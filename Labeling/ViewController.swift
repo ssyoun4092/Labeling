@@ -6,25 +6,23 @@ class ViewController: UIViewController {
     @IBOutlet weak var textField: UITextField!
 
     let textArray = ["1", "2", "3", "4", "5", "6", "7"]
-    lazy var textFieldOriginX = textField.frame.origin.x
-    lazy var textFieldOriginY = textField.frame.origin.y
+    lazy var textFieldOrigin = textField.frame.origin
     var cellRectArray: [[Double]] = [[]]
+    var isTaskOnCell: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpCollectionView()
         initCollectionView()
         setUpTextField()
+        print("viewDidLoad: \(self.textFieldOrigin)")
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideKeyboard)))
-        print("Screen Width: \(UIScreen.main.bounds.width), Screen Height: \(UIScreen.main.bounds.height)")
-        print("CollectionView CGSize: \(collectionView.bounds.size)")
     }
 
     func setUpCollectionView() {
         self.collectionView.layer.cornerRadius = 10
         self.collectionView.layer.shadowColor = CGColor(gray: 1, alpha: 0.5)
         self.collectionView.layer.shadowOffset = CGSize(width: 100, height: 100)
-        self.collectionView.layer.backgroundColor = UIColor.blue.cgColor
     }
 
     func initCollectionView() {
@@ -42,25 +40,21 @@ class ViewController: UIViewController {
     }
 
     @objc func wasDragged(_ gesture: UIPanGestureRecognizer) {
-        let transition = gesture.translation(in: self.textField)
-        let label = gesture.view!
-
-        label.center = CGPoint(x: label.center.x + transition.x, y: label.center.y + transition.y)
+        let translation = gesture.translation(in: self.textField.superview)
+        let changedXPoint = self.textField.center.x + translation.x
+        let changedYPoint = self.textField.center.y + translation.y
         switch gesture.state {
         case .began:
-            print(self.cellRectArray)
-        case .changed :
             animateIn()
-            print("label.center.x: \(label.center.x), label.center.y: \(label.center.y)")
-            showCellOnGesture(currentGesturePoint: label.center)
+        case .changed :
+            self.textField.center = CGPoint(x: changedXPoint, y: changedYPoint)
+            showCellOnGesture(currentGesturePoint: self.textField.center)
         case .ended :
             disableAllCellShow()
             animateOut()
-
         default:
             break
         }
-
         gesture.setTranslation(.zero, in: self.textField)
     }
 
@@ -70,7 +64,7 @@ class ViewController: UIViewController {
 
     func animateIn() {
         UIView.animate(withDuration: 0.1) {
-            self.hideBottomLine()
+            self.hideTextFieldBottomLine()
             self.textField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         }
     }
@@ -95,34 +89,47 @@ class ViewController: UIViewController {
         let y6Point = collectionViewOriginY + collectionViewHeight
 
         if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
-            disableCellShow(index: 0)
+            disableCellShowExcept(index: 0)
+            self.isTaskOnCell = true
         } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
-            disableCellShow(index: 1)
+            disableCellShowExcept(index: 1)
+            self.isTaskOnCell = true
         } else if point.x >= x1Point && point.x <= x2Point && point.y >= y3Point && point.y <= y4Point {
-            disableCellShow(index: 2)
+            disableCellShowExcept(index: 2)
+            self.isTaskOnCell = true
         } else if point.x >= x3Point && point.x <= x4Point && point.y >= y3Point && point.y <= y4Point {
-            disableCellShow(index: 3)
+            disableCellShowExcept(index: 3)
+            self.isTaskOnCell = true
         } else if point.x >= x1Point && point.x <= x2Point && point.y >= y5Point && point.y <= y6Point {
-            disableCellShow(index: 4)
+            disableCellShowExcept(index: 4)
+            self.isTaskOnCell = true
         } else if point.x >= x3Point && point.x <= x4Point && point.y >= y5Point && point.y <= y6Point {
-            disableCellShow(index: 5)
+            disableCellShowExcept(index: 5)
+            self.isTaskOnCell = true
+        } else {
+            disableAllCellShow()
+            self.isTaskOnCell = false
         }
 
-        func disableCellShow(index: Int) {
+        func disableCellShowExcept(index: Int = 6) {
             collectionView.cellForItem(at: IndexPath(row: index, section: 0))?.backgroundColor = .cyan
             if index > 0 && index < 5 {
                 for i in 0..<index {
                     collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
                 }
-                for i in (index+1)...5 {
+                for i in (index + 1)...5 {
                     collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
                 }
             } else if index == 0 {
-                for i in (index+1)...5 {
+                for i in (index + 1)...5 {
+                    collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
+                }
+            } else if index == 5{
+                for i in 0..<(index - 1) {
                     collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
                 }
             } else {
-                for i in 0..<index {
+                for i in 0...(index - 1) {
                     collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
                 }
             }
@@ -136,15 +143,33 @@ class ViewController: UIViewController {
     }
 
     func animateOut() {
-        UIView.animate(withDuration: 0.3) {
-            self.textField.frame.origin.x = self.textFieldOriginX
-            self.textField.frame.origin.y = self.textFieldOriginY
-            self.textField.transform = CGAffineTransform.identity
-            self.showBottomLine()
+        if isTaskOnCell {
+            UIView.animate(withDuration: 0.3) {
+                self.textField.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                UIView.animate(withDuration: 0.3) {
+                    self.textField.frame.origin = self.textFieldOrigin
+                    self.textField.transform = CGAffineTransform.identity
+                    self.showTextFieldBottomLine()
+                }
+            }
+        } else {
+            UIView.animate(withDuration: 0.3) {
+                print(self.textFieldOrigin)
+                print(self.textField.frame.origin)
+                self.textField.frame.origin = self.textFieldOrigin
+                print(self.textFieldOrigin)
+                print(self.textField.frame.origin)
+                print("-------------------------")
+                self.textField.transform = CGAffineTransform.identity
+                self.showTextFieldBottomLine()
+                
+            }
         }
     }
 
-    func hideBottomLine() {
+    func hideTextFieldBottomLine() {
         let subViews = self.textField.subviews
         for subView in subViews {
             if subView.tag == 100 {
@@ -153,7 +178,7 @@ class ViewController: UIViewController {
         }
     }
 
-    func showBottomLine() {
+    func showTextFieldBottomLine() {
         let subViews = self.textField.subviews
         for subView in subViews {
             if subView.tag == 100 {
@@ -185,12 +210,6 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         cell.mainLabel.text = textArray[indexPath.row]
         cell.subLabel.text = "hey"
 
-        let attributes = collectionView.layoutAttributesForItem(at: indexPath)
-        let cellRect = attributes?.frame
-        let cellFrameInSuperview = collectionView.convert(cellRect ?? CGRect.zero, to: collectionView.superview)
-        print(cellFrameInSuperview)
-//        cellRectArray = convertCGRectToArray(tuple: cellArray)
-
         return cell
     }
 
@@ -210,16 +229,16 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         let cellWidth = (bounds.width - 10) / 2
         let cellHeight = (bounds.height - 20) / 3
 
-        print("cell Width: \(cellWidth), cell height: \(cellHeight)")
-
         return CGSize(width: cellWidth, height: cellHeight)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+
         return CGFloat(10)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+
         return CGFloat(10)
     }
 }
