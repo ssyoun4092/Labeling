@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="collectorCell" id="gTV-IL-0wX" customClass="CollectorViewCell" customModule="Labeling" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="227" height="258"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="227" height="258"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NAn-Ry-5yx">
+                        <rect key="frame" x="0.0" y="0.0" width="227" height="258"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="휴지통" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qm6-Th-KdH" userLabel="MainLabel">
+                                <rect key="frame" x="10" y="10" width="44.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="필요없는 생각은 " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x7C-yv-Qyw">
+                                <rect key="frame" x="10" y="51" width="86" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="x7C-yv-Qyw" firstAttribute="leading" secondItem="NAn-Ry-5yx" secondAttribute="leading" constant="10" id="5VQ-nH-O0n"/>
+                            <constraint firstItem="Qm6-Th-KdH" firstAttribute="top" secondItem="NAn-Ry-5yx" secondAttribute="top" constant="10" id="Nrk-VT-x8Z"/>
+                            <constraint firstItem="Qm6-Th-KdH" firstAttribute="leading" secondItem="NAn-Ry-5yx" secondAttribute="leading" constant="10" id="UKq-eh-Sz1"/>
+                            <constraint firstItem="x7C-yv-Qyw" firstAttribute="top" secondItem="Qm6-Th-KdH" secondAttribute="bottom" constant="20" id="n0e-dN-V5J"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="NAn-Ry-5yx" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="0gg-ti-ha3"/>
+                <constraint firstAttribute="bottom" secondItem="NAn-Ry-5yx" secondAttribute="bottom" id="4ce-X6-guS"/>
+                <constraint firstAttribute="trailing" secondItem="NAn-Ry-5yx" secondAttribute="trailing" id="Tpp-sU-s6g"/>
+                <constraint firstItem="NAn-Ry-5yx" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="z0a-OP-4ny"/>
+            </constraints>
+            <size key="customSize" width="227" height="258"/>
+            <connections>
+                <outlet property="cellView" destination="NAn-Ry-5yx" id="vaS-op-hmS"/>
+                <outlet property="mainLabel" destination="Qm6-Th-KdH" id="8AS-v9-eBx"/>
+                <outlet property="subLabel" destination="x7C-yv-Qyw" id="dUJ-JS-iAP"/>
+            </connections>
+            <point key="canvasLocation" x="200.72463768115944" y="115.84821428571428"/>
+        </collectionViewCell>
+    </objects>
+</document>
