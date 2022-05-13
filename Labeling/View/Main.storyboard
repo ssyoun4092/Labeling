@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cpe-na-DVH">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cpe-na-DVH">
                                 <rect key="frame" x="20" y="286.33333333333331" width="388" height="555.66666666666674"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="i8q-cW-2TV">
@@ -38,7 +38,7 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="방금 떠오른 생각을 적어주세요" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S47-3K-NkU">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="떠오른 생각을 적어주세요" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S47-3K-NkU">
                                 <rect key="frame" x="20" y="108" width="388" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="Ktu-00-fjx"/>
@@ -61,26 +61,31 @@
                             <constraint firstItem="S47-3K-NkU" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="kor-Q7-GCV"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="zYq-Uh-flZ"/>
+                    <navigationItem key="navigationItem" id="zYq-Uh-flZ">
+                        <barButtonItem key="rightBarButtonItem" title="Settings" image="gearshape" catalog="system" id="rja-hc-581">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="cpe-na-DVH" id="sDi-CP-FcF"/>
-                        <outlet property="textField" destination="S47-3K-NkU" id="wNd-17-apa"/>
+                        <outlet property="taskTextField" destination="S47-3K-NkU" id="wNd-17-apa"/>
+                        <segue destination="iPE-md-nUf" kind="show" identifier="goToLabeled" id="wHV-yx-xg8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="884.05797101449286" y="104.46428571428571"/>
+            <point key="canvasLocation" x="911" y="104"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Labeled Table View Controller-->
         <scene sceneID="uKt-dy-6CU">
             <objects>
-                <tableViewController id="iPE-md-nUf" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="LabeledTableViewController" id="iPE-md-nUf" customClass="LabeledTableViewController" customModule="Labeling" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Vxd-BE-zxz">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="gfS-oG-lFP">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LabeledCell" id="gfS-oG-lFP" userLabel="LabeledCell">
                                 <rect key="frame" x="0.0" y="44.666666030883789" width="428" height="43.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gfS-oG-lFP" id="1JE-zu-b9b">
@@ -94,10 +99,11 @@
                             <outlet property="delegate" destination="iPE-md-nUf" id="fCV-M5-Fh2"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="L8y-fl-N2P"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mxj-Aa-MDD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1799" y="117"/>
+            <point key="canvasLocation" x="1803" y="104"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="FLx-qo-YAT">
@@ -119,6 +125,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="gearshape" catalog="system" width="128" height="121"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

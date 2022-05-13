@@ -23,7 +23,7 @@ class CollectorViewCell: UICollectionViewCell {
 
     func setUpCell() {
         self.layer.cornerRadius = 10
-        self.backgroundColor = UIColor.gray
+        self.backgroundColor = UIColor.gray.withAlphaComponent(0.5)
         self.layer.borderWidth = 1
         self.layer.borderColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1)
     }

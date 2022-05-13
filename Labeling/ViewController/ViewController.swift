@@ -1,22 +1,43 @@
-
 import UIKit
+import CoreData
 
 class ViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
-    let textArray = ["1", "2", "3", "4", "5", "6", "7"]
-    @IBOutlet weak var textField: UITextField!
-    lazy var textFieldOrigin = textField.frame.origin
-    var cellRectArray: [[Double]] = [[]]
+    @IBOutlet weak var taskTextField: UITextField!
+    lazy var textFieldOrigin = taskTextField.frame.origin
     var isTaskOnCell: Bool = false
+    var keyboardIsPresented: Bool = false
+
+    let trashLabel = LabelCell(mainLabel: "휴지통", subLabel: "필요없는 생각은 저한테 주세요")
+    let somedayLabel = LabelCell(mainLabel: "언젠가", subLabel: "나중에 찾아볼 것 같을때 저한테 주세요")
+    let referenceLabel = LabelCell(mainLabel: "참고자료", subLabel: "필요할 때 찾아볼 것 같을때 저한테 주세요")
+    let delegateLabel = LabelCell(mainLabel: "위임", subLabel: "다른 누군가에게 맡겨야할 때 저한테 주세요")
+    let calendarLabel = LabelCell(mainLabel: "일정표", subLabel: "특정 시기에 실행해야할 때")
+    let asapLabel = LabelCell(mainLabel: "가능한 빨리", subLabel: "최대한 빨리 해야할 때")
+    lazy var labelCell: [LabelCell] = [trashLabel, somedayLabel, referenceLabel, delegateLabel, calendarLabel, asapLabel]
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpCollectionView()
         initCollectionView()
-        setUpTextField()
+        setUpTaskTextField()
         print("viewDidLoad: \(self.textFieldOrigin)")
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideKeyboard)))
+        let tapForDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapForDismissKeyboard.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapForDismissKeyboard)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: UIResponder.keyboardDidHideNotification, object: nil)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(false)
+        NotificationCenter.default.removeObserver(self)
     }
     
     func setUpCollectionView() {
@@ -28,7 +49,6 @@ class ViewController: UIViewController {
     func setCellsView() {
         let width = (collectionView.frame.size.width) / 3
         let height = (collectionView.frame.size.height * 0.6) / 6
-        
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         flowLayout.itemSize = CGSize(width: width, height: height)
     }
@@ -36,44 +56,60 @@ class ViewController: UIViewController {
     func initCollectionView() {
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
+        self.collectionView.allowsSelection = true
         self.collectionView.isUserInteractionEnabled = true
         self.collectionView.register(UINib(nibName: "CollectorViewCell", bundle: nil), forCellWithReuseIdentifier: CollectorViewCell.identifier)
     }
 
-    func setUpTextField() {
+    func setUpTaskTextField() {
         let dragGesture = UIPanGestureRecognizer(target: self, action: #selector(wasDragged))
-        self.textField.isUserInteractionEnabled = true
-        self.textField.addGestureRecognizer(dragGesture)
-        self.textField.addBottomLineView(width: 1)
+        self.taskTextField.delegate = self
+        self.taskTextField.isUserInteractionEnabled = true
+        self.taskTextField.addGestureRecognizer(dragGesture)
+        self.taskTextField.center = self.view.center
+        guard let placeHolderWidth = taskTextField.attributedPlaceholder?.size().width else { return }
+        self.taskTextField.addBottomLineView(width: placeHolderWidth, height: 1)
+    }
+
+    @objc func keyboardDidShow() {
+        print("keyboardWillShow")
+        self.keyboardIsPresented = true
+        print(keyboardIsPresented)
+    }
+
+    @objc func keyboardDidHide() {
+        print("keyboardWillHide")
+        self.keyboardIsPresented = false
+        print(keyboardIsPresented)
     }
     
     @objc func wasDragged(_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: self.textField.superview)
-        let changedXPoint = self.textField.center.x + translation.x
-        let changedYPoint = self.textField.center.y + translation.y
+        let translation = gesture.translation(in: self.taskTextField.superview)
+        let changedXPoint = self.taskTextField.center.x + translation.x
+        let changedYPoint = self.taskTextField.center.y + translation.y
         switch gesture.state {
         case .began:
             animateIn()
         case .changed :
-            self.textField.center = CGPoint(x: changedXPoint, y: changedYPoint)
-            showCellOnGesture(currentGesturePoint: self.textField.center)
+            self.taskTextField.center = CGPoint(x: changedXPoint, y: changedYPoint)
+            showCellOnGesture(currentGesturePoint: self.taskTextField.center)
         case .ended :
             disableAllCellShow()
             animateOut()
         default:
             break
         }
-        gesture.setTranslation(.zero, in: self.textField)
+        gesture.setTranslation(.zero, in: self.taskTextField)
     }
     
-    @objc func hideKeyboard() {
+    @objc func hideKeyboard(_ sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
     }
     
     func animateIn() {
         UIView.animate(withDuration: 0.1) {
             self.hideTextFieldBottomLine()
-            self.textField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            self.taskTextField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         }
     }
     
@@ -153,32 +189,36 @@ class ViewController: UIViewController {
     func animateOut() {
         if isTaskOnCell {
             UIView.animate(withDuration: 0.3) {
-                self.textField.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+                self.taskTextField.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 UIView.animate(withDuration: 0.3) {
-                    self.textField.frame.origin = self.textFieldOrigin
-                    self.textField.transform = CGAffineTransform.identity
+                    self.taskTextField.frame.origin = self.textFieldOrigin
+                    self.taskTextField.transform = CGAffineTransform.identity
                     self.showTextFieldBottomLine()
                 }
             }
         } else {
             UIView.animate(withDuration: 0.3) {
-                print(self.textFieldOrigin)
-                print(self.textField.frame.origin)
-                self.textField.frame.origin = self.textFieldOrigin
-                print(self.textFieldOrigin)
-                print(self.textField.frame.origin)
-                print("-------------------------")
-                self.textField.transform = CGAffineTransform.identity
+                self.taskTextField.frame.origin = self.textFieldOrigin
+                self.taskTextField.transform = CGAffineTransform.identity
                 self.showTextFieldBottomLine()
                 
             }
         }
     }
+
+    func removeTextFieldBottomLine() {
+        let subviews = self.taskTextField.subviews
+        for subview in subviews {
+            if subview.tag == 100 {
+                subview.removeFromSuperview()
+            }
+        }
+    }
     
     func hideTextFieldBottomLine() {
-        let subViews = self.textField.subviews
+        let subViews = self.taskTextField.subviews
         for subView in subViews {
             if subView.tag == 100 {
                 subView.alpha = 0
@@ -187,7 +227,7 @@ class ViewController: UIViewController {
     }
     
     func showTextFieldBottomLine() {
-        let subViews = self.textField.subviews
+        let subViews = self.taskTextField.subviews
         for subView in subViews {
             if subView.tag == 100 {
                 subView.alpha = 1
@@ -208,25 +248,41 @@ class ViewController: UIViewController {
     }
 }
 
+extension ViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let length = textField.attributedText?.size().width else { return }
+        removeTextFieldBottomLine()
+        textField.addBottomLineView(width: length, height: 1)
+    }
+}
+
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 6
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectorViewCell.identifier, for: indexPath) as! CollectorViewCell
-        cell.mainLabel.text = textArray[indexPath.row]
-        cell.subLabel.text = "hey"
+        cell.mainLabel.text = labelCell[indexPath.row].mainLabel
+        cell.subLabel.text = labelCell[indexPath.row].subLabel
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("tapped")
-        if let cell = collectionView.cellForItem(at: indexPath) as? CollectorViewCell {
-            print("Tapped!")
-            cell.showViewColor()
+        if !keyboardIsPresented {
+//            guard let tableViewController = self.storyboard?.instantiateViewController(withIdentifier: "LabeledTableViewController") else { return }
+//            print("Tapped!")
+//            self.navigationController?.pushViewController(tableViewController, animated: true)
+
+            performSegue(withIdentifier: "goToLabeled", sender: self)
+        }
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinactionVC = segue.destination as! LabeledTableViewController
+        if let indexPath = collectionView.indexPathsForSelectedItems {
+            print("\(indexPath)")
         }
     }
 }
@@ -266,7 +322,7 @@ struct ViewControllerRepresentable: UIViewControllerRepresentable {
     }
 }
 
-struct AddTaskViewPreview: PreviewProvider {
+struct ViewControllerPreview: PreviewProvider {
     static var previews: some View {
         ViewControllerRepresentable()
             .preferredColorScheme(.light)
