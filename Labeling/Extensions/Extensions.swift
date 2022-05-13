@@ -1,10 +1,3 @@
-//
-//  Extensions.swift
-//  Labeling
-//
-//  Created by MacPro on 2022/04/30.
-//
-
 import Foundation
 import UIKit
 

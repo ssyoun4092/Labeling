@@ -1,43 +1,15 @@
-<<<<<<< HEAD
-//
-//  ViewController.swift
-//  Labeling
-//
-//  Created by MacPro on 2022/04/27.
-//
 
-=======
->>>>>>> 31ee4a3b4c62357f31ebef655ff6748fb4e630ea
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     @IBOutlet weak var collectionView: UICollectionView!
-<<<<<<< HEAD
     let textArray = ["1", "2", "3", "4", "5", "6", "7"]
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-//        let dragInteraction = UIDragInteraction(delegate: self)
-//        self.textField.isUserInteractionEnabled = true
-//        self.textField.addInteraction(dragInteraction)
-//        let gesture = UIPanGestureRecognizer(target: self, action: #selector(wasDragged))
-//        self.label.isUserInteractionEnabled = true
-//        self.label.addInteraction(dragInteraction)
-//        self.textField.addGestureRecognizer(gesture)
-        setUpCollectionView()
-        setCellsView()
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
-=======
     @IBOutlet weak var textField: UITextField!
-
-    let textArray = ["1", "2", "3", "4", "5", "6", "7"]
     lazy var textFieldOrigin = textField.frame.origin
     var cellRectArray: [[Double]] = [[]]
     var isTaskOnCell: Bool = false
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpCollectionView()
@@ -45,44 +17,22 @@ class ViewController: UIViewController {
         setUpTextField()
         print("viewDidLoad: \(self.textFieldOrigin)")
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideKeyboard)))
->>>>>>> 31ee4a3b4c62357f31ebef655ff6748fb4e630ea
     }
-
+    
     func setUpCollectionView() {
         self.collectionView.layer.cornerRadius = 10
         self.collectionView.layer.shadowColor = CGColor(gray: 1, alpha: 0.5)
         self.collectionView.layer.shadowOffset = CGSize(width: 100, height: 100)
     }
-
-<<<<<<< HEAD
+    
     func setCellsView() {
         let width = (collectionView.frame.size.width) / 3
         let height = (collectionView.frame.size.height * 0.6) / 6
-
+        
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         flowLayout.itemSize = CGSize(width: width, height: height)
     }
-
-//    @objc func wasDragged(_ gesture: UIPanGestureRecognizer) {
-//        let transition = gesture.translation(in: self.label)
-//        let label = gesture.view!
-//
-//        label.center = CGPoint(x: label.center.x + transition.x, y: label.center.y + transition.y)
-//        gesture.setTranslation(.zero, in: self.label)
-//    }
-
-//    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
-//        let textField = self.textField
-//        let provider = NSItemProvider(object: textField! as! NSItemProviderWriting)
-//        let item = UIDragItem(itemProvider: provider)
-//        return [item]
-//    }
-
-}
-
-extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-
-=======
+    
     func initCollectionView() {
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
@@ -96,7 +46,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         self.textField.addGestureRecognizer(dragGesture)
         self.textField.addBottomLineView(width: 1)
     }
-
+    
     @objc func wasDragged(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: self.textField.superview)
         let changedXPoint = self.textField.center.x + translation.x
@@ -115,18 +65,18 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         }
         gesture.setTranslation(.zero, in: self.textField)
     }
-
+    
     @objc func hideKeyboard() {
         self.view.endEditing(true)
     }
-
+    
     func animateIn() {
         UIView.animate(withDuration: 0.1) {
             self.hideTextFieldBottomLine()
             self.textField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         }
     }
-
+    
     func showCellOnGesture(currentGesturePoint point: CGPoint) {
         let collectionViewOriginX = collectionView.frame.origin.x
         let collectionViewOriginY = collectionView.frame.origin.y
@@ -134,7 +84,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         let collectionViewHeight = collectionView.frame.size.height
         let spacing: CGFloat = 10
         let cellHeight = (collectionViewHeight - (2 * spacing)) / 3
-
+        
         let x1Point = collectionViewOriginX
         let x2Point = collectionViewOriginX + (collectionViewWidth / 2)
         let x3Point = collectionViewOriginX + (collectionViewWidth / 2) + spacing
@@ -145,7 +95,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         let y4Point = collectionViewOriginY + (2 * cellHeight) + spacing
         let y5Point = collectionViewOriginY + (2 * cellHeight) + (2 * spacing)
         let y6Point = collectionViewOriginY + collectionViewHeight
-
+        
         if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
             disableCellShowExcept(index: 0)
             self.isTaskOnCell = true
@@ -168,7 +118,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
             disableAllCellShow()
             self.isTaskOnCell = false
         }
-
+        
         func disableCellShowExcept(index: Int = 6) {
             collectionView.cellForItem(at: IndexPath(row: index, section: 0))?.backgroundColor = .cyan
             if index > 0 && index < 5 {
@@ -193,13 +143,13 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
             }
         }
     }
-
+    
     func disableAllCellShow() {
         for index in 0...5 {
             collectionView.cellForItem(at: IndexPath(row: index, section: 0))?.backgroundColor = .gray
         }
     }
-
+    
     func animateOut() {
         if isTaskOnCell {
             UIView.animate(withDuration: 0.3) {
@@ -226,7 +176,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
             }
         }
     }
-
+    
     func hideTextFieldBottomLine() {
         let subViews = self.textField.subviews
         for subView in subViews {
@@ -235,7 +185,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
             }
         }
     }
-
+    
     func showTextFieldBottomLine() {
         let subViews = self.textField.subviews
         for subView in subViews {
@@ -244,7 +194,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
             }
         }
     }
-
+    
     func convertCGRectToArray(tuple: [(Double, Double, Double, Double)]) -> [[Double]] {
         let arrayCount = tuple.count
         var returnArray: [[Double]] = [[]]
@@ -253,35 +203,25 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
             returnArray.append(array)
         }
         returnArray.remove(at: 0)
-
+        
         return returnArray
     }
 }
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
->>>>>>> 31ee4a3b4c62357f31ebef655ff6748fb4e630ea
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 6
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-<<<<<<< HEAD
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collector", for: indexPath) as! CollectorCell
-//        cell.backgroundColor = UIColor.red
-//        cell.cellLabel.text = self.textArray[indexPath.row]
-//        cell.cellLabel.textColor = .white
-
-        return cell
-    }
-}
-=======
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectorViewCell.identifier, for: indexPath) as! CollectorViewCell
         cell.mainLabel.text = textArray[indexPath.row]
         cell.subLabel.text = "hey"
-
+        
         return cell
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("tapped")
         if let cell = collectionView.cellForItem(at: indexPath) as? CollectorViewCell {
@@ -290,7 +230,6 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         }
     }
 }
-
 
 extension ViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -312,7 +251,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-
 #if canImport(SwiftUI) && DEBUG
 import SwiftUI
 @available(iOS 13.0, *)
@@ -326,8 +264,8 @@ struct ViewControllerRepresentable: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
 
     }
-
 }
+
 struct AddTaskViewPreview: PreviewProvider {
     static var previews: some View {
         ViewControllerRepresentable()
@@ -335,4 +273,3 @@ struct AddTaskViewPreview: PreviewProvider {
     }
 }
 #endif
->>>>>>> 31ee4a3b4c62357f31ebef655ff6748fb4e630ea

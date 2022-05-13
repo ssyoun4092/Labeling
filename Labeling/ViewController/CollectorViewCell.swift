@@ -16,26 +16,6 @@ class CollectorViewCell: UICollectionViewCell {
     @IBOutlet weak var subLabel: UILabel!
     @IBOutlet weak var cellView: UIView!
 
-//    var clickCount: Int = 0 {
-//        didSet {
-//            if clickCount == 0 {
-//                cellView.backgroundColor = UIColor.lightGray
-//            }
-//            else {
-//                cellView.backgroundColor = UIColor.red
-//            }
-//        }
-//    }
-//
-//    override var isSelected: Bool {
-//        didSet {
-//            if !isSelected {
-//                cellView.backgroundColor = UIColor.lightGray
-//                clickCount = 0
-//            }
-//        }
-//    }
-
     override func awakeFromNib() {
         super.awakeFromNib()
         setUpCell()
