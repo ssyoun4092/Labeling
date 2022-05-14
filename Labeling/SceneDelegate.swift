@@ -1,10 +1,3 @@
-//
-//  SceneDelegate.swift
-//  Labeling
-//
-//  Created by MacPro on 2022/04/27.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {

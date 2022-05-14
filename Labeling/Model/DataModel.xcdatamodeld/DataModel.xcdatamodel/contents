@@ -3,15 +3,15 @@
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="done" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
-        <relationship name="newRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Label" inverseName="newRelationship" inverseEntity="Label"/>
+        <relationship name="parentCategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Label" inverseName="items" inverseEntity="Label"/>
     </entity>
     <entity name="Label" representedClassName="Label" syncable="YES" codeGenerationType="class">
         <attribute name="mainLabel" optional="YES" attributeType="String"/>
         <attribute name="subLabel" optional="YES" attributeType="String"/>
-        <relationship name="newRelationship" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="newRelationship" inverseEntity="Item"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="parentCategory" inverseEntity="Item"/>
     </entity>
     <elements>
-        <element name="Label" positionX="-305.1567993164062" positionY="15.47454833984375" width="111.4078369140625" height="88"/>
         <element name="Item" positionX="-54" positionY="9" width="128" height="88"/>
+        <element name="Label" positionX="-305.1567993164062" positionY="15.47454833984375" width="111.4078369140625" height="88"/>
     </elements>
 </model>

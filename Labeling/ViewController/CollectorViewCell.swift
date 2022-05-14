@@ -21,6 +21,12 @@ class CollectorViewCell: UICollectionViewCell {
         setUpCell()
     }
 
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.contentView.layer.shadowColor = UIColor.gray.cgColor
+        self.contentView.layer.shadowRadius = 10
+    }
+
     func setUpCell() {
         self.layer.cornerRadius = 10
         self.backgroundColor = UIColor.gray.withAlphaComponent(0.5)

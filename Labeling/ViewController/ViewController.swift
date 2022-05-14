@@ -5,21 +5,16 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var taskTextField: UITextField!
-    lazy var textFieldOrigin = taskTextField.frame.origin
+    var textFieldOrigin: CGPoint = CGPoint()
+    var selectedCell: UICollectionViewCell? = nil
     var isTaskOnCell: Bool = false
     var keyboardIsPresented: Bool = false
-
-    let trashLabel = LabelCell(mainLabel: "휴지통", subLabel: "필요없는 생각은 저한테 주세요")
-    let somedayLabel = LabelCell(mainLabel: "언젠가", subLabel: "나중에 찾아볼 것 같을때 저한테 주세요")
-    let referenceLabel = LabelCell(mainLabel: "참고자료", subLabel: "필요할 때 찾아볼 것 같을때 저한테 주세요")
-    let delegateLabel = LabelCell(mainLabel: "위임", subLabel: "다른 누군가에게 맡겨야할 때 저한테 주세요")
-    let calendarLabel = LabelCell(mainLabel: "일정표", subLabel: "특정 시기에 실행해야할 때")
-    let asapLabel = LabelCell(mainLabel: "가능한 빨리", subLabel: "최대한 빨리 해야할 때")
+    
     lazy var labelCell: [LabelCell] = [trashLabel, somedayLabel, referenceLabel, delegateLabel, calendarLabel, asapLabel]
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         setUpCollectionView()
         initCollectionView()
         setUpTaskTextField()
@@ -59,40 +54,57 @@ class ViewController: UIViewController {
         self.collectionView.allowsSelection = true
         self.collectionView.isUserInteractionEnabled = true
         self.collectionView.register(UINib(nibName: "CollectorViewCell", bundle: nil), forCellWithReuseIdentifier: CollectorViewCell.identifier)
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+        self.collectionView.addGestureRecognizer(longPressGesture)
     }
 
     func setUpTaskTextField() {
-        let dragGesture = UIPanGestureRecognizer(target: self, action: #selector(wasDragged))
+        textFieldOrigin = self.taskTextField.frame.origin
+        let dragGesture = UIPanGestureRecognizer(target: self, action: #selector(handleDragGestrue))
         self.taskTextField.delegate = self
         self.taskTextField.isUserInteractionEnabled = true
         self.taskTextField.addGestureRecognizer(dragGesture)
-        self.taskTextField.center = self.view.center
         guard let placeHolderWidth = taskTextField.attributedPlaceholder?.size().width else { return }
         self.taskTextField.addBottomLineView(width: placeHolderWidth, height: 1)
     }
 
+    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+        guard let collectionView = collectionView else { return }
+        switch gesture.state {
+        case .began:
+            guard let indexPath = collectionView.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
+            collectionView.beginInteractiveMovementForItem(at: indexPath)
+        case .changed:
+            collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
+            print(gesture.location(in: collectionView))
+        case .ended:
+            collectionView.endInteractiveMovement()
+        default:
+            collectionView.cancelInteractiveMovement()
+        }
+    }
+
     @objc func keyboardDidShow() {
-        print("keyboardWillShow")
         self.keyboardIsPresented = true
-        print(keyboardIsPresented)
     }
 
     @objc func keyboardDidHide() {
-        print("keyboardWillHide")
         self.keyboardIsPresented = false
-        print(keyboardIsPresented)
     }
     
-    @objc func wasDragged(_ gesture: UIPanGestureRecognizer) {
+    @objc func handleDragGestrue(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: self.taskTextField.superview)
         let changedXPoint = self.taskTextField.center.x + translation.x
         let changedYPoint = self.taskTextField.center.y + translation.y
         switch gesture.state {
         case .began:
-            animateIn()
+            animateHideTextFieldBottomLine()
+            self.view.endEditing(true)
         case .changed :
             self.taskTextField.center = CGPoint(x: changedXPoint, y: changedYPoint)
-            showCellOnGesture(currentGesturePoint: self.taskTextField.center)
+            let indexPath = calculateCellIndexPath(on: self.taskTextField.center)
+            disableCellShowExceptAt(indexPath: indexPath)
+            doesGestureOnCellAt(indexPath: indexPath)
         case .ended :
             disableAllCellShow()
             animateOut()
@@ -106,21 +118,21 @@ class ViewController: UIViewController {
         self.view.endEditing(true)
     }
     
-    func animateIn() {
-        UIView.animate(withDuration: 0.1) {
+    func animateHideTextFieldBottomLine() {
+        UIView.animate(withDuration: 0.3) {
             self.hideTextFieldBottomLine()
             self.taskTextField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         }
     }
-    
-    func showCellOnGesture(currentGesturePoint point: CGPoint) {
+
+    func calculateCellIndexPath(on point: CGPoint) -> IndexPath {
         let collectionViewOriginX = collectionView.frame.origin.x
         let collectionViewOriginY = collectionView.frame.origin.y
         let collectionViewWidth = collectionView.frame.size.width
         let collectionViewHeight = collectionView.frame.size.height
         let spacing: CGFloat = 10
         let cellHeight = (collectionViewHeight - (2 * spacing)) / 3
-        
+
         let x1Point = collectionViewOriginX
         let x2Point = collectionViewOriginX + (collectionViewWidth / 2)
         let x3Point = collectionViewOriginX + (collectionViewWidth / 2) + spacing
@@ -131,55 +143,57 @@ class ViewController: UIViewController {
         let y4Point = collectionViewOriginY + (2 * cellHeight) + spacing
         let y5Point = collectionViewOriginY + (2 * cellHeight) + (2 * spacing)
         let y6Point = collectionViewOriginY + collectionViewHeight
-        
+
         if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
-            disableCellShowExcept(index: 0)
-            self.isTaskOnCell = true
+            return IndexPath(row: 0, section: 0)
         } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
-            disableCellShowExcept(index: 1)
-            self.isTaskOnCell = true
+            return IndexPath(row: 1, section: 0)
         } else if point.x >= x1Point && point.x <= x2Point && point.y >= y3Point && point.y <= y4Point {
-            disableCellShowExcept(index: 2)
-            self.isTaskOnCell = true
+            return IndexPath(row: 2, section: 0)
         } else if point.x >= x3Point && point.x <= x4Point && point.y >= y3Point && point.y <= y4Point {
-            disableCellShowExcept(index: 3)
-            self.isTaskOnCell = true
+            return IndexPath(row: 3, section: 0)
         } else if point.x >= x1Point && point.x <= x2Point && point.y >= y5Point && point.y <= y6Point {
-            disableCellShowExcept(index: 4)
-            self.isTaskOnCell = true
+            return IndexPath(row: 4, section: 0)
         } else if point.x >= x3Point && point.x <= x4Point && point.y >= y5Point && point.y <= y6Point {
-            disableCellShowExcept(index: 5)
-            self.isTaskOnCell = true
+            return IndexPath(row: 5, section: 0)
         } else {
-            disableAllCellShow()
-            self.isTaskOnCell = false
+            return IndexPath(row: 6, section: 0)
         }
-        
-        func disableCellShowExcept(index: Int = 6) {
-            collectionView.cellForItem(at: IndexPath(row: index, section: 0))?.backgroundColor = .cyan
-            if index > 0 && index < 5 {
-                for i in 0..<index {
-                    collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
-                }
-                for i in (index + 1)...5 {
-                    collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
-                }
-            } else if index == 0 {
-                for i in (index + 1)...5 {
-                    collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
-                }
-            } else if index == 5{
-                for i in 0..<(index - 1) {
-                    collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
-                }
-            } else {
-                for i in 0...(index - 1) {
-                    collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
-                }
+    }
+
+    func doesGestureOnCellAt(indexPath: IndexPath) {
+        if indexPath.row == 6 {
+            self.isTaskOnCell = false
+        } else {
+            self.isTaskOnCell = true
+        }
+    }
+
+    func disableCellShowExceptAt(indexPath: IndexPath) {
+        let row = indexPath.row
+        collectionView.cellForItem(at: IndexPath(row: row, section: 0))?.backgroundColor = .cyan
+        if row > 0 && row < 5 {
+            for i in 0..<row {
+                collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
+            }
+            for i in (row + 1)...5 {
+                collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
+            }
+        } else if row == 0 {
+            for i in (row + 1)...5 {
+                collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
+            }
+        } else if row == 5{
+            for i in 0..<(row - 1) {
+                collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
+            }
+        } else {
+            for i in 0...(row - 1) {
+                collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
             }
         }
     }
-    
+
     func disableAllCellShow() {
         for index in 0...5 {
             collectionView.cellForItem(at: IndexPath(row: index, section: 0))?.backgroundColor = .gray
@@ -192,19 +206,18 @@ class ViewController: UIViewController {
                 self.taskTextField.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                UIView.animate(withDuration: 0.3) {
-                    self.taskTextField.frame.origin = self.textFieldOrigin
-                    self.taskTextField.transform = CGAffineTransform.identity
-                    self.showTextFieldBottomLine()
-                }
+                self.taskTextField.animateDisappearAndAppearAt(
+                    initialOrigin: self.textFieldOrigin,
+                    duration: 0.3,
+                    bottomLineAction: self.showTextFieldBottomLine()
+                )
             }
         } else {
-            UIView.animate(withDuration: 0.3) {
-                self.taskTextField.frame.origin = self.textFieldOrigin
-                self.taskTextField.transform = CGAffineTransform.identity
-                self.showTextFieldBottomLine()
-                
-            }
+            self.taskTextField.animateDisappearAndAppearAt(
+                initialOrigin: self.textFieldOrigin,
+                duration: 0.3,
+                bottomLineAction: self.showTextFieldBottomLine()
+            )
         }
     }
 
@@ -234,18 +247,6 @@ class ViewController: UIViewController {
             }
         }
     }
-    
-    func convertCGRectToArray(tuple: [(Double, Double, Double, Double)]) -> [[Double]] {
-        let arrayCount = tuple.count
-        var returnArray: [[Double]] = [[]]
-        for index in 0...(arrayCount-1) {
-            let array = Mirror(reflecting: tuple[index]).children.map({ $0.value}) as! [Double]
-            returnArray.append(array)
-        }
-        returnArray.remove(at: 0)
-        
-        return returnArray
-    }
 }
 
 extension ViewController: UITextFieldDelegate {
@@ -254,13 +255,17 @@ extension ViewController: UITextFieldDelegate {
         removeTextFieldBottomLine()
         textField.addBottomLineView(width: length, height: 1)
     }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("textFieldDidEndEditing")
+    }
 }
 
-extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return labelCell.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectorViewCell.identifier, for: indexPath) as! CollectorViewCell
         cell.mainLabel.text = labelCell[indexPath.row].mainLabel
@@ -268,12 +273,14 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         
         return cell
     }
-    
+}
+
+extension ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if !keyboardIsPresented {
-//            guard let tableViewController = self.storyboard?.instantiateViewController(withIdentifier: "LabeledTableViewController") else { return }
-//            print("Tapped!")
-//            self.navigationController?.pushViewController(tableViewController, animated: true)
+            //            guard let tableViewController = self.storyboard?.instantiateViewController(withIdentifier: "LabeledTableViewController") else { return }
+            //            print("Tapped!")
+            //            self.navigationController?.pushViewController(tableViewController, animated: true)
 
             performSegue(withIdentifier: "goToLabeled", sender: self)
         }
@@ -284,6 +291,20 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         if let indexPath = collectionView.indexPathsForSelectedItems {
             print("\(indexPath)")
         }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+
+        return true
+    }
+
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        var labelCell = self.labelCell
+        let label = labelCell[sourceIndexPath.row]
+        labelCell.remove(at: sourceIndexPath.row)
+        labelCell.insert(label, at: destinationIndexPath.row)
+        self.labelCell = labelCell
+        print(self.labelCell)
     }
 }
 

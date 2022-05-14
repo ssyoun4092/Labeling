@@ -2,6 +2,13 @@ import UIKit
 
 class LabeledTableViewController: UITableViewController {
 
+    var itemArray = [Item]()
+    var selectedCategory: Category? {
+        didSet {
+
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
