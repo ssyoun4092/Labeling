@@ -2,39 +2,43 @@ import UIKit
 import CoreData
 
 class ViewController: UIViewController {
-    
+    //MARK: - Properties
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var taskTextField: UITextField!
     var textFieldOrigin: CGPoint = CGPoint()
     var selectedCell: UICollectionViewCell? = nil
     var isTaskOnCell: Bool = false
     var keyboardIsPresented: Bool = false
-    
+    var labels = [Label]()
     lazy var labelCell: [LabelCell] = [trashLabel, somedayLabel, referenceLabel, delegateLabel, calendarLabel, asapLabel]
-    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+
+    //MARK: - ViewController Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        //        loadLabelFirstAppLaunch()
         setUpCollectionView()
         initCollectionView()
         setUpTaskTextField()
-        print("viewDidLoad: \(self.textFieldOrigin)")
         let tapForDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapForDismissKeyboard.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapForDismissKeyboard)
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(false)
+        super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: UIResponder.keyboardDidHideNotification, object: nil)
+        loadLabel()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(false)
+        super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
     }
-    
+
+    //MARK: - Setup View
     func setUpCollectionView() {
         self.collectionView.layer.cornerRadius = 10
         self.collectionView.layer.shadowColor = CGColor(gray: 1, alpha: 0.5)
@@ -68,30 +72,7 @@ class ViewController: UIViewController {
         self.taskTextField.addBottomLineView(width: placeHolderWidth, height: 1)
     }
 
-    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
-        guard let collectionView = collectionView else { return }
-        switch gesture.state {
-        case .began:
-            guard let indexPath = collectionView.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
-            collectionView.beginInteractiveMovementForItem(at: indexPath)
-        case .changed:
-            collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
-            print(gesture.location(in: collectionView))
-        case .ended:
-            collectionView.endInteractiveMovement()
-        default:
-            collectionView.cancelInteractiveMovement()
-        }
-    }
-
-    @objc func keyboardDidShow() {
-        self.keyboardIsPresented = true
-    }
-
-    @objc func keyboardDidHide() {
-        self.keyboardIsPresented = false
-    }
-    
+    //MARK: - Gesture func
     @objc func handleDragGestrue(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: self.taskTextField.superview)
         let changedXPoint = self.taskTextField.center.x + translation.x
@@ -103,46 +84,68 @@ class ViewController: UIViewController {
         case .changed :
             self.taskTextField.center = CGPoint(x: changedXPoint, y: changedYPoint)
             let indexPath = calculateCellIndexPath(on: self.taskTextField.center)
-            disableCellShowExceptAt(indexPath: indexPath)
+            disableCellColorExceptAt(indexPath: indexPath)
             doesGestureOnCellAt(indexPath: indexPath)
         case .ended :
-            disableAllCellShow()
+            disableAllCellColor()
             animateOut()
         default:
             break
         }
         gesture.setTranslation(.zero, in: self.taskTextField)
     }
+
+    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+        guard let collectionView = collectionView else { return }
+        switch gesture.state {
+        case .began:
+            guard let indexPath = collectionView.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
+            collectionView.beginInteractiveMovementForItem(at: indexPath)
+        case .changed:
+            collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
+            let position = gesture.location(in: collectionView)
+            if let indexPath = collectionView.indexPathForItem(at: position) {
+                print(indexPath)
+            }
+
+        case .ended:
+            collectionView.endInteractiveMovement()
+            //            collectionView.cellForItem(at: selectedCellIndexPath!)?.transform = CGAffineTransform.identity
+        default:
+            collectionView.cancelInteractiveMovement()
+        }
+    }
+
+    //MARK: - Handling Keyboard
+    @objc func keyboardDidShow() {
+        self.keyboardIsPresented = true
+    }
+
+    @objc func keyboardDidHide() {
+        self.keyboardIsPresented = false
+    }
     
     @objc func hideKeyboard(_ sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
     }
-    
-    func animateHideTextFieldBottomLine() {
-        UIView.animate(withDuration: 0.3) {
-            self.hideTextFieldBottomLine()
-            self.taskTextField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        }
-    }
 
+    //MARK: - Handling Cell
     func calculateCellIndexPath(on point: CGPoint) -> IndexPath {
-        let collectionViewOriginX = collectionView.frame.origin.x
-        let collectionViewOriginY = collectionView.frame.origin.y
+        let collectionViewOrigin = collectionView.frame.origin
         let collectionViewWidth = collectionView.frame.size.width
         let collectionViewHeight = collectionView.frame.size.height
         let spacing: CGFloat = 10
         let cellHeight = (collectionViewHeight - (2 * spacing)) / 3
-
-        let x1Point = collectionViewOriginX
-        let x2Point = collectionViewOriginX + (collectionViewWidth / 2)
-        let x3Point = collectionViewOriginX + (collectionViewWidth / 2) + spacing
-        let x4Point = collectionViewOriginX + collectionViewWidth
-        let y1Point = collectionViewOriginY
-        let y2Point = collectionViewOriginY + cellHeight
-        let y3Point = collectionViewOriginY + cellHeight + spacing
-        let y4Point = collectionViewOriginY + (2 * cellHeight) + spacing
-        let y5Point = collectionViewOriginY + (2 * cellHeight) + (2 * spacing)
-        let y6Point = collectionViewOriginY + collectionViewHeight
+        let x1Point = collectionViewOrigin.x
+        let x2Point = collectionViewOrigin.x + (collectionViewWidth / 2)
+        let x3Point = collectionViewOrigin.x + (collectionViewWidth / 2) + spacing
+        let x4Point = collectionViewOrigin.x + collectionViewWidth
+        let y1Point = collectionViewOrigin.y
+        let y2Point = collectionViewOrigin.y + cellHeight
+        let y3Point = collectionViewOrigin.y + cellHeight + spacing
+        let y4Point = collectionViewOrigin.y + (2 * cellHeight) + spacing
+        let y5Point = collectionViewOrigin.y + (2 * cellHeight) + (2 * spacing)
+        let y6Point = collectionViewOrigin.y + collectionViewHeight
 
         if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
             return IndexPath(row: 0, section: 0)
@@ -169,7 +172,7 @@ class ViewController: UIViewController {
         }
     }
 
-    func disableCellShowExceptAt(indexPath: IndexPath) {
+    func disableCellColorExceptAt(indexPath: IndexPath) {
         let row = indexPath.row
         collectionView.cellForItem(at: IndexPath(row: row, section: 0))?.backgroundColor = .cyan
         if row > 0 && row < 5 {
@@ -194,7 +197,7 @@ class ViewController: UIViewController {
         }
     }
 
-    func disableAllCellShow() {
+    func disableAllCellColor() {
         for index in 0...5 {
             collectionView.cellForItem(at: IndexPath(row: index, section: 0))?.backgroundColor = .gray
         }
@@ -221,25 +224,53 @@ class ViewController: UIViewController {
         }
     }
 
-    func removeTextFieldBottomLine() {
-        let subviews = self.taskTextField.subviews
-        for subview in subviews {
-            if subview.tag == 100 {
-                subview.removeFromSuperview()
+    //MARK: - handling Coredata
+    private func loadLabelFirstAppLaunch() {
+        if UIApplication.isFirstLaunch() {
+            for count in 0...(labelCell.count - 1) {
+                print(count)
+                let label = Label(context: self.context)
+                label.mainLabel = labelCell[count].mainLabel
+                label.subLabel = labelCell[count].subLabel
+                labels.append(label)
+                saveLabel()
             }
+            print("FirstLaunch!")
         }
     }
-    
-    func hideTextFieldBottomLine() {
-        let subViews = self.taskTextField.subviews
-        for subView in subViews {
-            if subView.tag == 100 {
-                subView.alpha = 0
-            }
+
+    private func loadLabel() {
+        print("LoadLabel")
+        let request: NSFetchRequest<Label> = Label.fetchRequest()
+        do {
+            labels = try context.fetch(request)
+        } catch {
+            print("Error loading labels \(error)")
+        }
+        labels.forEach {
+            print($0.mainLabel)
+        }
+        collectionView.reloadData()
+    }
+
+    private func saveLabel() {
+        do {
+            try context.save()
+        } catch {
+            print("error saving Label \(error)")
+        }
+        collectionView.reloadData()
+    }
+
+    //MARK: - handling TextField BottomLine
+    private func animateHideTextFieldBottomLine() {
+        UIView.animate(withDuration: 0.3) {
+            self.hideTextFieldBottomLine()
+            self.taskTextField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         }
     }
-    
-    func showTextFieldBottomLine() {
+
+    private func showTextFieldBottomLine() {
         let subViews = self.taskTextField.subviews
         for subView in subViews {
             if subView.tag == 100 {
@@ -247,29 +278,46 @@ class ViewController: UIViewController {
             }
         }
     }
+
+    private func hideTextFieldBottomLine() {
+        let subViews = self.taskTextField.subviews
+        for subView in subViews {
+            if subView.tag == 100 {
+                subView.alpha = 0
+            }
+        }
+    }
+
+    private func removeTextFieldBottomLine() {
+        let subviews = self.taskTextField.subviews
+        for subview in subviews {
+            if subview.tag == 100 {
+                subview.removeFromSuperview()
+            }
+        }
+    }
 }
 
+//MARK: - ViewController Extensions
 extension ViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let length = textField.attributedText?.size().width else { return }
         removeTextFieldBottomLine()
         textField.addBottomLineView(width: length, height: 1)
     }
-
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        print("textFieldDidEndEditing")
-    }
 }
 
 extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return labelCell.count
+
+        return labels.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectorViewCell.identifier, for: indexPath) as! CollectorViewCell
-        cell.mainLabel.text = labelCell[indexPath.row].mainLabel
-        cell.subLabel.text = labelCell[indexPath.row].subLabel
+        print("cellForItemAt")
+        cell.mainLabel.text = labels[indexPath.row].mainLabel
+        cell.subLabel.text = labels[indexPath.row].subLabel
         
         return cell
     }
@@ -281,7 +329,7 @@ extension ViewController: UICollectionViewDelegate {
             //            guard let tableViewController = self.storyboard?.instantiateViewController(withIdentifier: "LabeledTableViewController") else { return }
             //            print("Tapped!")
             //            self.navigationController?.pushViewController(tableViewController, animated: true)
-
+            //            loadLabel()
             performSegue(withIdentifier: "goToLabeled", sender: self)
         }
     }
@@ -299,12 +347,11 @@ extension ViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        var labelCell = self.labelCell
-        let label = labelCell[sourceIndexPath.row]
-        labelCell.remove(at: sourceIndexPath.row)
-        labelCell.insert(label, at: destinationIndexPath.row)
-        self.labelCell = labelCell
-        print(self.labelCell)
+        let label = labels[sourceIndexPath.row]
+        labels.remove(at: sourceIndexPath.row)
+        labels.insert(label, at: destinationIndexPath.row)
+
+        saveLabel()
     }
 }
 
@@ -328,6 +375,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+//MARK: - SwiftUI
 #if canImport(SwiftUI) && DEBUG
 import SwiftUI
 @available(iOS 13.0, *)
