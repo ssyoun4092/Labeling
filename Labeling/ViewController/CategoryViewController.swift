@@ -86,10 +86,11 @@ class CategoryViewController: UIViewController {
             disableCellColorExceptAt(indexPath: indexPath)
             doesGestureOnCellAt(indexPath: indexPath)
         case .ended :
+            print("================")
             let indexPath = calculateCellIndexPath(on: self.labelTextField.center)
-            if !(indexPath.row == 6) { addLabel(indexPath: indexPath) }
             disableAllCellColor()
             animateOut()
+            if !(indexPath.row == 6) { addLabel(indexPath: indexPath) }
         default:
             break
         }
@@ -240,6 +241,8 @@ class CategoryViewController: UIViewController {
             let label = Label(context: self.context)
             label.title = labelText
             label.done = false
+            guard let labelIndex = categories[indexPath.row].labels?.count else { return }
+            label.index = Int64(labelIndex)
             label.parentCategory = categories[indexPath.row]
             self.labels.append(label)
             print(labelText)
@@ -250,12 +253,12 @@ class CategoryViewController: UIViewController {
     }
 
     private func loadCategories() {
-        print("LoadCategories")
         let request: NSFetchRequest<Category> = Category.fetchRequest()
         let sort = NSSortDescriptor(key: "index", ascending: true)
         request.sortDescriptors = [sort]
         do {
             categories = try context.fetch(request)
+            print("LoadCategories")
         } catch {
             print("Error loading labels \(error)")
         }
@@ -336,19 +339,19 @@ extension CategoryViewController: UICollectionViewDataSource {
 extension CategoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if !keyboardIsPresented {
-            //            guard let tableViewController = self.storyboard?.instantiateViewController(withIdentifier: "LabeledTableViewController") else { return }
-            //            print("Tapped!")
-            //            self.navigationController?.pushViewController(tableViewController, animated: true)
-            //            loadLabel()
             performSegue(withIdentifier: "goToLabeled", sender: self)
         }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinactionVC = segue.destination as! LabelTableViewController
-        if let indexPath = collectionView.indexPathsForSelectedItems {
-            print("\(indexPath)")
+        if segue.identifier == "goToLabeled" {
+            guard let destinactionVC = segue.destination as? LabelTableViewController else { return }
+            guard let indexPaths = collectionView.indexPathsForSelectedItems else { return }
+            if let indexPath = indexPaths.first {
+                destinactionVC.selectedCategory = self.categories[indexPath.row]
+            }
         }
+
     }
 
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
