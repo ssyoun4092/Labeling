@@ -1,8 +1,6 @@
 import UIKit
 
-class LabeledTableViewController: UITableViewController {
-
-    var itemArray = [Item]()
+class LabelTableViewController: UITableViewController {
     var selectedCategory: Category? {
         didSet {
 
@@ -27,13 +25,13 @@ class LabeledTableViewController: UITableViewController {
 import SwiftUI
 @available(iOS 13.0, *)
 struct LabeledTableViewControllerRepresentable: UIViewControllerRepresentable {
-    typealias UIViewControllerType = LabeledTableViewController
+    typealias UIViewControllerType = LabelTableViewController
 
-    func makeUIViewController(context: Context) -> LabeledTableViewController {
-        UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LabeledTableViewController") as! LabeledTableViewController
+    func makeUIViewController(context: Context) -> LabelTableViewController {
+        UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LabeledTableViewController") as! LabelTableViewController
     }
 
-    func updateUIViewController(_ uiViewController: LabeledTableViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: LabelTableViewController, context: Context) {
 
     }
 }

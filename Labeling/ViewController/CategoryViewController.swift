@@ -1,36 +1,36 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController {
+class CategoryViewController: UIViewController {
     //MARK: - Properties
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var taskTextField: UITextField!
+    @IBOutlet weak var labelTextField: UITextField!
+
     var textFieldOrigin: CGPoint = CGPoint()
     var selectedCell: UICollectionViewCell? = nil
     var isTaskOnCell: Bool = false
     var keyboardIsPresented: Bool = false
+    var categories = [Category]()
+    lazy var firstLaunchCategories: [FirstLaunchCategory] = [trashLabel, somedayLabel, referenceLabel, delegateLabel, calendarLabel, asapLabel]
     var labels = [Label]()
-    lazy var labelCell: [LabelCell] = [trashLabel, somedayLabel, referenceLabel, delegateLabel, calendarLabel, asapLabel]
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
-    //MARK: - ViewController Life Cycle
+    //MARK: - View Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        //        loadLabelFirstAppLaunch()
-        setUpCollectionView()
+        initView()
         initCollectionView()
-        setUpTaskTextField()
-        let tapForDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        tapForDismissKeyboard.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(tapForDismissKeyboard)
+        setUpCollectionView()
+        setUpLabelTextField()
+        loadCategoriesFirstAppLaunch()
+        loadCategories()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: UIResponder.keyboardDidHideNotification, object: nil)
-        loadLabel()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -39,20 +39,13 @@ class ViewController: UIViewController {
     }
 
     //MARK: - Setup View
-    func setUpCollectionView() {
-        self.collectionView.layer.cornerRadius = 10
-        self.collectionView.layer.shadowColor = CGColor(gray: 1, alpha: 0.5)
-        self.collectionView.layer.shadowOffset = CGSize(width: 100, height: 100)
+    private func initView() {
+        let tapForDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapForDismissKeyboard.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapForDismissKeyboard)
     }
-    
-    func setCellsView() {
-        let width = (collectionView.frame.size.width) / 3
-        let height = (collectionView.frame.size.height * 0.6) / 6
-        let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        flowLayout.itemSize = CGSize(width: width, height: height)
-    }
-    
-    func initCollectionView() {
+
+    private func initCollectionView() {
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.allowsSelection = true
@@ -62,37 +55,45 @@ class ViewController: UIViewController {
         self.collectionView.addGestureRecognizer(longPressGesture)
     }
 
-    func setUpTaskTextField() {
-        textFieldOrigin = self.taskTextField.frame.origin
-        let dragGesture = UIPanGestureRecognizer(target: self, action: #selector(handleDragGestrue))
-        self.taskTextField.delegate = self
-        self.taskTextField.isUserInteractionEnabled = true
-        self.taskTextField.addGestureRecognizer(dragGesture)
-        guard let placeHolderWidth = taskTextField.attributedPlaceholder?.size().width else { return }
-        self.taskTextField.addBottomLineView(width: placeHolderWidth, height: 1)
+    private func setUpCollectionView() {
+        self.collectionView.layer.cornerRadius = 10
+        self.collectionView.layer.shadowColor = CGColor(gray: 1, alpha: 0.5)
+        self.collectionView.layer.shadowOffset = CGSize(width: 100, height: 100)
     }
 
-    //MARK: - Gesture func
+    private func setUpLabelTextField() {
+        textFieldOrigin = self.labelTextField.frame.origin
+        let dragGesture = UIPanGestureRecognizer(target: self, action: #selector(handleDragGestrue))
+        self.labelTextField.delegate = self
+        self.labelTextField.isUserInteractionEnabled = true
+        self.labelTextField.addGestureRecognizer(dragGesture)
+        guard let placeHolderWidth = labelTextField.attributedPlaceholder?.size().width else { return }
+        self.labelTextField.addBottomLineView(width: placeHolderWidth, height: 1)
+    }
+
+    //MARK: - Gesture functions
     @objc func handleDragGestrue(_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: self.taskTextField.superview)
-        let changedXPoint = self.taskTextField.center.x + translation.x
-        let changedYPoint = self.taskTextField.center.y + translation.y
+        let translation = gesture.translation(in: self.labelTextField.superview)
+        let changedXPoint = self.labelTextField.center.x + translation.x
+        let changedYPoint = self.labelTextField.center.y + translation.y
         switch gesture.state {
         case .began:
             animateHideTextFieldBottomLine()
             self.view.endEditing(true)
         case .changed :
-            self.taskTextField.center = CGPoint(x: changedXPoint, y: changedYPoint)
-            let indexPath = calculateCellIndexPath(on: self.taskTextField.center)
+            self.labelTextField.center = CGPoint(x: changedXPoint, y: changedYPoint)
+            let indexPath = calculateCellIndexPath(on: self.labelTextField.center)
             disableCellColorExceptAt(indexPath: indexPath)
             doesGestureOnCellAt(indexPath: indexPath)
         case .ended :
+            let indexPath = calculateCellIndexPath(on: self.labelTextField.center)
+            if !(indexPath.row == 6) { addLabel(indexPath: indexPath) }
             disableAllCellColor()
             animateOut()
         default:
             break
         }
-        gesture.setTranslation(.zero, in: self.taskTextField)
+        gesture.setTranslation(.zero, in: self.labelTextField)
     }
 
     @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
@@ -103,14 +104,8 @@ class ViewController: UIViewController {
             collectionView.beginInteractiveMovementForItem(at: indexPath)
         case .changed:
             collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
-            let position = gesture.location(in: collectionView)
-            if let indexPath = collectionView.indexPathForItem(at: position) {
-                print(indexPath)
-            }
-
         case .ended:
             collectionView.endInteractiveMovement()
-            //            collectionView.cellForItem(at: selectedCellIndexPath!)?.transform = CGAffineTransform.identity
         default:
             collectionView.cancelInteractiveMovement()
         }
@@ -130,7 +125,7 @@ class ViewController: UIViewController {
     }
 
     //MARK: - Handling Cell
-    func calculateCellIndexPath(on point: CGPoint) -> IndexPath {
+    private func calculateCellIndexPath(on point: CGPoint) -> IndexPath {
         let collectionViewOrigin = collectionView.frame.origin
         let collectionViewWidth = collectionView.frame.size.width
         let collectionViewHeight = collectionView.frame.size.height
@@ -164,7 +159,7 @@ class ViewController: UIViewController {
         }
     }
 
-    func doesGestureOnCellAt(indexPath: IndexPath) {
+    private func doesGestureOnCellAt(indexPath: IndexPath) {
         if indexPath.row == 6 {
             self.isTaskOnCell = false
         } else {
@@ -172,7 +167,7 @@ class ViewController: UIViewController {
         }
     }
 
-    func disableCellColorExceptAt(indexPath: IndexPath) {
+    private func disableCellColorExceptAt(indexPath: IndexPath) {
         let row = indexPath.row
         collectionView.cellForItem(at: IndexPath(row: row, section: 0))?.backgroundColor = .cyan
         if row > 0 && row < 5 {
@@ -197,26 +192,26 @@ class ViewController: UIViewController {
         }
     }
 
-    func disableAllCellColor() {
+    private func disableAllCellColor() {
         for index in 0...5 {
             collectionView.cellForItem(at: IndexPath(row: index, section: 0))?.backgroundColor = .gray
         }
     }
     
-    func animateOut() {
+    private func animateOut() {
         if isTaskOnCell {
             UIView.animate(withDuration: 0.3) {
-                self.taskTextField.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+                self.labelTextField.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.taskTextField.animateDisappearAndAppearAt(
+                self.labelTextField.animateDisappearAndAppearAt(
                     initialOrigin: self.textFieldOrigin,
                     duration: 0.3,
                     bottomLineAction: self.showTextFieldBottomLine()
                 )
             }
         } else {
-            self.taskTextField.animateDisappearAndAppearAt(
+            self.labelTextField.animateDisappearAndAppearAt(
                 initialOrigin: self.textFieldOrigin,
                 duration: 0.3,
                 bottomLineAction: self.showTextFieldBottomLine()
@@ -224,54 +219,70 @@ class ViewController: UIViewController {
         }
     }
 
-    //MARK: - handling Coredata
-    private func loadLabelFirstAppLaunch() {
+    //MARK: - Handling Coredata
+    private func loadCategoriesFirstAppLaunch() {
         if UIApplication.isFirstLaunch() {
-            for count in 0...(labelCell.count - 1) {
-                print(count)
-                let label = Label(context: self.context)
-                label.mainLabel = labelCell[count].mainLabel
-                label.subLabel = labelCell[count].subLabel
-                labels.append(label)
-                saveLabel()
+            for count in 0...(firstLaunchCategories.count - 1) {
+                let category = Category(context: self.context)
+                category.mainLabel = firstLaunchCategories[count].mainLabel
+                category.subLabel = firstLaunchCategories[count].subLabel
+                category.index = Int64(count)
+                categories.append(category)
+                saveCategory()
             }
             print("FirstLaunch!")
         }
     }
 
-    private func loadLabel() {
-        print("LoadLabel")
-        let request: NSFetchRequest<Label> = Label.fetchRequest()
+    private func addLabel(indexPath: IndexPath) {
+        guard let labelText = self.labelTextField.text else { return }
+        if !labelText.isEmpty {
+            let label = Label(context: self.context)
+            label.title = labelText
+            label.done = false
+            label.parentCategory = categories[indexPath.row]
+            self.labels.append(label)
+            print(labelText)
+            saveCategory()
+        } else {
+            print("labelText is Empty")
+        }
+    }
+
+    private func loadCategories() {
+        print("LoadCategories")
+        let request: NSFetchRequest<Category> = Category.fetchRequest()
+        let sort = NSSortDescriptor(key: "index", ascending: true)
+        request.sortDescriptors = [sort]
         do {
-            labels = try context.fetch(request)
+            categories = try context.fetch(request)
         } catch {
             print("Error loading labels \(error)")
         }
-        labels.forEach {
-            print($0.mainLabel)
-        }
         collectionView.reloadData()
     }
 
-    private func saveLabel() {
+    private func saveCategory() {
         do {
             try context.save()
+            print("Sucess Save")
         } catch {
             print("error saving Label \(error)")
+            print("Nothing Happen")
         }
         collectionView.reloadData()
     }
 
-    //MARK: - handling TextField BottomLine
+    //MARK: - Handling TextField BottomLine
     private func animateHideTextFieldBottomLine() {
         UIView.animate(withDuration: 0.3) {
             self.hideTextFieldBottomLine()
-            self.taskTextField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            self.labelTextField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         }
     }
 
     private func showTextFieldBottomLine() {
-        let subViews = self.taskTextField.subviews
+        let subViews = self.labelTextField.subviews
         for subView in subViews {
             if subView.tag == 100 {
                 subView.alpha = 1
@@ -280,7 +291,7 @@ class ViewController: UIViewController {
     }
 
     private func hideTextFieldBottomLine() {
-        let subViews = self.taskTextField.subviews
+        let subViews = self.labelTextField.subviews
         for subView in subViews {
             if subView.tag == 100 {
                 subView.alpha = 0
@@ -289,7 +300,7 @@ class ViewController: UIViewController {
     }
 
     private func removeTextFieldBottomLine() {
-        let subviews = self.taskTextField.subviews
+        let subviews = self.labelTextField.subviews
         for subview in subviews {
             if subview.tag == 100 {
                 subview.removeFromSuperview()
@@ -299,7 +310,7 @@ class ViewController: UIViewController {
 }
 
 //MARK: - ViewController Extensions
-extension ViewController: UITextFieldDelegate {
+extension CategoryViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let length = textField.attributedText?.size().width else { return }
         removeTextFieldBottomLine()
@@ -307,23 +318,22 @@ extension ViewController: UITextFieldDelegate {
     }
 }
 
-extension ViewController: UICollectionViewDataSource {
+extension CategoryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 
-        return labels.count
+        return categories.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectorViewCell.identifier, for: indexPath) as! CollectorViewCell
-        print("cellForItemAt")
-        cell.mainLabel.text = labels[indexPath.row].mainLabel
-        cell.subLabel.text = labels[indexPath.row].subLabel
+        cell.mainLabel.text = categories[indexPath.row].mainLabel
+        cell.subLabel.text = categories[indexPath.row].subLabel
         
         return cell
     }
 }
 
-extension ViewController: UICollectionViewDelegate {
+extension CategoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if !keyboardIsPresented {
             //            guard let tableViewController = self.storyboard?.instantiateViewController(withIdentifier: "LabeledTableViewController") else { return }
@@ -335,7 +345,7 @@ extension ViewController: UICollectionViewDelegate {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinactionVC = segue.destination as! LabeledTableViewController
+        let destinactionVC = segue.destination as! LabelTableViewController
         if let indexPath = collectionView.indexPathsForSelectedItems {
             print("\(indexPath)")
         }
@@ -347,15 +357,18 @@ extension ViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let label = labels[sourceIndexPath.row]
-        labels.remove(at: sourceIndexPath.row)
-        labels.insert(label, at: destinationIndexPath.row)
+        let itemMove = categories[sourceIndexPath.row]
+        categories.remove(at: sourceIndexPath.row)
+        categories.insert(itemMove, at: destinationIndexPath.row)
 
-        saveLabel()
+        for (index, element) in categories.enumerated() {
+            element.index = Int64(index)
+        }
+        saveCategory()
     }
 }
 
-extension ViewController: UICollectionViewDelegateFlowLayout {
+extension CategoryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let bounds = self.collectionView.bounds.size
         let cellWidth = (bounds.width - 10) / 2
@@ -379,21 +392,21 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
 #if canImport(SwiftUI) && DEBUG
 import SwiftUI
 @available(iOS 13.0, *)
-struct ViewControllerRepresentable: UIViewControllerRepresentable {
-    typealias UIViewControllerType = ViewController
+struct CategoryViewControllerRepresentable: UIViewControllerRepresentable {
+    typealias UIViewControllerType = CategoryViewController
 
-    func makeUIViewController(context: Context) -> ViewController {
-        UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ViewController") as! ViewController
+    func makeUIViewController(context: Context) -> CategoryViewController {
+        UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ViewController") as! CategoryViewController
     }
 
-    func updateUIViewController(_ uiViewController: ViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: CategoryViewController, context: Context) {
 
     }
 }
 
 struct ViewControllerPreview: PreviewProvider {
     static var previews: some View {
-        ViewControllerRepresentable()
+        CategoryViewControllerRepresentable()
             .preferredColorScheme(.light)
     }
 }

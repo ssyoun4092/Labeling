@@ -15,7 +15,6 @@ extension UITextField {
         bottomView.tag = 100
         borderStyle = UITextField.BorderStyle.none
         self.addSubview(bottomView)
-        print(UIScreen.main.bounds)
     }
 
     func animateDisappearAndAppearAt(initialOrigin: CGPoint, duration: TimeInterval, bottomLineAction: ()) {
@@ -35,12 +34,12 @@ extension UICollectionView {
 }
 
 extension UIApplication {
-        class func isFirstLaunch() -> Bool {
-            if !UserDefaults.standard.bool(forKey: "hasBeenLaunchedBeforeFlag") {
-                UserDefaults.standard.set(true, forKey: "hasBeenLaunchedBeforeFlag")
-                UserDefaults.standard.synchronize()
-                return true
-            }
-            return false
+    class func isFirstLaunch() -> Bool {
+        if !UserDefaults.standard.bool(forKey: "hasBeenLaunchedBeforeFlag") {
+            UserDefaults.standard.set(true, forKey: "hasBeenLaunchedBeforeFlag")
+            UserDefaults.standard.synchronize()
+            return true
         }
+        return false
     }
+}
