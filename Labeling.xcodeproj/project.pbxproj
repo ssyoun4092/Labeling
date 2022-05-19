@@ -12,6 +12,8 @@
 		8E581F8E2834BB6C00EF82F9 /* Category+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E581F8A2834BB6C00EF82F9 /* Category+CoreDataProperties.swift */; };
 		8E581F8F2834BB6C00EF82F9 /* Label+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E581F8B2834BB6C00EF82F9 /* Label+CoreDataClass.swift */; };
 		8E581F902834BB6C00EF82F9 /* Label+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E581F8C2834BB6C00EF82F9 /* Label+CoreDataProperties.swift */; };
+		8E581FD32834D4C400EF82F9 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E581FD22834D4C400EF82F9 /* SettingsViewController.swift */; };
+		8E581FD52835CCFA00EF82F9 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E581FD42835CCFA00EF82F9 /* Settings.swift */; };
 		8E64AEE5282DF0B3009D9BF7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E64AEE4282DF0B3009D9BF7 /* Main.storyboard */; };
 		8E64AEEB282E2F0F009D9BF7 /* LabelTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E64AEEA282E2F0F009D9BF7 /* LabelTableViewController.swift */; };
 		8E64AEF2282E797D009D9BF7 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8E64AEF0282E797D009D9BF7 /* Model.xcdatamodeld */; };
@@ -31,6 +33,8 @@
 		8E581F8A2834BB6C00EF82F9 /* Category+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		8E581F8B2834BB6C00EF82F9 /* Label+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Label+CoreDataClass.swift"; sourceTree = "<group>"; };
 		8E581F8C2834BB6C00EF82F9 /* Label+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Label+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		8E581FD22834D4C400EF82F9 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		8E581FD42835CCFA00EF82F9 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		8E64AEE4282DF0B3009D9BF7 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8E64AEEA282E2F0F009D9BF7 /* LabelTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTableViewController.swift; sourceTree = "<group>"; };
 		8E64AEF1282E797D009D9BF7 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -82,6 +86,7 @@
 			children = (
 				8EE476062819262F0004EA88 /* CategoryViewController.swift */,
 				8E64AEEA282E2F0F009D9BF7 /* LabelTableViewController.swift */,
+				8E581FD22834D4C400EF82F9 /* SettingsViewController.swift */,
 				8ED263D8281D623000812BA1 /* CollectorViewCell.swift */,
 			);
 			path = ViewController;
@@ -99,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				8E64AEF0282E797D009D9BF7 /* Model.xcdatamodeld */,
+				8E581FD42835CCFA00EF82F9 /* Settings.swift */,
 				8E1A5F83282F713100388099 /* FirstLaunchCategory.swift */,
 				8E581F892834BB6C00EF82F9 /* Category+CoreDataClass.swift */,
 				8E581F8A2834BB6C00EF82F9 /* Category+CoreDataProperties.swift */,
@@ -213,12 +219,14 @@
 				8EE476032819262F0004EA88 /* AppDelegate.swift in Sources */,
 				8EE476052819262F0004EA88 /* SceneDelegate.swift in Sources */,
 				8ED263DD281D653E00812BA1 /* Extensions.swift in Sources */,
+				8E581FD52835CCFA00EF82F9 /* Settings.swift in Sources */,
 				8E581F902834BB6C00EF82F9 /* Label+CoreDataProperties.swift in Sources */,
 				8ED263DA281D623000812BA1 /* CollectorViewCell.swift in Sources */,
 				8E1A5F84282F713100388099 /* FirstLaunchCategory.swift in Sources */,
 				8E64AEEB282E2F0F009D9BF7 /* LabelTableViewController.swift in Sources */,
 				8E581F8F2834BB6C00EF82F9 /* Label+CoreDataClass.swift in Sources */,
 				8E581F8E2834BB6C00EF82F9 /* Category+CoreDataProperties.swift in Sources */,
+				8E581FD32834D4C400EF82F9 /* SettingsViewController.swift in Sources */,
 				8E581F8D2834BB6C00EF82F9 /* Category+CoreDataClass.swift in Sources */,
 				8E64AEF2282E797D009D9BF7 /* Model.xcdatamodeld in Sources */,
 			);
