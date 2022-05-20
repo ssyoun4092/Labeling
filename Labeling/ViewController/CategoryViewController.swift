@@ -1,15 +1,25 @@
 import UIKit
 import CoreData
 
+enum CurrentMode {
+    case normal
+    case edit
+}
+
 class CategoryViewController: UIViewController {
+
     //MARK: - Properties
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var labelTextField: UITextField!
+    @IBOutlet weak var editButton: UIBarButtonItem!
+    @IBOutlet weak var settingButton: UIBarButtonItem!
 
     var textFieldOrigin: CGPoint = CGPoint()
     var selectedCell: UICollectionViewCell? = nil
     var isTaskOnCell: Bool = false
     var keyboardIsPresented: Bool = false
+    var currentModeDelegate: CategoryViewControllerDelegate?
+    var currentMode: CurrentMode = .normal
     var categories = [Category]()
     lazy var firstLaunchCategories: [FirstLaunchCategory] = [trashLabel, somedayLabel, referenceLabel, delegateLabel, calendarLabel, asapLabel]
     var labels = [Label]()
@@ -23,6 +33,7 @@ class CategoryViewController: UIViewController {
         initCollectionView()
         setUpCollectionView()
         setUpLabelTextField()
+        setUpEditButton()
         loadCategoriesFirstAppLaunch()
         loadCategories()
     }
@@ -43,6 +54,7 @@ class CategoryViewController: UIViewController {
         let tapForDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapForDismissKeyboard.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapForDismissKeyboard)
+        self.currentModeDelegate = self
     }
 
     private func initCollectionView() {
@@ -50,7 +62,8 @@ class CategoryViewController: UIViewController {
         self.collectionView.dataSource = self
         self.collectionView.allowsSelection = true
         self.collectionView.isUserInteractionEnabled = true
-        self.collectionView.register(UINib(nibName: "CollectorViewCell", bundle: nil), forCellWithReuseIdentifier: CollectorViewCell.identifier)
+        self.collectionView.register(UINib(nibName: "CategoryViewCell", bundle: nil), forCellWithReuseIdentifier: CategoryViewCell.identifier)
+        self.collectionView.register(UINib(nibName: "AddCategoryViewCell", bundle: nil), forCellWithReuseIdentifier: AddCategoryViewCell.identifier)
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
         self.collectionView.addGestureRecognizer(longPressGesture)
     }
@@ -63,7 +76,7 @@ class CategoryViewController: UIViewController {
 
     private func setUpLabelTextField() {
         textFieldOrigin = self.labelTextField.frame.origin
-        let dragGesture = UIPanGestureRecognizer(target: self, action: #selector(handleDragGestrue))
+        let dragGesture = UIPanGestureRecognizer(target: self, action: #selector(handleDragGesture))
         self.labelTextField.delegate = self
         self.labelTextField.isUserInteractionEnabled = true
         self.labelTextField.addGestureRecognizer(dragGesture)
@@ -71,8 +84,12 @@ class CategoryViewController: UIViewController {
         self.labelTextField.addBottomLineView(width: placeHolderWidth, height: 1)
     }
 
+    private func setUpEditButton() {
+        self.editButton.title = (currentMode == .normal) ? "편집" : "완료"
+    }
+
     //MARK: - Gesture functions
-    @objc func handleDragGestrue(_ gesture: UIPanGestureRecognizer) {
+    @objc func handleDragGesture(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: self.labelTextField.superview)
         let changedXPoint = self.labelTextField.center.x + translation.x
         let changedYPoint = self.labelTextField.center.y + translation.y
@@ -84,13 +101,15 @@ class CategoryViewController: UIViewController {
             self.labelTextField.center = CGPoint(x: changedXPoint, y: changedYPoint)
             let indexPath = calculateCellIndexPath(on: self.labelTextField.center)
             disableCellColorExceptAt(indexPath: indexPath)
-            doesGestureOnCellAt(indexPath: indexPath)
+            isGestureOnCellAt(indexPath: indexPath)
         case .ended :
             print("================")
             let indexPath = calculateCellIndexPath(on: self.labelTextField.center)
             disableAllCellColor()
             animateOut()
-            if !(indexPath.row == 6) { addLabel(indexPath: indexPath) }
+            if !(indexPath.row == 6) {
+                addLabelToCategory(indexPath: indexPath)
+            }
         default:
             break
         }
@@ -98,17 +117,19 @@ class CategoryViewController: UIViewController {
     }
 
     @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
-        guard let collectionView = collectionView else { return }
-        switch gesture.state {
-        case .began:
-            guard let indexPath = collectionView.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
-            collectionView.beginInteractiveMovementForItem(at: indexPath)
-        case .changed:
-            collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
-        case .ended:
-            collectionView.endInteractiveMovement()
-        default:
-            collectionView.cancelInteractiveMovement()
+        if currentMode == .edit {
+            guard let collectionView = collectionView else { return }
+            switch gesture.state {
+            case .began:
+                guard let indexPath = collectionView.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
+                collectionView.beginInteractiveMovementForItem(at: indexPath)
+            case .changed:
+                collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
+            case .ended:
+                collectionView.endInteractiveMovement()
+            default:
+                collectionView.cancelInteractiveMovement()
+            }
         }
     }
 
@@ -160,7 +181,7 @@ class CategoryViewController: UIViewController {
         }
     }
 
-    private func doesGestureOnCellAt(indexPath: IndexPath) {
+    private func isGestureOnCellAt(indexPath: IndexPath) {
         if indexPath.row == 6 {
             self.isTaskOnCell = false
         } else {
@@ -202,7 +223,7 @@ class CategoryViewController: UIViewController {
     private func animateOut() {
         if isTaskOnCell {
             UIView.animate(withDuration: 0.3) {
-                self.labelTextField.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+                self.labelTextField.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.labelTextField.animateDisappearAndAppearAt(
@@ -227,6 +248,8 @@ class CategoryViewController: UIViewController {
                 let category = Category(context: self.context)
                 category.mainLabel = firstLaunchCategories[count].mainLabel
                 category.subLabel = firstLaunchCategories[count].subLabel
+                category.doCalendar = firstLaunchCategories[count].doCalendar
+                category.doTimer = firstLaunchCategories[count].doTimer
                 category.index = Int64(count)
                 categories.append(category)
                 saveCategory()
@@ -235,7 +258,7 @@ class CategoryViewController: UIViewController {
         }
     }
 
-    private func addLabel(indexPath: IndexPath) {
+    private func addLabelToCategory(indexPath: IndexPath) {
         guard let labelText = self.labelTextField.text else { return }
         if !labelText.isEmpty {
             let label = Label(context: self.context)
@@ -250,6 +273,23 @@ class CategoryViewController: UIViewController {
         } else {
             print("labelText is Empty")
         }
+    }
+
+    private func removeCategory(indexPath: IndexPath) {
+        let row = indexPath.row
+        context.delete(self.categories[row])
+        if row == (self.categories.count - 1) {
+            self.categories.remove(at: row)
+        } else {
+            self.categories.remove(at: row)
+            for index in (row)...(categories.count - 1) {
+                categories[index].index -= Int64(1)
+            }
+        }
+        for (_, element) in categories.enumerated() {
+            print("\(String(describing: element.mainLabel)), \(element.index)")
+        }
+        saveCategory()
     }
 
     private func loadCategories() {
@@ -310,6 +350,12 @@ class CategoryViewController: UIViewController {
             }
         }
     }
+
+    @IBAction func tapEditButton(_ sender: UIBarButtonItem) {
+        self.currentMode = (self.currentMode == .normal) ? .edit : .normal
+        currentModeDelegate?.changeEditButtonTitle(currentMode: currentMode)
+        collectionView.reloadData()
+    }
 }
 
 //MARK: - ViewController Extensions
@@ -323,16 +369,30 @@ extension CategoryViewController: UITextFieldDelegate {
 
 extension CategoryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-
-        return categories.count
+        if categories.count == 6 {
+            return categories.count
+        } else {
+            return (categories.count + 1)
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectorViewCell.identifier, for: indexPath) as! CollectorViewCell
-        cell.mainLabel.text = categories[indexPath.row].mainLabel
-        cell.subLabel.text = categories[indexPath.row].subLabel
-        
-        return cell
+        let categoryCell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryViewCell.identifier, for: indexPath) as! CategoryViewCell
+        let addCell = collectionView.dequeueReusableCell(withReuseIdentifier: AddCategoryViewCell.identifier, for: indexPath) as! AddCategoryViewCell
+        if indexPath.row == categories.count {
+            addCell.delegate = self
+
+            return addCell
+        } else {
+            categoryCell.delegate = self
+            categoryCell.mainLabel.text = categories[indexPath.row].mainLabel
+            categoryCell.subLabel.text = categories[indexPath.row].subLabel
+            categoryCell.calendarButton.tintColor = (categories[indexPath.row].doCalendar == true) ? .purple : .gray
+            categoryCell.timerButton.tintColor = (categories[indexPath.row].doTimer == true) ? .purple : .gray
+            categoryCell.xButton.isHidden = (self.currentMode == .normal) ? true : false
+
+            return categoryCell
+        }
     }
 }
 
@@ -388,6 +448,55 @@ extension CategoryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
 
         return CGFloat(10)
+    }
+}
+
+extension CategoryViewController: CategoryViewControllerDelegate {
+    func changeEditButtonTitle(currentMode: CurrentMode) {
+        self.editButton.title = (currentMode == .edit) ? "완료" : "편집"
+    }
+
+    func removeCategoryCell(cell: UICollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        let row = indexPath.row
+        context.delete(self.categories[row])
+        if row == (self.categories.count - 1) {
+            self.categories.remove(at: row)
+        } else {
+            self.categories.remove(at: row)
+            for index in (row)...(categories.count - 1) {
+                categories[index].index -= Int64(1)
+            }
+        }
+        for (_, element) in categories.enumerated() {
+            print("\(String(describing: element.mainLabel)), \(element.index)")
+        }
+        saveCategory()
+    }
+}
+
+extension CategoryViewController: AddCategoryDelegate {
+
+    func showAddCategoryController() {
+        guard let addCategoryViewController = self.storyboard?.instantiateViewController(withIdentifier: AddCategoryViewController.identifier) as? AddCategoryViewController else { return }
+        addCategoryViewController.delegate = self
+        addCategoryViewController.modalPresentationStyle = .overCurrentContext
+        addCategoryViewController.modalTransitionStyle = .crossDissolve
+        self.present(addCategoryViewController, animated: true)
+    }
+
+    func addCategory(mainLabel: String, subLabel: String, doCalendar: Bool, doTimer: Bool) {
+        let newCategory = Category(context: self.context)
+        newCategory.mainLabel = mainLabel
+        newCategory.subLabel = subLabel
+        newCategory.doCalendar = doCalendar
+        newCategory.doTimer = doTimer
+        newCategory.index = Int64(categories.count)
+        categories.append(newCategory)
+        for (_, element) in categories.enumerated() {
+            print("\(String(describing: element.mainLabel)), \(element.index)")
+        }
+        saveCategory()
     }
 }
 
