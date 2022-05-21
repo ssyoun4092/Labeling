@@ -1,9 +1,24 @@
 import Foundation
 import UIKit
 
-extension UICollectionViewCell {
-    func shake() {
+extension UIViewController {
+    func dismissView(byTapping tapView: UIView) {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissViewObjc))
+        tapView.addGestureRecognizer(tapGesture)
+    }
 
+    func hideKeyboard() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboardObjc))
+        tapGesture.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapGesture)
+    }
+
+    @objc func dismissViewObjc(_ sender: UITapGestureRecognizer) {
+        self.dismiss(animated: true)
+    }
+
+    @objc func hideKeyboardObjc(byTapping tapView: UIView) {
+        self.view.endEditing(true)
     }
 }
 
@@ -27,10 +42,6 @@ extension UITextField {
             bottomLineAction
         }
     }
-}
-
-extension UICollectionView {
-    
 }
 
 extension UIApplication {

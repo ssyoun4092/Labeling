@@ -30,7 +30,6 @@ class CategoryViewCell: UICollectionViewCell {
         calendarButton.setTitle("", for: .normal)
         timerButton.setTitle("", for: .normal)
     }
-
     @IBAction func tapXButton(_ sender: UIButton) {
         self.delegate?.removeCategoryCell(cell: self)
     }

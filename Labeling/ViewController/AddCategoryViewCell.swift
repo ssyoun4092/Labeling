@@ -8,6 +8,11 @@ class AddCategoryViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         setUpaddButton()
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapAddCell)))
+    }
+
+    @objc func tapAddCell() {
+        delegate?.showAddCategoryController()
     }
 
     func setUpaddButton() {

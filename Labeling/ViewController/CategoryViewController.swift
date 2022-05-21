@@ -29,11 +29,9 @@ class CategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        initView()
         initCollectionView()
         setUpCollectionView()
         setUpLabelTextField()
-        setUpEditButton()
         loadCategoriesFirstAppLaunch()
         loadCategories()
     }
@@ -51,9 +49,7 @@ class CategoryViewController: UIViewController {
 
     //MARK: - Setup View
     private func initView() {
-        let tapForDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        tapForDismissKeyboard.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(tapForDismissKeyboard)
+        self.hideKeyboard()
         self.currentModeDelegate = self
     }
 
@@ -82,10 +78,6 @@ class CategoryViewController: UIViewController {
         self.labelTextField.addGestureRecognizer(dragGesture)
         guard let placeHolderWidth = labelTextField.attributedPlaceholder?.size().width else { return }
         self.labelTextField.addBottomLineView(width: placeHolderWidth, height: 1)
-    }
-
-    private func setUpEditButton() {
-        self.editButton.title = (currentMode == .normal) ? "편집" : "완료"
     }
 
     //MARK: - Gesture functions
@@ -140,10 +132,6 @@ class CategoryViewController: UIViewController {
 
     @objc func keyboardDidHide() {
         self.keyboardIsPresented = false
-    }
-    
-    @objc func hideKeyboard(_ sender: UITapGestureRecognizer) {
-        self.view.endEditing(true)
     }
 
     //MARK: - Handling Cell
@@ -478,8 +466,9 @@ extension CategoryViewController: CategoryViewControllerDelegate {
 extension CategoryViewController: AddCategoryDelegate {
 
     func showAddCategoryController() {
-        guard let addCategoryViewController = self.storyboard?.instantiateViewController(withIdentifier: AddCategoryViewController.identifier) as? AddCategoryViewController else { return }
-        addCategoryViewController.delegate = self
+//        guard let addCategoryViewController = self.storyboard?.instantiateViewController(withIdentifier: AddCategoryViewController.identifier) as? AddCategoryViewController else { return }
+        guard let addCategoryViewController = self.storyboard?.instantiateViewController(withIdentifier: SelectDateViewController.identifier) as? SelectDateViewController else { return }
+//        addCategoryViewController.delegate = self
         addCategoryViewController.modalPresentationStyle = .overCurrentContext
         addCategoryViewController.modalTransitionStyle = .crossDissolve
         self.present(addCategoryViewController, animated: true)
