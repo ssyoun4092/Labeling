@@ -15,8 +15,7 @@ class CategoryViewController: UIViewController {
     @IBOutlet weak var settingButton: UIBarButtonItem!
 
     var textFieldOrigin: CGPoint = CGPoint()
-    var selectedCell: UICollectionViewCell? = nil
-    var isTaskOnCell: Bool = false
+    var isLabelOnCell: Bool = false
     var keyboardIsPresented: Bool = false
     var currentModeDelegate: CategoryViewControllerDelegate?
     var currentMode: CurrentMode = .normal
@@ -136,6 +135,7 @@ class CategoryViewController: UIViewController {
 
     //MARK: - Handling Cell
     private func calculateCellIndexPath(on point: CGPoint) -> IndexPath {
+        let currentCellCount = self.categories.count
         let collectionViewOrigin = collectionView.frame.origin
         let collectionViewWidth = collectionView.frame.size.width
         let collectionViewHeight = collectionView.frame.size.height
@@ -151,29 +151,87 @@ class CategoryViewController: UIViewController {
         let y4Point = collectionViewOrigin.y + (2 * cellHeight) + spacing
         let y5Point = collectionViewOrigin.y + (2 * cellHeight) + (2 * spacing)
         let y6Point = collectionViewOrigin.y + collectionViewHeight
+        var indexPath = IndexPath()
 
-        if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
-            return IndexPath(row: 0, section: 0)
-        } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
-            return IndexPath(row: 1, section: 0)
-        } else if point.x >= x1Point && point.x <= x2Point && point.y >= y3Point && point.y <= y4Point {
-            return IndexPath(row: 2, section: 0)
-        } else if point.x >= x3Point && point.x <= x4Point && point.y >= y3Point && point.y <= y4Point {
-            return IndexPath(row: 3, section: 0)
-        } else if point.x >= x1Point && point.x <= x2Point && point.y >= y5Point && point.y <= y6Point {
-            return IndexPath(row: 4, section: 0)
-        } else if point.x >= x3Point && point.x <= x4Point && point.y >= y5Point && point.y <= y6Point {
-            return IndexPath(row: 5, section: 0)
-        } else {
-            return IndexPath(row: 6, section: 0)
+        switch currentCellCount {
+        case 1:
+            if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
+                indexPath = IndexPath(row: 0, section: 0)
+            } else {
+                indexPath = IndexPath(row: 6, section: 0)
+            }
+        case 2:
+            if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
+                indexPath = IndexPath(row: 0, section: 0)
+            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
+                indexPath = IndexPath(row: 1, section: 0)
+            } else {
+                indexPath = IndexPath(row: 6, section: 0)
+            }
+        case 3:
+            if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
+                indexPath = IndexPath(row: 0, section: 0)
+            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
+                indexPath = IndexPath(row: 1, section: 0)
+            } else if point.x >= x1Point && point.x <= x2Point && point.y >= y3Point && point.y <= y4Point {
+                indexPath = IndexPath(row: 2, section: 0)
+            } else {
+                indexPath = IndexPath(row: 6, section: 0)
+            }
+        case 4:
+            if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
+                indexPath = IndexPath(row: 0, section: 0)
+            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
+                indexPath = IndexPath(row: 1, section: 0)
+            } else if point.x >= x1Point && point.x <= x2Point && point.y >= y3Point && point.y <= y4Point {
+                indexPath = IndexPath(row: 2, section: 0)
+            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y3Point && point.y <= y4Point {
+                indexPath = IndexPath(row: 3, section: 0)
+            } else {
+                indexPath = IndexPath(row: 6, section: 0)
+            }
+        case 5:
+            if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
+                indexPath = IndexPath(row: 0, section: 0)
+            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
+                indexPath = IndexPath(row: 1, section: 0)
+            } else if point.x >= x1Point && point.x <= x2Point && point.y >= y3Point && point.y <= y4Point {
+                indexPath = IndexPath(row: 2, section: 0)
+            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y3Point && point.y <= y4Point {
+                indexPath = IndexPath(row: 3, section: 0)
+            } else if point.x >= x1Point && point.x <= x2Point && point.y >= y5Point && point.y <= y6Point {
+                indexPath = IndexPath(row: 4, section: 0)
+            } else {
+                indexPath = IndexPath(row: 6, section: 0)
+            }
+        case 6:
+            if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
+                indexPath = IndexPath(row: 0, section: 0)
+            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
+                indexPath = IndexPath(row: 1, section: 0)
+            } else if point.x >= x1Point && point.x <= x2Point && point.y >= y3Point && point.y <= y4Point {
+                indexPath = IndexPath(row: 2, section: 0)
+            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y3Point && point.y <= y4Point {
+                indexPath = IndexPath(row: 3, section: 0)
+            } else if point.x >= x1Point && point.x <= x2Point && point.y >= y5Point && point.y <= y6Point {
+                indexPath = IndexPath(row: 4, section: 0)
+            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y5Point && point.y <= y6Point {
+                indexPath = IndexPath(row: 5, section: 0)
+            } else {
+                indexPath = IndexPath(row: 6, section: 0)
+            }
+        default:
+            print("Default")
         }
+
+        return indexPath
     }
 
     private func isGestureOnCellAt(indexPath: IndexPath) {
         if indexPath.row == 6 {
-            self.isTaskOnCell = false
+            self.isLabelOnCell = false
         } else {
-            self.isTaskOnCell = true
+            self.isLabelOnCell = true
         }
     }
 
@@ -209,7 +267,7 @@ class CategoryViewController: UIViewController {
     }
     
     private func animateOut() {
-        if isTaskOnCell {
+        if isLabelOnCell {
             UIView.animate(withDuration: 0.3) {
                 self.labelTextField.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
             }

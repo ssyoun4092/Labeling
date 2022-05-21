@@ -18,8 +18,8 @@ class SelectTimeViewController: UIViewController {
     }
 
     func initBlurView() {
-        let tapForDismissView = UITapGestureRecognizer(target: self, action: #selector(dismissView))
-        self.blurView.addGestureRecognizer(tapForDismissView)
+        let tapForDismissPresentedView = UITapGestureRecognizer(target: self, action: #selector(dismissPresentedView))
+        self.blurView.addGestureRecognizer(tapForDismissPresentedView)
     }
 
     func setUpPickerContainerview() {
@@ -35,7 +35,7 @@ class SelectTimeViewController: UIViewController {
         saveButton.layer.cornerRadius = 5
     }
 
-    @objc func dismissView(_ sender: UITapGestureRecognizer) {
+    @objc func dismissPresentedView(_ sender: UITapGestureRecognizer) {
         self.view.window?.rootViewController?.dismiss(animated: true)
     }
 
