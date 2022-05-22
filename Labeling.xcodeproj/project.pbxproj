@@ -19,6 +19,7 @@
 		8E64AEEB282E2F0F009D9BF7 /* LabelTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E64AEEA282E2F0F009D9BF7 /* LabelTableViewController.swift */; };
 		8E64AEF2282E797D009D9BF7 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8E64AEF0282E797D009D9BF7 /* Model.xcdatamodeld */; };
 		8ECBE218283A091C007D1B78 /* LabelTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ECBE217283A091C007D1B78 /* LabelTableCell.xib */; };
+		8ECBE21A283A2373007D1B78 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECBE219283A2373007D1B78 /* Constants.swift */; };
 		8ED263DA281D623000812BA1 /* CategoryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED263D8281D623000812BA1 /* CategoryViewCell.swift */; };
 		8ED263DB281D623000812BA1 /* CategoryViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ED263D9281D623000812BA1 /* CategoryViewCell.xib */; };
 		8ED263DD281D653E00812BA1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED263DC281D653E00812BA1 /* Extensions.swift */; };
@@ -44,6 +45,7 @@
 		8E64AEEA282E2F0F009D9BF7 /* LabelTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTableViewController.swift; sourceTree = "<group>"; };
 		8E64AEF1282E797D009D9BF7 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		8ECBE217283A091C007D1B78 /* LabelTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LabelTableCell.xib; sourceTree = "<group>"; };
+		8ECBE219283A2373007D1B78 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8ED263D8281D623000812BA1 /* CategoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewCell.swift; sourceTree = "<group>"; };
 		8ED263D9281D623000812BA1 /* CategoryViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryViewCell.xib; sourceTree = "<group>"; };
 		8ED263DC281D653E00812BA1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				8E64AEF0282E797D009D9BF7 /* Model.xcdatamodeld */,
 				8E581FD42835CCFA00EF82F9 /* Settings.swift */,
 				8E1A5F83282F713100388099 /* FirstLaunchCategory.swift */,
+				8ECBE219283A2373007D1B78 /* Constants.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				8E581FDA2835F74600EF82F9 /* Protocols.swift in Sources */,
 				8EE476032819262F0004EA88 /* AppDelegate.swift in Sources */,
 				8EE476052819262F0004EA88 /* SceneDelegate.swift in Sources */,
+				8ECBE21A283A2373007D1B78 /* Constants.swift in Sources */,
 				8ED263DD281D653E00812BA1 /* Extensions.swift in Sources */,
 				8E581FD52835CCFA00EF82F9 /* Settings.swift in Sources */,
 				8E5820242837521900EF82F9 /* AddCategoryViewCell.swift in Sources */,

@@ -8,13 +8,12 @@ class SelectDateViewController: UIViewController {
     @IBOutlet weak var calendarView: FSCalendar!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
-    var addDateDelegate: AddSelectedProperty?
     var selectedDate: Date?
     var nextButtonText: String = "Choose Time"
-    var choosenCellIndexPath: IndexPath?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("SelectDateVC Did Load")
         self.calendarView.dataSource = self
         self.calendarView.delegate = self
         self.dismissView(byTapping: blurView)
@@ -51,27 +50,38 @@ class SelectDateViewController: UIViewController {
     }
 
     @IBAction func tapCancelButton(_ sender: UIButton) {
+        NotificationCenter.default.post(name: NSNotification.Name("cancelButtonTapped"), object: nil)
         self.dismiss(animated: true)
     }
 
     @IBAction func tapNextButton(_ sender: UIButton) {
         guard let selectedDate = selectedDate else { return }
-        let dateString = convertDateToString(date: selectedDate)
-        print(selectedDate)
         if self.nextButton.titleLabel?.text == "Choose Time" {
             guard let selectTimeVC = self.storyboard?.instantiateViewController(withIdentifier: SelectTimeViewController.identifier) as? SelectTimeViewController else { return }
-            self.addDateDelegate?.addSelectedDateToLabel(date: dateString)
-            selectTimeVC.categoryCellIndexPath = self.choosenCellIndexPath
             selectTimeVC.doesComeFromSelectDateVC = true
-            selectTimeVC.passTimeDelegate = self
+            postSelectedDateToObserver(date: selectedDate)
             selectTimeVC.modalPresentationStyle = .overCurrentContext
             selectTimeVC.modalTransitionStyle = .crossDissolve
-            self.present(selectTimeVC, animated: true)
+            guard let categoryVC = self.presentingViewController else { return }
+            self.dismiss(animated: false) {
+                categoryVC.present(selectTimeVC, animated: true)
+            }
         } else {
-            self.addDateDelegate?.saveSelectedDateToLabel(date: dateString, indexPath: choosenCellIndexPath)
+            saveSelectedDateInLabel(date: selectedDate)
             self.dismiss(animated: true)
         }
     }
+
+    private func postSelectedDateToObserver(date: Date) {
+        let convertedDate = convertDateToString(date: date)
+        NotificationCenter.default.post(name: NSNotification.Name("addDate"), object: convertedDate)
+    }
+
+    private func saveSelectedDateInLabel(date: Date) {
+        let convertedDate = convertDateToString(date: date)
+        NotificationCenter.default.post(name: NSNotification.Name("saveDate"), object: convertedDate)
+    }
+
 
     private func convertDateToString(date: Date) -> String {
         let dateFormatter = DateFormatter()
@@ -92,11 +102,5 @@ extension SelectDateViewController: FSCalendarDataSource {
 extension SelectDateViewController: FSCalendarDelegate {
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         self.selectedDate = date
-    }
-}
-
-extension SelectDateViewController: PassTimeToSelectDateVC {
-    func passTimeData(time: String, indexPath: IndexPath?) {
-        self.addDateDelegate?.saveSelectedTimeToLabel(time: time, indexPath: indexPath)
     }
 }

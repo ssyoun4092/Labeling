@@ -28,14 +28,16 @@ class CategoryViewController: UIViewController {
     var categories = [Category]()
     lazy var firstLaunchCategories: [FirstLaunchCategory] = [trashLabel, somedayLabel, referenceLabel, delegateLabel, calendarLabel, asapLabel]
     var labels = [Label]()
-    var tempLabel: [String: String] = ["title": "", "date": "", "time": ""]
+    var tempLabel: [String: Any] = ["title": "", "date": "", "time": "", "cellIndexPath": IndexPath()]
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     //MARK: - View Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("CategoryVC Did Load")
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         initCollectionView()
+        initView()
         setUpCollectionView()
         setUpLabelTextField()
         loadCategoriesFirstAppLaunch()
@@ -46,11 +48,43 @@ class CategoryViewController: UIViewController {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: UIResponder.keyboardDidHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addDate(_:)), name: NSNotification.Name("addDate"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(saveDate(_: )), name: NSNotification.Name("saveDate"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(saveTime(_:)), name: NSNotification.Name("saveTime"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(resetTappedCancel(_:)), name: NSNotification.Name("cancelButtonTapped"), object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidHideNotification, object: nil)
+    }
+
+    @objc func addDate(_ notification: Notification) {
+        guard let passedDate = notification.object as? String else { return }
+        self.tempLabel["date"] = passedDate
+        print("\(tempLabel) in addDateObserver")
+    }
+
+    @objc func saveDate(_ notification: Notification) {
+        guard let passedDate = notification.object as? String else { return }
+        guard let indexPath = self.tempLabel["cellIndexPath"] as? IndexPath else { return }
+        self.tempLabel["date"] = passedDate
+        print(indexPath)
+        print("\(tempLabel) in saveDateObserver")
+        addLabelToCategory(At: indexPath)
+    }
+
+    @objc func saveTime(_ notification: Notification) {
+        guard let passedTime = notification.object as? String else { return }
+        guard let indexPath = self.tempLabel["cellIndexPath"] as? IndexPath else { return }
+        self.tempLabel["time"] = passedTime
+        print("\(tempLabel) in saveTimeObserver")
+        addLabelToCategory(At: indexPath)
+    }
+
+    @objc func resetTappedCancel(_ notification: Notification) {
+        resetTempLabel()
     }
 
     //MARK: - Setup View
@@ -105,11 +139,10 @@ class CategoryViewController: UIViewController {
             disableAllCellColor()
             animateOut()
             if !(indexPath.row == 6) {
-                //                addLabelToCategory(At: indexPath)
+                self.tempLabel["cellIndexPath"] = indexPath
                 saveTitleInTempLabel(title: self.labelTextField.text)
                 presentSelectViewConroller(indexPath: indexPath)
             }
-            print(tempLabel)
             print("=====")
         default:
             break
@@ -248,23 +281,17 @@ class CategoryViewController: UIViewController {
     private func presentSelectViewConroller(indexPath: IndexPath) {
         if categories[indexPath.row].doCalendar && categories[indexPath.row].doTimer {
             guard let selectDateVC = self.storyboard?.instantiateViewController(withIdentifier: SelectDateViewController.identifier) as? SelectDateViewController else { return }
-            selectDateVC.addDateDelegate = self
-            selectDateVC.choosenCellIndexPath = indexPath
             selectDateVC.modalPresentationStyle = .overCurrentContext
             selectDateVC.modalTransitionStyle = .crossDissolve
             self.present(selectDateVC, animated: true)
         } else if (categories[indexPath.row].doCalendar == true) && (categories[indexPath.row].doTimer == false) {
             guard let selectDateVC = self.storyboard?.instantiateViewController(withIdentifier: SelectDateViewController.identifier) as? SelectDateViewController else { return }
-            selectDateVC.choosenCellIndexPath = indexPath
             selectDateVC.nextButtonText = "Save"
-            selectDateVC.addDateDelegate = self
             selectDateVC.modalPresentationStyle = .overCurrentContext
             selectDateVC.modalTransitionStyle = .crossDissolve
             self.present(selectDateVC, animated: true)
         } else if (categories[indexPath.row].doCalendar == false) && (categories[indexPath.row].doTimer == true) {
             guard let selectTimeVC = self.storyboard?.instantiateViewController(withIdentifier: SelectTimeViewController.identifier) as? SelectTimeViewController else { return }
-            selectTimeVC.saveTimeDelegate = self
-            selectTimeVC.categoryCellIndexPath = indexPath
             selectTimeVC.modalPresentationStyle = .overCurrentContext
             selectTimeVC.modalTransitionStyle = .crossDissolve
             self.present(selectTimeVC, animated: true)
@@ -350,6 +377,7 @@ class CategoryViewController: UIViewController {
         } else {
             print("Be Empty!")
         }
+        print("\(tempLabel) in saveTitle Method")
     }
 
     private func resetTempLabel() {
@@ -359,9 +387,9 @@ class CategoryViewController: UIViewController {
     private func addLabelToCategory(At indexPath: IndexPath) {
         guard let labelText = self.labelTextField.text else { return }
         let label = Label(context: self.context)
-        label.title = self.tempLabel["title"]
-        label.date = self.tempLabel["date"]
-        label.time = self.tempLabel["time"]
+        label.title = self.tempLabel["title"] as? String
+        label.date = self.tempLabel["date"] as? String
+        label.time = self.tempLabel["time"] as? String
         label.done = false
         guard let labelIndex = categories[indexPath.row].labels?.count else { return }
         label.index = Int64(labelIndex)
@@ -452,6 +480,10 @@ class CategoryViewController: UIViewController {
         currentModeDelegate?.changeEditButtonTitle(currentMode: currentMode)
         collectionView.reloadData()
     }
+
+    deinit {
+        print("CategoryVC Deinit")
+    }
 }
 
 //MARK: - ViewController Extensions
@@ -484,8 +516,8 @@ extension CategoryViewController: UICollectionViewDataSource {
             categoryCell.delegate = self
             categoryCell.mainLabel.text = categories[indexPath.row].mainLabel
             categoryCell.subLabel.text = categories[indexPath.row].subLabel
-            categoryCell.calendarButton.tintColor = (categories[indexPath.row].doCalendar == true) ? .purple : .gray
-            categoryCell.timerButton.tintColor = (categories[indexPath.row].doTimer == true) ? .purple : .gray
+            categoryCell.calendarButton.tintColor = (categories[indexPath.row].doCalendar == true) ? .purple : Color.cellBackgroundColor
+            categoryCell.timerButton.tintColor = (categories[indexPath.row].doTimer == true) ? .purple : Color.cellBackgroundColor
             categoryCell.xButton.isHidden = (self.currentMode == .normal) ? true : false
 
             return categoryCell
@@ -592,25 +624,6 @@ extension CategoryViewController: AddSelectedProperty {
             print("\(String(describing: element.mainLabel)), \(element.index)")
         }
         saveCategory()
-    }
-
-    func addSelectedDateToLabel(date: String) {
-        self.tempLabel["date"] = date
-    }
-
-    func saveSelectedDateToLabel(date: String, indexPath: IndexPath?) {
-        guard let indexPath = indexPath else { return }
-        self.tempLabel["date"] = date
-        self.tempLabel["time"] = ""
-        addLabelToCategory(At: indexPath)
-        resetTempLabel()
-    }
-
-    func saveSelectedTimeToLabel(time: String, indexPath: IndexPath?) {
-        guard let indexPath = indexPath else { return }
-        self.tempLabel["time"] = time
-        addLabelToCategory(At: indexPath)
-        resetTempLabel()
     }
 }
 

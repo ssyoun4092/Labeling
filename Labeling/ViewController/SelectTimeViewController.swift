@@ -1,9 +1,5 @@
 import UIKit
 
-protocol PassTimeToSelectDateVC {
-    func passTimeData(time: String, indexPath: IndexPath?)
-}
-
 class SelectTimeViewController: UIViewController {
     static let identifier = "SelectTimeViewController"
     @IBOutlet weak var blurView: UIView!
@@ -12,14 +8,12 @@ class SelectTimeViewController: UIViewController {
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
 
-    var passTimeDelegate: PassTimeToSelectDateVC?
-    var saveTimeDelegate: AddSelectedProperty?
-    var selectedTime: Date = Date()
-    var categoryCellIndexPath: IndexPath?
+    var selectedTime: Date?
     var doesComeFromSelectDateVC: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("SelectTimeVC Did Load")
         initBlurView()
         setUpPickerContainerview()
         setUpTimePicker()
@@ -44,17 +38,24 @@ class SelectTimeViewController: UIViewController {
         saveButton.layer.cornerRadius = 5
     }
     @IBAction func tapCancelButton(_ sender: UIButton) {
-
+        if doesComeFromSelectDateVC {
+            guard let selectedDateVC = self.storyboard?.instantiateViewController(withIdentifier: SelectDateViewController.identifier) as? SelectDateViewController else { return }
+            selectedDateVC.modalTransitionStyle = .crossDissolve
+            selectedDateVC.modalPresentationStyle = .overCurrentContext
+            guard let categoryVC = self.presentingViewController else { return }
+            self.dismiss(animated: false) {
+                categoryVC.present(selectedDateVC, animated: true)
+            }
+        } else {
+            NotificationCenter.default.post(name: NSNotification.Name("cancelButtonTapped"), object: nil)
+            self.dismiss(animated: true)
+        }
     }
 
     @IBAction func tapSaveButton(_ sender: UIButton) {
-        let timeString = convertTimeToString(time: selectedTime)
-        print("\(timeString) in SelectTimeVC")
-        if doesComeFromSelectDateVC {
-            self.passTimeDelegate?.passTimeData(time: timeString, indexPath: categoryCellIndexPath)
-        } else {
-            self.saveTimeDelegate?.saveSelectedTimeToLabel(time: timeString, indexPath: categoryCellIndexPath)
-        }
+        guard let selectedTime = selectedTime else { return }
+        saveSelectedTimeInLabel(time: selectedTime)
+        self.dismiss(animated: true)
     }
 
     func convertTimeToString(time: Date) -> String {
@@ -65,11 +66,20 @@ class SelectTimeViewController: UIViewController {
         return timeString
     }
 
+    func saveSelectedTimeInLabel(time: Date) {
+        let convertedTime = convertTimeToString(time: time)
+        NotificationCenter.default.post(name: NSNotification.Name("saveTime"), object: convertedTime)
+    }
+
     @objc func dismissPresentedView(_ sender: UITapGestureRecognizer) {
         self.dismiss(animated: true)
     }
 
     @objc func timePickerValueChanged(_ datePicker: UIDatePicker) {
         selectedTime = datePicker.date
+    }
+
+    deinit {
+        print("SelectTimeVC Deinit")
     }
 }
