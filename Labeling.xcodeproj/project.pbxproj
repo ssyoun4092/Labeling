@@ -18,6 +18,7 @@
 		8E64AEE5282DF0B3009D9BF7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E64AEE4282DF0B3009D9BF7 /* Main.storyboard */; };
 		8E64AEEB282E2F0F009D9BF7 /* LabelTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E64AEEA282E2F0F009D9BF7 /* LabelTableViewController.swift */; };
 		8E64AEF2282E797D009D9BF7 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8E64AEF0282E797D009D9BF7 /* Model.xcdatamodeld */; };
+		8ECBE218283A091C007D1B78 /* LabelTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ECBE217283A091C007D1B78 /* LabelTableCell.xib */; };
 		8ED263DA281D623000812BA1 /* CategoryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED263D8281D623000812BA1 /* CategoryViewCell.swift */; };
 		8ED263DB281D623000812BA1 /* CategoryViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ED263D9281D623000812BA1 /* CategoryViewCell.xib */; };
 		8ED263DD281D653E00812BA1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED263DC281D653E00812BA1 /* Extensions.swift */; };
@@ -42,6 +43,7 @@
 		8E64AEE4282DF0B3009D9BF7 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8E64AEEA282E2F0F009D9BF7 /* LabelTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTableViewController.swift; sourceTree = "<group>"; };
 		8E64AEF1282E797D009D9BF7 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		8ECBE217283A091C007D1B78 /* LabelTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LabelTableCell.xib; sourceTree = "<group>"; };
 		8ED263D8281D623000812BA1 /* CategoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewCell.swift; sourceTree = "<group>"; };
 		8ED263D9281D623000812BA1 /* CategoryViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryViewCell.xib; sourceTree = "<group>"; };
 		8ED263DC281D653E00812BA1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -76,7 +78,6 @@
 				9B73038C3BEE1C9A3573514C /* Pods-Labeling.debug.xcconfig */,
 				CE2E2251AFD37A134F9AECE4 /* Pods-Labeling.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -110,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				8ED263D9281D623000812BA1 /* CategoryViewCell.xib */,
+				8ECBE217283A091C007D1B78 /* LabelTableCell.xib */,
 				8E5820212837520600EF82F9 /* AddCategoryViewCell.xib */,
 				8E64AEE4282DF0B3009D9BF7 /* Main.storyboard */,
 				8EE4760D281926330004EA88 /* LaunchScreen.storyboard */,
@@ -247,6 +249,7 @@
 				8E5820222837520700EF82F9 /* AddCategoryViewCell.xib in Resources */,
 				8EE4760F281926330004EA88 /* LaunchScreen.storyboard in Resources */,
 				8EE4760C281926330004EA88 /* Assets.xcassets in Resources */,
+				8ECBE218283A091C007D1B78 /* LabelTableCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

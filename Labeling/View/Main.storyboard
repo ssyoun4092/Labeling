@@ -13,7 +13,7 @@
         <!--Category View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="ViewController" id="BYZ-38-t0r" customClass="CategoryViewController" customModule="Labeling" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CategoryViewController" id="BYZ-38-t0r" customClass="CategoryViewController" customModule="Labeling" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -270,7 +270,7 @@
                                         <rect key="frame" x="10" y="5" width="342.66666666666669" height="278"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </view>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Ev-1E-wPx">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="3Ev-1E-wPx">
                                         <rect key="frame" x="10" y="293" width="342.66666666666669" height="40"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0rG-j5-CNz">
@@ -287,11 +287,9 @@
                                                 <rect key="frame" x="171.33333333333331" y="0.0" width="171.33333333333331" height="40"/>
                                                 <color key="backgroundColor" systemColor="systemPurpleColor"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="Choose Time">
-                                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </buttonConfiguration>
+                                                <buttonConfiguration key="configuration" style="plain"/>
                                                 <connections>
-                                                    <action selector="tapChooseTimeButton:" destination="aL1-3m-D2C" eventType="touchUpInside" id="jNB-GM-E4n"/>
+                                                    <action selector="tapNextButton:" destination="aL1-3m-D2C" eventType="touchUpInside" id="Fp4-B8-gvJ"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -329,7 +327,7 @@
                         <outlet property="calendarBackgroundView" destination="NU1-Me-aLV" id="wRz-L6-tMj"/>
                         <outlet property="calendarView" destination="tiS-en-tgi" id="oF7-lJ-SgC"/>
                         <outlet property="cancelButton" destination="0rG-j5-CNz" id="Gmk-ua-Wu3"/>
-                        <outlet property="chooseTimeButton" destination="rN3-Cu-Bcf" id="keV-YZ-Zli"/>
+                        <outlet property="nextButton" destination="rN3-Cu-Bcf" id="keV-YZ-Zli"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VxQ-Py-TA6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -349,13 +347,13 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wai-io-8bb" userLabel="PickerContainer">
-                                <rect key="frame" x="27.666666666666657" y="299" width="372.66666666666674" height="378"/>
+                                <rect key="frame" x="32.666666666666657" y="289" width="362.66666666666674" height="348"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Kdy-9G-v7N" userLabel="ContainerVStack">
-                                        <rect key="frame" x="15" y="30" width="342.66666666666669" height="328"/>
+                                        <rect key="frame" x="10" y="10" width="342.66666666666669" height="328"/>
                                         <subviews>
                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="vzN-Re-TbQ">
-                                                <rect key="frame" x="0.0" y="0.0" width="342" height="278"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="342.66666666666669" height="278"/>
                                                 <locale key="locale" localeIdentifier="ko_KR"/>
                                             </datePicker>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Qt-nf-X76" userLabel="ButtonHStack">
@@ -368,6 +366,7 @@
                                                             <color key="baseForegroundColor" systemColor="systemPurpleColor"/>
                                                         </buttonConfiguration>
                                                         <connections>
+                                                            <action selector="tapCancelButton:" destination="47i-VT-gYY" eventType="touchUpInside" id="2bP-km-WfG"/>
                                                             <action selector="tapCancelButton:" destination="aL1-3m-D2C" eventType="touchUpInside" id="Rtr-vd-bDI"/>
                                                         </connections>
                                                     </button>
@@ -379,7 +378,7 @@
                                                             <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </buttonConfiguration>
                                                         <connections>
-                                                            <action selector="tapChooseTimeButton:" destination="aL1-3m-D2C" eventType="touchUpInside" id="SYq-5V-Kto"/>
+                                                            <action selector="tapSaveButton:" destination="47i-VT-gYY" eventType="touchUpInside" id="oGb-po-aiW"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -395,20 +394,19 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" secondItem="Kdy-9G-v7N" secondAttribute="height" constant="50" id="Nea-IK-icu"/>
-                                    <constraint firstAttribute="width" secondItem="Kdy-9G-v7N" secondAttribute="width" constant="30" id="YUi-e3-stS"/>
+                                    <constraint firstAttribute="height" secondItem="Kdy-9G-v7N" secondAttribute="height" constant="20" id="Nea-IK-icu" userLabel="height = ContainerVStack.height + 20"/>
+                                    <constraint firstAttribute="width" secondItem="Kdy-9G-v7N" secondAttribute="width" constant="20" id="YUi-e3-stS"/>
+                                    <constraint firstItem="Kdy-9G-v7N" firstAttribute="centerY" secondItem="wai-io-8bb" secondAttribute="centerY" id="hD1-Ye-XPl"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="043-T8-1de"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="vzN-Re-TbQ" firstAttribute="height" secondItem="PGN-Ra-d15" secondAttribute="height" multiplier="0.3" id="6CE-AN-5Tr"/>
                             <constraint firstItem="9We-xW-13m" firstAttribute="leading" secondItem="043-T8-1de" secondAttribute="leading" id="7Cf-gY-gkK"/>
                             <constraint firstItem="vzN-Re-TbQ" firstAttribute="width" secondItem="PGN-Ra-d15" secondAttribute="width" multiplier="0.8" id="ZBV-WX-OlX"/>
                             <constraint firstItem="wai-io-8bb" firstAttribute="centerX" secondItem="PGN-Ra-d15" secondAttribute="centerX" id="k1T-hz-TIB"/>
-                            <constraint firstItem="vzN-Re-TbQ" firstAttribute="centerY" secondItem="043-T8-1de" secondAttribute="centerY" id="ljg-It-1DX"/>
-                            <constraint firstItem="wai-io-8bb" firstAttribute="centerY" secondItem="PGN-Ra-d15" secondAttribute="centerY" constant="25" id="ofd-D7-tCN"/>
+                            <constraint firstItem="wai-io-8bb" firstAttribute="centerY" secondItem="PGN-Ra-d15" secondAttribute="centerY" id="ofd-D7-tCN"/>
                             <constraint firstItem="043-T8-1de" firstAttribute="trailing" secondItem="9We-xW-13m" secondAttribute="trailing" id="ooi-eO-hc6"/>
                             <constraint firstItem="9We-xW-13m" firstAttribute="top" secondItem="PGN-Ra-d15" secondAttribute="top" id="s6k-Ot-4kK"/>
                             <constraint firstItem="0Qt-nf-X76" firstAttribute="centerX" secondItem="043-T8-1de" secondAttribute="centerX" id="vug-C4-h1v"/>

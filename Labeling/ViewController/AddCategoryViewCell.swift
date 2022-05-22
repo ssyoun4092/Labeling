@@ -3,7 +3,7 @@ import UIKit
 class AddCategoryViewCell: UICollectionViewCell {
     @IBOutlet weak var addButton: UIButton!
     static let identifier = "AddCategoryViewCell"
-    var delegate: AddCategoryDelegate?
+    var delegate: AddSelectedProperty?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -12,7 +12,7 @@ class AddCategoryViewCell: UICollectionViewCell {
     }
 
     @objc func tapAddCell() {
-        delegate?.showAddCategoryController()
+        delegate?.presentAddCategoryController()
     }
 
     func setUpaddButton() {
@@ -20,6 +20,6 @@ class AddCategoryViewCell: UICollectionViewCell {
     }
 
     @IBAction func tapAddButton(_ sender: UIButton) {
-        delegate?.showAddCategoryController()
+        delegate?.presentAddCategoryController()
     }
 }

@@ -9,10 +9,10 @@
         <relationship name="labels" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Label" inverseName="parentCategory" inverseEntity="Label"/>
     </entity>
     <entity name="Label" representedClassName="Label" syncable="YES" codeGenerationType="class">
-        <attribute name="doCalendar" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="date" optional="YES" attributeType="String"/>
         <attribute name="done" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="doTimer" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="index" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="time" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="parentCategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="labels" inverseEntity="Category"/>
     </entity>

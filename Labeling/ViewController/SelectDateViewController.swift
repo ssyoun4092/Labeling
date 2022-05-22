@@ -7,10 +7,11 @@ class SelectDateViewController: UIViewController {
     @IBOutlet weak var calendarBackgroundView: UIView!
     @IBOutlet weak var calendarView: FSCalendar!
     @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var chooseTimeButton: UIButton!
-
+    @IBOutlet weak var nextButton: UIButton!
+    var addDateDelegate: AddSelectedProperty?
     var selectedDate: Date?
-
+    var nextButtonText: String = "Choose Time"
+    var choosenCellIndexPath: IndexPath?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,11 +23,6 @@ class SelectDateViewController: UIViewController {
         setUpButtons()
     }
 
-//    private func initBlurView() {
-//        let tapForDismissView = UITapGestureRecognizer(target: self, action: #selector(dismissView))
-//        self.blurView.addGestureRecognizer(tapForDismissView)
-//    }
-
     private func setUpCalendarBackgroundView() {
         self.calendarBackgroundView.layer.cornerRadius = 10
     }
@@ -35,12 +31,13 @@ class SelectDateViewController: UIViewController {
         calendarView.scrollEnabled = true
         calendarView.scrollDirection = .horizontal
         setUpCalendarAppearance()
-
     }
 
     private func setUpButtons() {
+        self.nextButton.setTitle(nextButtonText, for: .normal)
+        self.nextButton.tintColor = UIColor.white
         self.cancelButton.layer.cornerRadius = 5
-        self.chooseTimeButton.layer.cornerRadius = 5
+        self.nextButton.layer.cornerRadius = 5
     }
 
     private func setUpCalendarAppearance() {
@@ -53,22 +50,34 @@ class SelectDateViewController: UIViewController {
         calendarView.appearance.selectionColor = .systemPurple
     }
 
-//    @objc func dismissView(_ sender: UITapGestureRecognizer) {
-//        self.dismiss(animated: true)
-//    }
-
     @IBAction func tapCancelButton(_ sender: UIButton) {
         self.dismiss(animated: true)
     }
 
-    @IBAction func tapChooseTimeButton(_ sender: UIButton) {
-//        self.dismiss(animated: false)
+    @IBAction func tapNextButton(_ sender: UIButton) {
         guard let selectedDate = selectedDate else { return }
+        let dateString = convertDateToString(date: selectedDate)
         print(selectedDate)
-        guard let selectTimeViewController = self.storyboard?.instantiateViewController(withIdentifier: SelectTimeViewController.identifier) as? SelectTimeViewController else { return }
-        selectTimeViewController.modalPresentationStyle = .overCurrentContext
-        selectTimeViewController.modalTransitionStyle = .crossDissolve
-        self.present(selectTimeViewController, animated: true)
+        if self.nextButton.titleLabel?.text == "Choose Time" {
+            guard let selectTimeVC = self.storyboard?.instantiateViewController(withIdentifier: SelectTimeViewController.identifier) as? SelectTimeViewController else { return }
+            self.addDateDelegate?.addSelectedDateToLabel(date: dateString)
+            selectTimeVC.categoryCellIndexPath = self.choosenCellIndexPath
+            selectTimeVC.doesComeFromSelectDateVC = true
+            selectTimeVC.passTimeDelegate = self
+            selectTimeVC.modalPresentationStyle = .overCurrentContext
+            selectTimeVC.modalTransitionStyle = .crossDissolve
+            self.present(selectTimeVC, animated: true)
+        } else {
+            self.addDateDelegate?.saveSelectedDateToLabel(date: dateString, indexPath: choosenCellIndexPath)
+            self.dismiss(animated: true)
+        }
+    }
+
+    private func convertDateToString(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY년 MM월 dd일"
+        let stringDate = dateFormatter.string(from: date)
+        return stringDate
     }
 
     deinit {
@@ -83,5 +92,11 @@ extension SelectDateViewController: FSCalendarDataSource {
 extension SelectDateViewController: FSCalendarDelegate {
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         self.selectedDate = date
+    }
+}
+
+extension SelectDateViewController: PassTimeToSelectDateVC {
+    func passTimeData(time: String, indexPath: IndexPath?) {
+        self.addDateDelegate?.saveSelectedTimeToLabel(time: time, indexPath: indexPath)
     }
 }

@@ -1,5 +1,9 @@
 import UIKit
 
+protocol PassTimeToSelectDateVC {
+    func passTimeData(time: String, indexPath: IndexPath?)
+}
+
 class SelectTimeViewController: UIViewController {
     static let identifier = "SelectTimeViewController"
     @IBOutlet weak var blurView: UIView!
@@ -7,7 +11,12 @@ class SelectTimeViewController: UIViewController {
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
+
+    var passTimeDelegate: PassTimeToSelectDateVC?
+    var saveTimeDelegate: AddSelectedProperty?
     var selectedTime: Date = Date()
+    var categoryCellIndexPath: IndexPath?
+    var doesComeFromSelectDateVC: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,20 +43,33 @@ class SelectTimeViewController: UIViewController {
         cancelButton.layer.cornerRadius = 5
         saveButton.layer.cornerRadius = 5
     }
+    @IBAction func tapCancelButton(_ sender: UIButton) {
+
+    }
+
+    @IBAction func tapSaveButton(_ sender: UIButton) {
+        let timeString = convertTimeToString(time: selectedTime)
+        print("\(timeString) in SelectTimeVC")
+        if doesComeFromSelectDateVC {
+            self.passTimeDelegate?.passTimeData(time: timeString, indexPath: categoryCellIndexPath)
+        } else {
+            self.saveTimeDelegate?.saveSelectedTimeToLabel(time: timeString, indexPath: categoryCellIndexPath)
+        }
+    }
+
+    func convertTimeToString(time: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH시 mm분"
+        let timeString = dateFormatter.string(from: time)
+
+        return timeString
+    }
 
     @objc func dismissPresentedView(_ sender: UITapGestureRecognizer) {
-        self.view.window?.rootViewController?.dismiss(animated: true)
+        self.dismiss(animated: true)
     }
 
     @objc func timePickerValueChanged(_ datePicker: UIDatePicker) {
         selectedTime = datePicker.date
-        print(selectedTime)
-//        guard let selectedTime = selectedTime else {
-//            return
-//        }
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "HH:mm"
-//        let selectedTimeString = formatter.string(from: selectedTime)
-//        print(selectedTimeString)
     }
 }

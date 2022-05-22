@@ -8,7 +8,7 @@ class AddCategoryViewController: UIViewController {
     @IBOutlet weak var categorySubLabelTextField: UITextField!
     @IBOutlet weak var calendarSwitch: UISwitch!
     @IBOutlet weak var timerSwitch: UISwitch!
-    var delegate: AddCategoryDelegate?
+    var delegate: AddSelectedProperty?
 
     override func viewDidLoad() {
         super.viewDidLoad()
