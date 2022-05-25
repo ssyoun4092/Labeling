@@ -54,3 +54,21 @@ extension UIApplication {
         return false
     }
 }
+
+extension UIView {
+    func generateGradient() {
+        let colors: [CGColor] = [
+            .init(red: 9/255, green: 198/255, blue: 249/255, alpha: 1),
+            .init(red: 4/255, green: 93/255, blue: 233/255, alpha: 1)
+        ]
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = colors
+//        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.type = .radial
+        gradientLayer.startPoint = CGPoint(x: 0.8, y: 0.2)
+        gradientLayer.endPoint = CGPoint(x: -1, y: 3)
+        gradientLayer.frame = bounds
+        layer.insertSublayer(gradientLayer, at: 0)
+    }
+}

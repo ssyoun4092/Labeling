@@ -27,6 +27,14 @@ class CategoryViewController: UIViewController {
     var currentMode: CurrentMode = .normal
     var categories = [Category]()
     lazy var firstLaunchCategories: [FirstLaunchCategory] = [trashLabel, somedayLabel, referenceLabel, delegateLabel, calendarLabel, asapLabel]
+    var isGestureOnCell: Bool? {
+        didSet {
+            print("isGestureOnCell DidSet")
+            for row in 0...(categories.count - 1) {
+                self.collectionView.cellForItem(at: IndexPath(row: row, section: 0))?.backgroundColor = Color.cellBackgroundColor
+            }
+        }
+    }
     var labels = [Label]()
     var tempLabel: [String: Any] = ["title": "", "date": "", "time": "", "cellIndexPath": IndexPath()]
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -132,8 +140,12 @@ class CategoryViewController: UIViewController {
         case .changed :
             self.labelTextField.center = CGPoint(x: changedXPoint, y: changedYPoint)
             let indexPath = calculateCellIndexPath(on: self.labelTextField.center)
-            disableCellColorExceptAt(indexPath: indexPath)
-            self.isLabelOnCell = isGestureOnCellAt(indexPath: indexPath)
+            if indexPath.row == 6 {
+                disableAllCellColor()
+            } else {
+                disableCellColorExcept(At: indexPath)
+            }
+            self.isLabelOnCell = isGestureOnCell(At: indexPath)
         case .ended :
             let indexPath = calculateCellIndexPath(on: self.labelTextField.center)
             disableAllCellColor()
@@ -158,13 +170,100 @@ class CategoryViewController: UIViewController {
                 guard let indexPath = collectionView.indexPathForItem(at: gesture.location(in: collectionView)) else { return }
                 collectionView.beginInteractiveMovementForItem(at: indexPath)
             case .changed:
-                collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: collectionView))
+                let gestureLocation = gesture.location(in: collectionView)
+                let modifiedGestureLocation = modifyGestureLocationIfGoesOffFromCollectioViewBounds(gestureLocation)
+                collectionView.updateInteractiveMovementTargetPosition(modifiedGestureLocation)
+                if let indexPath = collectionView.indexPathForItem(at: gestureLocation) {
+                    print(indexPath)
+                }
             case .ended:
                 collectionView.endInteractiveMovement()
             default:
                 collectionView.cancelInteractiveMovement()
             }
         }
+    }
+
+    private func modifyGestureLocationIfGoesOffFromCollectioViewBounds(_ gestureLocation: CGPoint) -> CGPoint{
+        var modifiedGestureLocation = CGPoint()
+        let numberOfCells = (categories.count == 6) ? 6 : (categories.count + 1)
+        let cellWidth = (self.collectionView.bounds.size.width - 10) / 2
+        let halfCellWidth = cellWidth / 2
+        let cellHeight = (self.collectionView.bounds.size.height - 20) / 3
+        let halfCellHeight = cellHeight / 2
+        let spacing: CGFloat = 10
+        let spacingCellVertically = cellWidth + spacing
+        let spacingCellHorizontally = cellHeight + spacing
+
+        let firstPoint = CGPoint(x: halfCellWidth, y: halfCellHeight)
+        let secondPoint = CGPoint(x: halfCellWidth +  spacingCellVertically, y: halfCellHeight)
+        let thirdPoint = CGPoint(x: halfCellWidth, y: halfCellHeight + spacingCellHorizontally)
+        let fourthPoint = CGPoint(x: halfCellWidth + spacingCellVertically, y: halfCellHeight + spacingCellHorizontally)
+        let fifthPoint = CGPoint(x: halfCellWidth, y: halfCellHeight + (spacingCellHorizontally * 2))
+        let sixthPoint = CGPoint(x: halfCellWidth + spacingCellVertically, y: halfCellHeight + (spacingCellHorizontally * 2))
+
+        switch numberOfCells {
+        case 1, 2:
+            print("firstPoint: \(firstPoint)")
+            print("secondPoint: \(secondPoint)")
+            if gestureLocation.x < firstPoint.x {
+                modifiedGestureLocation = CGPoint(x: firstPoint.x, y: firstPoint.y)
+            } else if gestureLocation.x > secondPoint.x {
+                modifiedGestureLocation = CGPoint(x: secondPoint.x, y: secondPoint.y)
+
+            } else if gestureLocation.y < firstPoint.y || gestureLocation.y > firstPoint.y {
+                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: firstPoint.y)
+            } else {
+                modifiedGestureLocation = gestureLocation
+            }
+
+        case 3, 4:
+            if gestureLocation.x < firstPoint.x && gestureLocation.y < firstPoint.y {
+                modifiedGestureLocation = CGPoint(x: firstPoint.x, y: firstPoint.y)
+            } else if gestureLocation.x > secondPoint.x && gestureLocation.y < secondPoint.y {
+                modifiedGestureLocation = CGPoint(x: secondPoint.x, y: secondPoint.y)
+            } else if gestureLocation.x < thirdPoint.x && gestureLocation.y > thirdPoint.y {
+                modifiedGestureLocation = CGPoint(x: thirdPoint.x, y: thirdPoint.y)
+            } else if gestureLocation.x > fourthPoint.x && gestureLocation.y > fourthPoint.y {
+                modifiedGestureLocation = CGPoint(x: fourthPoint.x, y: fourthPoint.y)
+            } else if gestureLocation.y < firstPoint.y {
+                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: firstPoint.y)
+            } else if gestureLocation.y > thirdPoint.y {
+                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: thirdPoint.y)
+            } else if gestureLocation.x < firstPoint.x {
+                modifiedGestureLocation = CGPoint(x: firstPoint.x, y: gestureLocation.y)
+            } else if gestureLocation.x > secondPoint.x {
+                modifiedGestureLocation = CGPoint(x: secondPoint.x, y: gestureLocation.y)
+            } else {
+                modifiedGestureLocation = gestureLocation
+            }
+
+        case 5, 6:
+            if gestureLocation.x < firstPoint.x && gestureLocation.y < firstPoint.y {
+                modifiedGestureLocation = CGPoint(x: firstPoint.x, y: firstPoint.y)
+            } else if gestureLocation.x > secondPoint.x && gestureLocation.y < secondPoint.y {
+                modifiedGestureLocation = CGPoint(x: secondPoint.x, y: secondPoint.y)
+            } else if gestureLocation.x < fifthPoint.x && gestureLocation.y > fifthPoint.y {
+                modifiedGestureLocation = CGPoint(x: fifthPoint.x, y: fifthPoint.y)
+            } else if gestureLocation.x > sixthPoint.x && gestureLocation.y > sixthPoint.y {
+                modifiedGestureLocation = CGPoint(x: sixthPoint.x, y: sixthPoint.y)
+            } else if gestureLocation.y < firstPoint.y {
+                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: firstPoint.y)
+            } else if gestureLocation.y > fifthPoint.y {
+                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: fifthPoint.y)
+            } else if gestureLocation.x < firstPoint.x {
+                modifiedGestureLocation = CGPoint(x: firstPoint.x, y: gestureLocation.y)
+            } else if gestureLocation.x > secondPoint.x {
+                modifiedGestureLocation = CGPoint(x: secondPoint.x, y: gestureLocation.y)
+            } else {
+                modifiedGestureLocation = gestureLocation
+            }
+
+        default:
+            print("")
+        }
+
+        return modifiedGestureLocation
     }
 
     //MARK: - Handling Keyboard
@@ -270,7 +369,7 @@ class CategoryViewController: UIViewController {
         return indexPath
     }
 
-    private func isGestureOnCellAt(indexPath: IndexPath) -> Bool {
+    private func isGestureOnCell(At indexPath: IndexPath) -> Bool {
         if indexPath.row == 6 {
             return false
         } else {
@@ -301,34 +400,21 @@ class CategoryViewController: UIViewController {
         }
     }
 
-    private func disableCellColorExceptAt(indexPath: IndexPath) {
-        let row = indexPath.row
-        collectionView.cellForItem(at: IndexPath(row: row, section: 0))?.backgroundColor = .cyan
-        if row > 0 && row < 5 {
-            for i in 0..<row {
-                collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
-            }
-            for i in (row + 1)...5 {
-                collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
-            }
-        } else if row == 0 {
-            for i in (row + 1)...5 {
-                collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
-            }
-        } else if row == 5{
-            for i in 0..<(row - 1) {
-                collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
-            }
-        } else {
-            for i in 0...(row - 1) {
-                collectionView.cellForItem(at: IndexPath(row: i, section: 0))?.backgroundColor = .gray
-            }
+    private func disableAllCellColor() {
+        for cellRow in (0...(categories.count - 1)) {
+            collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0))?.backgroundColor = Color.cellBackgroundColor
         }
     }
 
-    private func disableAllCellColor() {
-        for index in 0...5 {
-            collectionView.cellForItem(at: IndexPath(row: index, section: 0))?.backgroundColor = .gray
+    private func disableCellColorExcept(At indexPath: IndexPath) {
+        let row = indexPath.row
+        let cellOnGesture = collectionView.cellForItem(at: IndexPath(row: row, section: 0))
+        cellOnGesture?.backgroundColor = .cyan
+        var array: [Int] = []
+        array.append(contentsOf: 0...(categories.count - 1))
+        array.remove(at: row)
+        for (_, cellRow) in array.enumerated() {
+            collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0))?.backgroundColor = Color.cellBackgroundColor
         }
     }
     
@@ -381,7 +467,7 @@ class CategoryViewController: UIViewController {
     }
 
     private func resetTempLabel() {
-        self.tempLabel = ["title": "", "date": "", "time": ""]
+        self.tempLabel = ["title": "", "date": "", "time": "", "cellIndexPath": IndexPath()]
     }
 
     private func addLabelToCategory(At indexPath: IndexPath) {
@@ -487,6 +573,25 @@ class CategoryViewController: UIViewController {
 }
 
 //MARK: - ViewController Extensions
+//extension CategoryViewController: UICollectionViewDragDelegate {
+//    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+//        let itemProvieder = NSItemProvider(object: "\(indexPath)" as NSString)
+//        let dragItem = UIDragItem(itemProvider: itemProvieder)
+//        dragItem.localObject = collectionView.cellForItem(at: indexPath)
+//        print("Drag Delegate")
+//
+//        return [dragItem]
+//    }
+//}
+//
+//extension CategoryViewController: UICollectionViewDropDelegate {
+//    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+//        guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
+//        print(destinationIndexPath)
+//    }
+//
+//}
+
 extension CategoryViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let length = textField.attributedText?.size().width else { return }
@@ -510,7 +615,9 @@ extension CategoryViewController: UICollectionViewDataSource {
         let addCell = collectionView.dequeueReusableCell(withReuseIdentifier: AddCategoryViewCell.identifier, for: indexPath) as! AddCategoryViewCell
         if indexPath.row == categories.count {
             addCell.delegate = self
-
+            if self.currentMode == .edit {
+                addCell.isUserInteractionEnabled = false
+            }
             return addCell
         } else {
             categoryCell.delegate = self
@@ -544,7 +651,7 @@ extension CategoryViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
 
-        return true
+        return collectionView.cellForItem(at: indexPath) is CategoryViewCell
     }
 
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -556,6 +663,17 @@ extension CategoryViewController: UICollectionViewDelegate {
             element.index = Int64(index)
         }
         saveCategory()
+    }
+
+    func collectionView(_ collectionView: UICollectionView, targetIndexPathForMoveOfItemFromOriginalIndexPath originalIndexPath: IndexPath, atCurrentIndexPath currentIndexPath: IndexPath, toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {
+        let addCategoryCellIndexPathRow = categories.count
+        if proposedIndexPath.row == addCategoryCellIndexPathRow {
+
+            return originalIndexPath
+        } else {
+
+            return proposedIndexPath
+        }
     }
 }
 
