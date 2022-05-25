@@ -44,7 +44,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="Ktu-00-fjx"/>
                                 </constraints>
-                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" name="TextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -64,12 +64,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="zYq-Uh-flZ">
                         <barButtonItem key="leftBarButtonItem" title="편집" id="XaR-He-PaX">
+                            <color key="tintColor" name="TextColor"/>
                             <connections>
                                 <action selector="tapEditButton:" destination="BYZ-38-t0r" id="2ec-LJ-MQO"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Settings" image="gearshape" catalog="system" id="rja-hc-581">
-                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="tintColor" name="TextColor"/>
                             <connections>
                                 <segue destination="mda-NS-RaK" kind="show" identifier="goToSettings" id="Je4-hY-35O"/>
                             </connections>
@@ -91,17 +92,18 @@
         <scene sceneID="uKt-dy-6CU">
             <objects>
                 <tableViewController storyboardIdentifier="LabeledTableViewController" id="iPE-md-nUf" customClass="LabelTableViewController" customModule="Labeling" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Vxd-BE-zxz">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Vxd-BE-zxz">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LabellCell" id="gfS-oG-lFP">
-                                <rect key="frame" x="0.0" y="44.666666030883789" width="428" height="43.666667938232422"/>
+                                <rect key="frame" x="0.0" y="44.666666030883789" width="428" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gfS-oG-lFP" id="1JE-zu-b9b">
-                                    <rect key="frame" x="0.0" y="0.0" width="428" height="43.666667938232422"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="428" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" name="CellBackgroundColor"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
@@ -137,22 +139,24 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="카테고리 제목(필수)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ULp-us-5GN">
                                                 <rect key="frame" x="0.0" y="0.0" width="135.33333333333334" height="20.333333333333332"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                <nil key="textColor"/>
+                                                <color key="textColor" name="TextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="카테고리 제목을 적어주세요" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WEi-0X-ya1">
                                                 <rect key="frame" x="0.0" y="30.333333333333314" width="170.33333333333334" height="34"/>
+                                                <color key="textColor" name="TextColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="카테고리 부제목" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="adu-kF-8Ut">
                                                 <rect key="frame" x="0.0" y="74.333333333333314" width="88.666666666666671" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <nil key="textColor"/>
+                                                <color key="textColor" name="TextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="카테고리 부제목을 적어주세요" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="j13-IF-uyg">
                                                 <rect key="frame" x="0.0" y="101.33333333333331" width="181.66666666666666" height="34"/>
+                                                <color key="textColor" name="TextColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
@@ -162,7 +166,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="캘린더" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f37-c3-eYU">
                                                         <rect key="frame" x="0.0" y="0.0" width="67.666666666666671" height="31"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" name="TextColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="snb-r8-TOv" userLabel="CalendarSwitch">
@@ -176,7 +180,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="시간" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WW0-m7-XIj">
                                                         <rect key="frame" x="0.0" y="0.0" width="177.66666666666666" height="31"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
+                                                        <color key="textColor" name="TextColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2qh-en-2pI" userLabel="TimeSwitch">
@@ -192,7 +196,7 @@
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="filled" title="취소">
                                                             <color key="baseForegroundColor" name="AccentColor"/>
-                                                            <color key="baseBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="baseBackgroundColor" name="CellBackgroundColor"/>
                                                         </buttonConfiguration>
                                                         <connections>
                                                             <action selector="tapCancelButton:" destination="w2C-Cy-GRG" eventType="touchUpInside" id="soq-fy-Auz"/>
@@ -201,7 +205,10 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zkp-e8-zDB">
                                                         <rect key="frame" x="120.99999999999997" y="0.0" width="105.66666666666666" height="31"/>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="filled" title="추가"/>
+                                                        <buttonConfiguration key="configuration" style="filled" title="추가">
+                                                            <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="baseBackgroundColor" name="AccentColor"/>
+                                                        </buttonConfiguration>
                                                         <connections>
                                                             <action selector="tapAddButton:" destination="w2C-Cy-GRG" eventType="touchUpInside" id="JIF-yC-erC"/>
                                                         </connections>
@@ -216,7 +223,7 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" name="CellBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="GWB-Ui-fyz" secondAttribute="bottom" constant="10" id="Fku-qC-X0A"/>
                                     <constraint firstItem="GWB-Ui-fyz" firstAttribute="leading" secondItem="0aO-Le-ppe" secondAttribute="leading" constant="15" id="HyD-ZX-2or"/>
@@ -267,15 +274,21 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tiS-en-tgi" userLabel="CalendarView" customClass="FSCalendar">
                                         <rect key="frame" x="10" y="5" width="342.66666666666669" height="278"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="weekdayTextColor">
+                                                <color key="value" name="TextColor"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="3Ev-1E-wPx">
                                         <rect key="frame" x="10" y="293" width="342.66666666666669" height="40"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0rG-j5-CNz">
                                                 <rect key="frame" x="0.0" y="0.0" width="171.33333333333334" height="40"/>
+                                                <color key="backgroundColor" name="CellBackgroundColor"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Cancel">
-                                                    <color key="baseForegroundColor" systemColor="systemPurpleColor"/>
+                                                    <color key="baseForegroundColor" name="AccentColor"/>
                                                 </buttonConfiguration>
                                                 <connections>
                                                     <action selector="tapCancelButton:" destination="aL1-3m-D2C" eventType="touchUpInside" id="7pz-jg-UzH"/>
@@ -283,7 +296,7 @@
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rN3-Cu-Bcf">
                                                 <rect key="frame" x="171.33333333333331" y="0.0" width="171.33333333333331" height="40"/>
-                                                <color key="backgroundColor" systemColor="systemPurpleColor"/>
+                                                <color key="backgroundColor" name="AccentColor"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain"/>
                                                 <connections>
@@ -296,7 +309,7 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" name="CellBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="3Ev-1E-wPx" firstAttribute="top" secondItem="tiS-en-tgi" secondAttribute="bottom" constant="10" id="7v5-xX-wTr"/>
                                     <constraint firstItem="3Ev-1E-wPx" firstAttribute="width" secondItem="tiS-en-tgi" secondAttribute="width" id="QIe-8S-M47"/>
@@ -352,6 +365,8 @@
                                         <subviews>
                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="vzN-Re-TbQ">
                                                 <rect key="frame" x="0.0" y="0.0" width="342.66666666666669" height="278"/>
+                                                <color key="backgroundColor" name="CellBackgroundColor"/>
+                                                <color key="tintColor" name="TextColor"/>
                                                 <locale key="locale" localeIdentifier="ko_KR"/>
                                             </datePicker>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Qt-nf-X76" userLabel="ButtonHStack">
@@ -359,9 +374,10 @@
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qc3-pf-6tk">
                                                         <rect key="frame" x="0.0" y="0.0" width="171.33333333333334" height="40"/>
+                                                        <color key="backgroundColor" name="CellBackgroundColor"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" title="Cancel">
-                                                            <color key="baseForegroundColor" systemColor="systemPurpleColor"/>
+                                                            <color key="baseForegroundColor" name="AccentColor"/>
                                                         </buttonConfiguration>
                                                         <connections>
                                                             <action selector="tapCancelButton:" destination="47i-VT-gYY" eventType="touchUpInside" id="2bP-km-WfG"/>
@@ -370,7 +386,7 @@
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s2B-ok-y4N">
                                                         <rect key="frame" x="171.33333333333331" y="0.0" width="171.33333333333331" height="40"/>
-                                                        <color key="backgroundColor" systemColor="systemPurpleColor"/>
+                                                        <color key="backgroundColor" name="AccentColor"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" title="Save">
                                                             <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -390,7 +406,7 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" name="CellBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" secondItem="Kdy-9G-v7N" secondAttribute="height" constant="20" id="Nea-IK-icu" userLabel="height = ContainerVStack.height + 20"/>
                                     <constraint firstAttribute="width" secondItem="Kdy-9G-v7N" secondAttribute="width" constant="20" id="YUi-e3-stS"/>
@@ -424,6 +440,38 @@
             </objects>
             <point key="canvasLocation" x="4072" y="846"/>
         </scene>
+        <!--Move Label Alert View Controller-->
+        <scene sceneID="pNE-oh-e51">
+            <objects>
+                <viewController storyboardIdentifier="MoveLabelAlertViewController" id="dvL-2E-KP1" customClass="MoveLabelAlertViewController" customModule="Labeling" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Mkp-7s-YzM">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cPA-ys-Fqz">
+                                <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                                <subviews>
+                                    <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tro-hG-6Yu">
+                                        <rect key="frame" x="0.0" y="382" width="428" height="162"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    </pickerView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="M6d-Qe-jna"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="cPA-ys-Fqz" secondAttribute="bottom" id="8io-oL-dlD"/>
+                            <constraint firstItem="M6d-Qe-jna" firstAttribute="trailing" secondItem="cPA-ys-Fqz" secondAttribute="trailing" id="FDX-UZ-bND"/>
+                            <constraint firstItem="cPA-ys-Fqz" firstAttribute="top" secondItem="Mkp-7s-YzM" secondAttribute="top" id="LRO-MX-NYZ"/>
+                            <constraint firstItem="cPA-ys-Fqz" firstAttribute="leading" secondItem="M6d-Qe-jna" secondAttribute="leading" id="kAG-dg-LVd"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="M9r-ZX-Zk8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1803" y="1657"/>
+        </scene>
         <!--설정-->
         <scene sceneID="ogd-qE-Mui">
             <objects>
@@ -434,6 +482,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hvr-R4-bZK">
                                 <rect key="frame" x="0.0" y="88" width="428" height="838"/>
+                                <color key="sectionIndexBackgroundColor" name="BackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingTable" id="s5r-x2-X8s">
                                         <rect key="frame" x="20" y="49" width="388" height="43.666667938232422"/>
@@ -486,16 +535,19 @@
     <resources>
         <image name="gearshape" catalog="system" width="128" height="121"/>
         <namedColor name="AccentColor">
-            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.023529411764705882" green="0.36470588235294116" blue="0.84705882352941175" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="BackgroundColor">
             <color red="0.92100000381469727" green="0.92100000381469727" blue="0.92100000381469727" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="CellBackgroundColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TextColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemPurpleColor">
-            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

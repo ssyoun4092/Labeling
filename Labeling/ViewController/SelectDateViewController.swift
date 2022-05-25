@@ -42,11 +42,13 @@ class SelectDateViewController: UIViewController {
     private func setUpCalendarAppearance() {
         calendarView.appearance.headerDateFormat = "YYYY년 MM월"
         calendarView.appearance.headerMinimumDissolvedAlpha = 0
-        calendarView.appearance.headerTitleColor = UIColor.black
-        calendarView.appearance.weekdayTextColor = .black
-        calendarView.appearance.titleWeekendColor = .red
+        calendarView.appearance.headerTitleColor = Color.textColor
+        calendarView.appearance.weekdayTextColor = Color.textColor
+        calendarView.appearance.titleDefaultColor = Color.textColor
+        calendarView.backgroundColor = Color.cellBackgroundColor
+        calendarView.appearance.titleWeekendColor = .systemRed
         calendarView.appearance.todaySelectionColor = .systemRed
-        calendarView.appearance.selectionColor = .systemPurple
+        calendarView.appearance.selectionColor = Color.accentColor
     }
 
     @IBAction func tapCancelButton(_ sender: UIButton) {
