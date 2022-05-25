@@ -12,6 +12,7 @@ class LabelTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.register(UINib(nibName: "LabelTableCell", bundle: nil), forCellReuseIdentifier: LabelTableViewCell.identifier)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -20,10 +21,14 @@ class LabelTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "LabellCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: LabelTableViewCell.identifier, for: indexPath) as! LabelTableViewCell
         let label = labels[indexPath.row]
-        cell.textLabel?.text = label.title
-        cell.accessoryType = label.done ? .checkmark : .none
+        cell.mainLabel.text = label.title
+        cell.dateLabel.text = label.date
+        cell.timeLabel.text = label.time
+
+//        cell.textLabel?.text = label.title
+//        cell.accessoryType = label.done ? .checkmark : .none
 
         return cell
     }

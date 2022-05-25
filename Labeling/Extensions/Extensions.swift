@@ -64,11 +64,25 @@ extension UIView {
 
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = colors
-//        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.locations = [1.0, 0.0]
         gradientLayer.type = .radial
-        gradientLayer.startPoint = CGPoint(x: 0.8, y: 0.2)
-        gradientLayer.endPoint = CGPoint(x: -1, y: 3)
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 1.0)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.0)
         gradientLayer.frame = bounds
         layer.insertSublayer(gradientLayer, at: 0)
     }
+
+    func disableGradient() {
+        if let layers = self.layer.sublayers {
+            layers[0].removeFromSuperlayer()
+        }
+    }
+//        print(self.layer.sublayers)
+//        if self.layer.sublayers?[0] != nil {
+//            print("REMOVE")
+//            self.layer.sublayers?[0].removeFromSuperlayer()
+//        } else {
+//            print("DON't CARE")
+//        }
+//    }
 }

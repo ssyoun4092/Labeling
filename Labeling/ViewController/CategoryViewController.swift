@@ -184,87 +184,6 @@ class CategoryViewController: UIViewController {
         }
     }
 
-    private func modifyGestureLocationIfGoesOffFromCollectioViewBounds(_ gestureLocation: CGPoint) -> CGPoint{
-        var modifiedGestureLocation = CGPoint()
-        let numberOfCells = (categories.count == 6) ? 6 : (categories.count + 1)
-        let cellWidth = (self.collectionView.bounds.size.width - 10) / 2
-        let halfCellWidth = cellWidth / 2
-        let cellHeight = (self.collectionView.bounds.size.height - 20) / 3
-        let halfCellHeight = cellHeight / 2
-        let spacing: CGFloat = 10
-        let spacingCellVertically = cellWidth + spacing
-        let spacingCellHorizontally = cellHeight + spacing
-
-        let firstPoint = CGPoint(x: halfCellWidth, y: halfCellHeight)
-        let secondPoint = CGPoint(x: halfCellWidth +  spacingCellVertically, y: halfCellHeight)
-        let thirdPoint = CGPoint(x: halfCellWidth, y: halfCellHeight + spacingCellHorizontally)
-        let fourthPoint = CGPoint(x: halfCellWidth + spacingCellVertically, y: halfCellHeight + spacingCellHorizontally)
-        let fifthPoint = CGPoint(x: halfCellWidth, y: halfCellHeight + (spacingCellHorizontally * 2))
-        let sixthPoint = CGPoint(x: halfCellWidth + spacingCellVertically, y: halfCellHeight + (spacingCellHorizontally * 2))
-
-        switch numberOfCells {
-        case 1, 2:
-            print("firstPoint: \(firstPoint)")
-            print("secondPoint: \(secondPoint)")
-            if gestureLocation.x < firstPoint.x {
-                modifiedGestureLocation = CGPoint(x: firstPoint.x, y: firstPoint.y)
-            } else if gestureLocation.x > secondPoint.x {
-                modifiedGestureLocation = CGPoint(x: secondPoint.x, y: secondPoint.y)
-
-            } else if gestureLocation.y < firstPoint.y || gestureLocation.y > firstPoint.y {
-                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: firstPoint.y)
-            } else {
-                modifiedGestureLocation = gestureLocation
-            }
-
-        case 3, 4:
-            if gestureLocation.x < firstPoint.x && gestureLocation.y < firstPoint.y {
-                modifiedGestureLocation = CGPoint(x: firstPoint.x, y: firstPoint.y)
-            } else if gestureLocation.x > secondPoint.x && gestureLocation.y < secondPoint.y {
-                modifiedGestureLocation = CGPoint(x: secondPoint.x, y: secondPoint.y)
-            } else if gestureLocation.x < thirdPoint.x && gestureLocation.y > thirdPoint.y {
-                modifiedGestureLocation = CGPoint(x: thirdPoint.x, y: thirdPoint.y)
-            } else if gestureLocation.x > fourthPoint.x && gestureLocation.y > fourthPoint.y {
-                modifiedGestureLocation = CGPoint(x: fourthPoint.x, y: fourthPoint.y)
-            } else if gestureLocation.y < firstPoint.y {
-                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: firstPoint.y)
-            } else if gestureLocation.y > thirdPoint.y {
-                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: thirdPoint.y)
-            } else if gestureLocation.x < firstPoint.x {
-                modifiedGestureLocation = CGPoint(x: firstPoint.x, y: gestureLocation.y)
-            } else if gestureLocation.x > secondPoint.x {
-                modifiedGestureLocation = CGPoint(x: secondPoint.x, y: gestureLocation.y)
-            } else {
-                modifiedGestureLocation = gestureLocation
-            }
-
-        case 5, 6:
-            if gestureLocation.x < firstPoint.x && gestureLocation.y < firstPoint.y {
-                modifiedGestureLocation = CGPoint(x: firstPoint.x, y: firstPoint.y)
-            } else if gestureLocation.x > secondPoint.x && gestureLocation.y < secondPoint.y {
-                modifiedGestureLocation = CGPoint(x: secondPoint.x, y: secondPoint.y)
-            } else if gestureLocation.x < fifthPoint.x && gestureLocation.y > fifthPoint.y {
-                modifiedGestureLocation = CGPoint(x: fifthPoint.x, y: fifthPoint.y)
-            } else if gestureLocation.x > sixthPoint.x && gestureLocation.y > sixthPoint.y {
-                modifiedGestureLocation = CGPoint(x: sixthPoint.x, y: sixthPoint.y)
-            } else if gestureLocation.y < firstPoint.y {
-                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: firstPoint.y)
-            } else if gestureLocation.y > fifthPoint.y {
-                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: fifthPoint.y)
-            } else if gestureLocation.x < firstPoint.x {
-                modifiedGestureLocation = CGPoint(x: firstPoint.x, y: gestureLocation.y)
-            } else if gestureLocation.x > secondPoint.x {
-                modifiedGestureLocation = CGPoint(x: secondPoint.x, y: gestureLocation.y)
-            } else {
-                modifiedGestureLocation = gestureLocation
-            }
-
-        default:
-            print("")
-        }
-
-        return modifiedGestureLocation
-    }
 
     //MARK: - Handling Keyboard
     @objc func keyboardDidShow() {
@@ -369,6 +288,87 @@ class CategoryViewController: UIViewController {
         return indexPath
     }
 
+
+    private func modifyGestureLocationIfGoesOffFromCollectioViewBounds(_ gestureLocation: CGPoint) -> CGPoint {
+        var modifiedGestureLocation = CGPoint()
+        let numberOfCells = (categories.count == 6) ? 6 : (categories.count + 1)
+        let cellWidth = (self.collectionView.bounds.size.width - 10) / 2
+        let halfCellWidth = cellWidth / 2
+        let cellHeight = (self.collectionView.bounds.size.height - 20) / 3
+        let halfCellHeight = cellHeight / 2
+        let spacing: CGFloat = 10
+        let spacingCellVertically = cellWidth + spacing
+        let spacingCellHorizontally = cellHeight + spacing
+
+        let firstCellCenterPoint = CGPoint(x: halfCellWidth, y: halfCellHeight)
+        let secondCellCenterPoint = CGPoint(x: halfCellWidth +  spacingCellVertically, y: halfCellHeight)
+        let thirdCellCenterPoint = CGPoint(x: halfCellWidth, y: halfCellHeight + spacingCellHorizontally)
+        let fourthCellCenterPoint = CGPoint(x: halfCellWidth + spacingCellVertically, y: halfCellHeight + spacingCellHorizontally)
+        let fifthCellCenterPoint = CGPoint(x: halfCellWidth, y: halfCellHeight + (spacingCellHorizontally * 2))
+        let sixthCellCenterPoint = CGPoint(x: halfCellWidth + spacingCellVertically, y: halfCellHeight + (spacingCellHorizontally * 2))
+
+        switch numberOfCells {
+        case 1, 2:
+            if gestureLocation.x < firstCellCenterPoint.x {
+                modifiedGestureLocation = CGPoint(x: firstCellCenterPoint.x, y: firstCellCenterPoint.y)
+            } else if gestureLocation.x > secondCellCenterPoint.x {
+                modifiedGestureLocation = CGPoint(x: secondCellCenterPoint.x, y: secondCellCenterPoint.y)
+
+            } else if gestureLocation.y < firstCellCenterPoint.y || gestureLocation.y > firstCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: firstCellCenterPoint.y)
+            } else {
+                modifiedGestureLocation = gestureLocation
+            }
+
+        case 3, 4:
+            if gestureLocation.x < firstCellCenterPoint.x && gestureLocation.y < firstCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: firstCellCenterPoint.x, y: firstCellCenterPoint.y)
+            } else if gestureLocation.x > secondCellCenterPoint.x && gestureLocation.y < secondCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: secondCellCenterPoint.x, y: secondCellCenterPoint.y)
+            } else if gestureLocation.x < thirdCellCenterPoint.x && gestureLocation.y > thirdCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: thirdCellCenterPoint.x, y: thirdCellCenterPoint.y)
+            } else if gestureLocation.x > fourthCellCenterPoint.x && gestureLocation.y > fourthCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: fourthCellCenterPoint.x, y: fourthCellCenterPoint.y)
+            } else if gestureLocation.y < firstCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: firstCellCenterPoint.y)
+            } else if gestureLocation.y > thirdCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: thirdCellCenterPoint.y)
+            } else if gestureLocation.x < firstCellCenterPoint.x {
+                modifiedGestureLocation = CGPoint(x: firstCellCenterPoint.x, y: gestureLocation.y)
+            } else if gestureLocation.x > secondCellCenterPoint.x {
+                modifiedGestureLocation = CGPoint(x: secondCellCenterPoint.x, y: gestureLocation.y)
+            } else {
+                modifiedGestureLocation = gestureLocation
+            }
+
+        case 5, 6:
+            if gestureLocation.x < firstCellCenterPoint.x && gestureLocation.y < firstCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: firstCellCenterPoint.x, y: firstCellCenterPoint.y)
+            } else if gestureLocation.x > secondCellCenterPoint.x && gestureLocation.y < secondCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: secondCellCenterPoint.x, y: secondCellCenterPoint.y)
+            } else if gestureLocation.x < fifthCellCenterPoint.x && gestureLocation.y > fifthCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: fifthCellCenterPoint.x, y: fifthCellCenterPoint.y)
+            } else if gestureLocation.x > sixthCellCenterPoint.x && gestureLocation.y > sixthCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: sixthCellCenterPoint.x, y: sixthCellCenterPoint.y)
+            } else if gestureLocation.y < firstCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: firstCellCenterPoint.y)
+            } else if gestureLocation.y > fifthCellCenterPoint.y {
+                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: fifthCellCenterPoint.y)
+            } else if gestureLocation.x < firstCellCenterPoint.x {
+                modifiedGestureLocation = CGPoint(x: firstCellCenterPoint.x, y: gestureLocation.y)
+            } else if gestureLocation.x > secondCellCenterPoint.x {
+                modifiedGestureLocation = CGPoint(x: secondCellCenterPoint.x, y: gestureLocation.y)
+            } else {
+                modifiedGestureLocation = gestureLocation
+            }
+
+        default:
+            print("")
+        }
+
+        return modifiedGestureLocation
+    }
+
     private func isGestureOnCell(At indexPath: IndexPath) -> Bool {
         if indexPath.row == 6 {
             return false
@@ -402,18 +402,21 @@ class CategoryViewController: UIViewController {
 
     private func disableAllCellColor() {
         for cellRow in (0...(categories.count - 1)) {
+//            collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0))?.disableGradient()
             collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0))?.backgroundColor = Color.cellBackgroundColor
         }
     }
 
     private func disableCellColorExcept(At indexPath: IndexPath) {
         let row = indexPath.row
-        let cellOnGesture = collectionView.cellForItem(at: IndexPath(row: row, section: 0))
-        cellOnGesture?.backgroundColor = .cyan
+        guard let cellOnGesture = collectionView.cellForItem(at: IndexPath(row: row, section: 0)) else { return }
+        cellOnGesture.backgroundColor = .systemBlue
+//        cellOnGesture.generateGradient()
         var array: [Int] = []
         array.append(contentsOf: 0...(categories.count - 1))
         array.remove(at: row)
         for (_, cellRow) in array.enumerated() {
+//            collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0))?.disableGradient()
             collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0))?.backgroundColor = Color.cellBackgroundColor
         }
     }
