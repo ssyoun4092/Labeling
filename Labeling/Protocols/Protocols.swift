@@ -8,5 +8,5 @@ protocol CategoryViewControllerDelegate {
 
 protocol AddSelectedProperty {
     func presentAddCategoryController()
-    func addCategory(mainLabel: String, subLabel: String, doCalendar: Bool, doTimer: Bool)
+    func addCategory(mainLabel: String, subLabel: String, doCalendar: Bool, doTimer: Bool, iconName: String)
 }

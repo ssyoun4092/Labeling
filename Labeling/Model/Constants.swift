@@ -9,8 +9,5 @@ struct Color {
 }
 
 struct SFSymbol {
-    static let calendarSymbol = UIImage(systemName: "calendar")
-    static let timerSymbol = UIImage(systemName: "clock")
-    static let checkMark = UIImage(systemName: "checkmark.circle")
-    static let nonCheckMark = UIImage(systemName: "circle")
+    
 }

@@ -4,6 +4,7 @@ class CategoryViewCell: UICollectionViewCell {
     //MARK: - PROPERTIES
     static let identifier = "CategoryViewCell"
 
+    @IBOutlet weak var iconButton: UIButton!
     @IBOutlet weak var mainLabel: UILabel!
     @IBOutlet weak var subLabel: UILabel!
     @IBOutlet weak var cellView: UIView!
@@ -28,6 +29,7 @@ class CategoryViewCell: UICollectionViewCell {
     }
 
     func setUpButtons() {
+        iconButton.setTitle("", for: .normal)
         xButton.setTitle("", for: .normal)
         calendarButton.setTitle("", for: .normal)
         timerButton.setTitle("", for: .normal)

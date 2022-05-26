@@ -4,37 +4,45 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CategoryViewCell" id="gTV-IL-0wX" customClass="CategoryViewCell" customModule="Labeling" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="188" height="179"/>
+            <rect key="frame" x="0.0" y="0.0" width="158" height="151"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="188" height="179"/>
+                <rect key="frame" x="0.0" y="0.0" width="158" height="151"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NAn-Ry-5yx">
-                        <rect key="frame" x="0.0" y="0.0" width="188" height="179"/>
+                        <rect key="frame" x="0.0" y="0.0" width="158" height="151"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="휴지통" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qm6-Th-KdH" userLabel="MainLabel">
-                                <rect key="frame" x="10" y="10" width="44.5" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="20" y="94" width="126.5" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="aUF-S3-mCr"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <color key="textColor" name="TextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x7C-yv-Qyw">
-                                <rect key="frame" x="10" y="50.5" width="0.0" height="0.0"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="필요 없는 건 나한테!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x7C-yv-Qyw">
+                                <rect key="frame" x="20" y="125" width="126.5" height="16"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="16" id="Ncb-ad-LYH"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" name="TextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bgH-4s-Dl7">
-                                <rect key="frame" x="148" y="0.0" width="40" height="40"/>
+                                <rect key="frame" x="118" y="0.0" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="YkE-3J-Diq"/>
                                     <constraint firstAttribute="width" constant="40" id="aXe-Ok-eBd"/>
@@ -48,7 +56,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u3c-cN-zxQ">
-                                <rect key="frame" x="118" y="144" width="60" height="25"/>
+                                <rect key="frame" x="88" y="10" width="60" height="25"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vj1-XL-RlU" userLabel="CalendarButton">
                                         <rect key="frame" x="0.0" y="0.0" width="30" height="25"/>
@@ -56,6 +64,7 @@
                                             <constraint firstAttribute="width" constant="30" id="WpB-rW-aIl"/>
                                             <constraint firstAttribute="height" constant="25" id="hDA-wf-pKq"/>
                                         </constraints>
+                                        <color key="tintColor" systemColor="systemRedColor"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="calendar" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="12"/>
@@ -67,6 +76,7 @@
                                             <constraint firstAttribute="width" constant="30" id="HO1-vP-bmu"/>
                                             <constraint firstAttribute="height" constant="25" id="lb7-MZ-aBh"/>
                                         </constraints>
+                                        <color key="tintColor" systemColor="systemRedColor"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="clock" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="11"/>
@@ -74,16 +84,35 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TwY-Nn-oWn">
+                                <rect key="frame" x="20" y="10" width="63" height="76"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" button="YES" notEnabled="YES"/>
+                                </accessibility>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <imageReference key="image" image="square.and.arrow.up" catalog="system" symbolScale="medium"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="35" weight="light"/>
+                                    <directionalEdgeInsets key="contentInsets" top="0.0" leading="0.0" bottom="10" trailing="0.0"/>
+                                    <color key="baseForegroundColor" name="AccentColor"/>
+                                </buttonConfiguration>
+                            </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="x7C-yv-Qyw" firstAttribute="leading" secondItem="NAn-Ry-5yx" secondAttribute="leading" constant="10" id="5VQ-nH-O0n"/>
-                            <constraint firstItem="Qm6-Th-KdH" firstAttribute="top" secondItem="NAn-Ry-5yx" secondAttribute="top" constant="10" id="Nrk-VT-x8Z"/>
-                            <constraint firstItem="Qm6-Th-KdH" firstAttribute="leading" secondItem="NAn-Ry-5yx" secondAttribute="leading" constant="10" id="UKq-eh-Sz1"/>
-                            <constraint firstAttribute="trailing" secondItem="u3c-cN-zxQ" secondAttribute="trailing" constant="10" id="bFH-zA-2b8"/>
-                            <constraint firstAttribute="bottom" secondItem="u3c-cN-zxQ" secondAttribute="bottom" constant="10" id="jqP-PF-TFZ"/>
-                            <constraint firstItem="x7C-yv-Qyw" firstAttribute="top" secondItem="Qm6-Th-KdH" secondAttribute="bottom" constant="20" id="n0e-dN-V5J"/>
-                            <constraint firstItem="bgH-4s-Dl7" firstAttribute="top" secondItem="NAn-Ry-5yx" secondAttribute="top" id="tpo-7q-jJC"/>
-                            <constraint firstAttribute="trailing" secondItem="bgH-4s-Dl7" secondAttribute="trailing" id="xa0-TN-wjQ"/>
+                            <constraint firstItem="Qm6-Th-KdH" firstAttribute="leading" secondItem="NAn-Ry-5yx" secondAttribute="leading" constant="20" id="7Nw-zw-DdV"/>
+                            <constraint firstItem="TwY-Nn-oWn" firstAttribute="top" secondItem="NAn-Ry-5yx" secondAttribute="top" constant="10" id="9lV-wI-hn1"/>
+                            <constraint firstItem="x7C-yv-Qyw" firstAttribute="leading" secondItem="NAn-Ry-5yx" secondAttribute="leading" constant="20" id="N1Y-aw-LtZ"/>
+                            <constraint firstItem="u3c-cN-zxQ" firstAttribute="top" secondItem="NAn-Ry-5yx" secondAttribute="top" constant="10" id="NrR-mM-o5j"/>
+                            <constraint firstItem="bgH-4s-Dl7" firstAttribute="top" secondItem="NAn-Ry-5yx" secondAttribute="top" id="OMK-Vh-869"/>
+                            <constraint firstAttribute="trailing" secondItem="u3c-cN-zxQ" secondAttribute="trailing" constant="10" id="PXB-nU-S9q"/>
+                            <constraint firstItem="TwY-Nn-oWn" firstAttribute="leading" secondItem="NAn-Ry-5yx" secondAttribute="leading" constant="20" id="PfO-Fk-MQ2"/>
+                            <constraint firstItem="TwY-Nn-oWn" firstAttribute="width" secondItem="NAn-Ry-5yx" secondAttribute="width" multiplier="0.4" id="QSs-jT-mBR"/>
+                            <constraint firstItem="x7C-yv-Qyw" firstAttribute="top" secondItem="Qm6-Th-KdH" secondAttribute="bottom" constant="10" id="c0f-cZ-RId"/>
+                            <constraint firstItem="Qm6-Th-KdH" firstAttribute="top" secondItem="TwY-Nn-oWn" secondAttribute="bottom" constant="8" id="mK2-tK-X6f"/>
+                            <constraint firstItem="Qm6-Th-KdH" firstAttribute="width" secondItem="NAn-Ry-5yx" secondAttribute="width" multiplier="0.8" id="puA-H5-AWP"/>
+                            <constraint firstAttribute="trailing" secondItem="bgH-4s-Dl7" secondAttribute="trailing" id="rx4-Vn-ua3"/>
+                            <constraint firstAttribute="bottom" secondItem="x7C-yv-Qyw" secondAttribute="bottom" constant="10" id="xSO-Do-kYv"/>
+                            <constraint firstItem="x7C-yv-Qyw" firstAttribute="width" secondItem="NAn-Ry-5yx" secondAttribute="width" multiplier="0.8" id="xdi-ax-B1h"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -96,27 +125,35 @@
                 <constraint firstAttribute="trailing" secondItem="NAn-Ry-5yx" secondAttribute="trailing" id="Tpp-sU-s6g"/>
                 <constraint firstItem="NAn-Ry-5yx" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="z0a-OP-4ny"/>
             </constraints>
-            <size key="customSize" width="188" height="179"/>
+            <size key="customSize" width="158" height="151"/>
             <connections>
                 <outlet property="calendarButton" destination="Vj1-XL-RlU" id="sva-1D-i3V"/>
                 <outlet property="cellView" destination="NAn-Ry-5yx" id="vaS-op-hmS"/>
+                <outlet property="iconButton" destination="TwY-Nn-oWn" id="NYL-nE-o2N"/>
                 <outlet property="mainLabel" destination="Qm6-Th-KdH" id="8AS-v9-eBx"/>
                 <outlet property="subLabel" destination="x7C-yv-Qyw" id="dUJ-JS-iAP"/>
                 <outlet property="timerButton" destination="yEe-Ib-EKD" id="Txj-Pr-9wI"/>
                 <outlet property="xButton" destination="bgH-4s-Dl7" id="LAz-af-Q8S"/>
             </connections>
-            <point key="canvasLocation" x="169.56521739130437" y="89.397321428571431"/>
+            <point key="canvasLocation" x="146.37681159420291" y="78.683035714285708"/>
         </collectionViewCell>
     </objects>
     <resources>
         <image name="calendar" catalog="system" width="128" height="106"/>
         <image name="clock" catalog="system" width="128" height="121"/>
+        <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
         <image name="xmark.circle.fill" catalog="system" width="128" height="121"/>
+        <namedColor name="AccentColor">
+            <color red="0.024000000208616257" green="0.36500000953674316" blue="0.84700000286102295" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="CellBackgroundColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="TextColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>
