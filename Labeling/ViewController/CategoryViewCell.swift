@@ -24,6 +24,11 @@ class CategoryViewCell: UICollectionViewCell {
         self.layer.cornerRadius = 10
 //        self.generateGradient()
 //        self.backgroundColor = UIColor.gray.withAlphaComponent(0.5)
+        self.layer.shadowOffset = CGSize(width: 3, height: 3)
+        self.layer.shadowOpacity = 0.3
+        self.layer.shadowRadius = 5
+        self.layer.shadowColor = UIColor.gray.cgColor
+        self.layer.masksToBounds = false
 //        self.layer.borderWidth = 1
 //        self.layer.borderColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1)
     }

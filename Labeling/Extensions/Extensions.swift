@@ -42,6 +42,21 @@ extension UITextField {
             bottomLineAction
         }
     }
+
+    func addShadow() {
+        self.layer.shadowColor = UIColor.gray.cgColor
+        self.layer.shadowOpacity = 0.5
+        self.layer.shadowRadius = 10
+        self.layer.shadowOffset = CGSize(width: 5, height: 5)
+    }
+
+    func showShadow() {
+        self.layer.shadowOpacity = 0.5
+    }
+
+    func hideShadow() {
+        self.layer.shadowOpacity = 0
+    }
 }
 
 extension UIApplication {

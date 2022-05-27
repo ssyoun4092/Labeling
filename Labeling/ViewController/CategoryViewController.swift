@@ -149,8 +149,11 @@ class CategoryViewController: UIViewController {
         self.labelTextField.delegate = self
         self.labelTextField.isUserInteractionEnabled = true
         self.labelTextField.addGestureRecognizer(dragGesture)
-        guard let placeHolderWidth = labelTextField.attributedPlaceholder?.size().width else { return }
-        self.labelTextField.addBottomLineView(width: placeHolderWidth, height: 1)
+        self.labelTextField.layer.cornerRadius = 20
+        self.labelTextField.addShadow()
+        self.labelTextField.layer.masksToBounds = false
+//        guard let placeHolderWidth = labelTextField.attributedPlaceholder?.size().width else { return }
+//        self.labelTextField.addBottomLineView(width: placeHolderWidth, height: 1)
     }
 
     //MARK: - Gesture functions
@@ -571,9 +574,13 @@ class CategoryViewController: UIViewController {
 
     //MARK: - Handling TextField BottomLine
     private func animateHideTextFieldBottomLine() {
+//        UIView.animate(withDuration: 0.3) {
+//            self.hideTextFieldBottomLine()
+//            self.labelTextField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+//        }
         UIView.animate(withDuration: 0.3) {
-            self.hideTextFieldBottomLine()
-            self.labelTextField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            self.labelTextField.backgroundColor = Color.backgroundColor
+            self.labelTextField.hideShadow()
         }
     }
 
@@ -617,9 +624,9 @@ class CategoryViewController: UIViewController {
 
 extension CategoryViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        guard let length = textField.attributedText?.size().width else { return }
-        removeTextFieldBottomLine()
-        textField.addBottomLineView(width: length, height: 1)
+//        guard let length = textField.attributedText?.size().width else { return }
+//        removeTextFieldBottomLine()
+//        textField.addBottomLineView(width: length, height: 1)
     }
 }
 
@@ -682,7 +689,16 @@ extension CategoryViewController: UICollectionViewDataSource {
 extension CategoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if !keyboardIsPresented {
-            performSegue(withIdentifier: "goToLabeled", sender: self)
+            switch currentMode {
+            case .normal:
+                performSegue(withIdentifier: "goToLabeled", sender: self)
+            case .edit:
+                guard let addCategoryVC = self.storyboard?.instantiateViewController(withIdentifier: AddCategoryViewController.identifier) as? AddCategoryViewController else { return }
+                addCategoryVC.isForEdit = true
+                addCategoryVC.categoryForEdit = categories[indexPath.row]
+                addCategoryVC.delegate = self
+                self.present(addCategoryVC, animated: true)
+            }
         }
     }
 
@@ -772,8 +788,6 @@ extension CategoryViewController: AddSelectedProperty {
     func presentAddCategoryController() {
         guard let addCategoryVC = self.storyboard?.instantiateViewController(withIdentifier: AddCategoryViewController.identifier) as? AddCategoryViewController else { return }
         addCategoryVC.delegate = self
-//        addCategoryVC.modalPresentationStyle = .overCurrentContext
-//        addCategoryVC.modalTransitionStyle = .crossDissolve
         self.present(addCategoryVC, animated: true)
     }
 
@@ -789,6 +803,14 @@ extension CategoryViewController: AddSelectedProperty {
         for (_, element) in categories.enumerated() {
             print("\(String(describing: element.mainLabel)), \(element.index)")
         }
+        saveCategory()
+    }
+
+    func modifyCategory(mainLabel: String, subLabel: String, iconName: String, index: Int64) {
+        let targetIndex: Int = Int(index)
+        categories[targetIndex].mainLabel = mainLabel
+        categories[targetIndex].subLabel = subLabel
+        categories[targetIndex].iconName = iconName
         saveCategory()
     }
 }

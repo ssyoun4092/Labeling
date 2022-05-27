@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="WAC-0i-oYP">
-    <device id="retina6_7" orientation="portrait" appearance="dark"/>
+    <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
@@ -39,10 +39,11 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="떠오른 생각을 적어주세요" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S47-3K-NkU">
-                                <rect key="frame" x="20" y="108" width="388" height="70"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="떠오른 생각을 적어주세요" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S47-3K-NkU">
+                                <rect key="frame" x="20" y="128" width="388" height="50"/>
+                                <color key="backgroundColor" name="CellBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="70" id="Ktu-00-fjx"/>
+                                    <constraint firstAttribute="height" constant="50" id="Ktu-00-fjx"/>
                                 </constraints>
                                 <color key="textColor" name="TextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -58,7 +59,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="S47-3K-NkU" secondAttribute="trailing" symbolic="YES" id="E2a-QI-p56"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="cpe-na-DVH" secondAttribute="trailing" constant="20" id="Q0Z-aT-y6q"/>
                             <constraint firstItem="S47-3K-NkU" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" constant="-40" id="Qnq-dK-QPd"/>
-                            <constraint firstItem="S47-3K-NkU" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="kor-Q7-GCV"/>
+                            <constraint firstItem="S47-3K-NkU" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="kor-Q7-GCV"/>
                             <constraint firstItem="cpe-na-DVH" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="utR-JV-B0v"/>
                         </constraints>
                     </view>
@@ -219,7 +220,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="eH8-zC-HN4">
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="eH8-zC-HN4" userLabel="IconAndTextFieldStackView">
                                 <rect key="frame" x="30" y="94.000000000000014" width="368" height="135.33333333333337"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dL5-jd-OJX" userLabel="IconButton">
@@ -228,7 +229,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.up" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="50" weight="thin"/>
-                                            <color key="baseForegroundColor" name="TextColor"/>
+                                            <color key="baseForegroundColor" name="AccentColor"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="tapIconButton:" destination="xjq-J6-PQK" eventType="touchUpInside" id="7ue-yU-WrT"/>
@@ -238,19 +239,19 @@
                                         <rect key="frame" x="191.66666666666663" y="0.0" width="176.33333333333337" height="135.33333333333334"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="카테고리 제목(필수)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8NT-48-iok">
-                                                <rect key="frame" x="0.0" y="0.0" width="135.33333333333334" height="20.333333333333332"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="176.33333333333334" height="20.333333333333332"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                 <color key="textColor" name="TextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="카테고리 제목을 적어주세요" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zBj-AY-vTQ">
-                                                <rect key="frame" x="0.0" y="30.333333333333329" width="170.33333333333334" height="34"/>
+                                                <rect key="frame" x="0.0" y="30.333333333333329" width="176.33333333333334" height="34"/>
                                                 <color key="textColor" name="TextColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="카테고리 부제목" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DSP-hx-flb">
-                                                <rect key="frame" x="0.0" y="74.333333333333343" width="88.666666666666671" height="17"/>
+                                                <rect key="frame" x="0.0" y="74.333333333333343" width="176.33333333333334" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" name="TextColor"/>
                                                 <nil key="highlightedColor"/>
@@ -262,7 +263,45 @@
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstItem="8NT-48-iok" firstAttribute="leading" secondItem="Ogm-aQ-aw3" secondAttribute="leading" id="6ot-aV-PBa"/>
+                                            <constraint firstAttribute="trailing" secondItem="zBj-AY-vTQ" secondAttribute="trailing" id="bXm-Z5-vgo"/>
+                                            <constraint firstAttribute="trailing" secondItem="STu-bM-f75" secondAttribute="trailing" id="fkp-Dp-zeU"/>
+                                            <constraint firstItem="DSP-hx-flb" firstAttribute="leading" secondItem="Ogm-aQ-aw3" secondAttribute="leading" id="fwS-A5-oyh"/>
+                                            <constraint firstItem="zBj-AY-vTQ" firstAttribute="leading" secondItem="Ogm-aQ-aw3" secondAttribute="leading" id="r8g-K6-Ic7"/>
+                                            <constraint firstAttribute="trailing" secondItem="DSP-hx-flb" secondAttribute="trailing" id="v2e-P4-Y63"/>
+                                            <constraint firstAttribute="trailing" secondItem="8NT-48-iok" secondAttribute="trailing" id="wdW-hs-63a"/>
+                                            <constraint firstItem="STu-bM-f75" firstAttribute="leading" secondItem="Ogm-aQ-aw3" secondAttribute="leading" id="xUC-Zc-jcN"/>
+                                        </constraints>
                                     </stackView>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="uwa-Zn-HiB" userLabel="CalendarStack">
+                                <rect key="frame" x="30" y="259.33333333333331" width="368" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="캘린더기능을 포함할까요?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hU-dd-znI">
+                                        <rect key="frame" x="0.0" y="0.0" width="289" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" name="TextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U3E-AQ-F1n" userLabel="CalendarSwitch">
+                                        <rect key="frame" x="319" y="0.0" width="51" height="31"/>
+                                    </switch>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="Eby-ZQ-KWp" userLabel="Timer Stack">
+                                <rect key="frame" x="30" y="320.33333333333331" width="368" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="시간기능을 포함할까요?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NaZ-Eo-Qa7">
+                                        <rect key="frame" x="0.0" y="0.0" width="289" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" name="TextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BsA-P1-ceq" userLabel="TimeSwitch">
+                                        <rect key="frame" x="319" y="0.0" width="51" height="31"/>
+                                    </switch>
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="S22-HK-zRY" userLabel="ButtonStackView">
@@ -295,34 +334,6 @@
                                     <constraint firstAttribute="height" constant="50" id="3rI-nR-Jel"/>
                                 </constraints>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="uwa-Zn-HiB" userLabel="CalendarStack">
-                                <rect key="frame" x="30" y="259.33333333333331" width="368" height="31"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="캘린더기능을 포함하시겠습니까?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hU-dd-znI">
-                                        <rect key="frame" x="0.0" y="0.0" width="289" height="31"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" name="TextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U3E-AQ-F1n" userLabel="CalendarSwitch">
-                                        <rect key="frame" x="319" y="0.0" width="51" height="31"/>
-                                    </switch>
-                                </subviews>
-                            </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="Eby-ZQ-KWp" userLabel="Timer Stack">
-                                <rect key="frame" x="30" y="320.33333333333331" width="368" height="31"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="시간기능을 포함하시겠습니까?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NaZ-Eo-Qa7">
-                                        <rect key="frame" x="0.0" y="0.0" width="289" height="31"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" name="TextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BsA-P1-ceq" userLabel="TimeSwitch">
-                                        <rect key="frame" x="319" y="0.0" width="51" height="31"/>
-                                    </switch>
-                                </subviews>
-                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="OXI-sU-h4G"/>
                         <color key="backgroundColor" name="BackgroundColor"/>
@@ -343,10 +354,13 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addButton" destination="Rsn-tp-OFh" id="dA5-gp-LyV"/>
+                        <outlet property="calendarDescription" destination="3hU-dd-znI" id="Az3-KU-U9m"/>
                         <outlet property="calendarSwitch" destination="U3E-AQ-F1n" id="3lO-ov-Oes"/>
                         <outlet property="categoryMainLabelTextField" destination="zBj-AY-vTQ" id="BJt-Ls-HZD"/>
                         <outlet property="categorySubLabelTextField" destination="STu-bM-f75" id="Om3-9u-tn7"/>
                         <outlet property="iconButton" destination="dL5-jd-OJX" id="2SE-pL-0gs"/>
+                        <outlet property="timerDescription" destination="NaZ-Eo-Qa7" id="ZDb-XS-gaR"/>
                         <outlet property="timerSwitch" destination="BsA-P1-ceq" id="Rnr-qb-4e5"/>
                     </connections>
                 </viewController>

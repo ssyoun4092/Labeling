@@ -53,12 +53,12 @@ class SelectTimeViewController: UIViewController {
     }
 
     @IBAction func tapSaveButton(_ sender: UIButton) {
-        guard let selectedTime = selectedTime else { return }
+        guard let selectedTime = selectedTime else { return alertIfTimeeNotSelected() }
         saveSelectedTimeInLabel(time: selectedTime)
         self.dismiss(animated: true)
     }
 
-    func convertTimeToString(time: Date) -> String {
+    private func convertTimeToString(time: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH시 mm분"
         let timeString = dateFormatter.string(from: time)
@@ -66,9 +66,16 @@ class SelectTimeViewController: UIViewController {
         return timeString
     }
 
-    func saveSelectedTimeInLabel(time: Date) {
+    private func saveSelectedTimeInLabel(time: Date) {
         let convertedTime = convertTimeToString(time: time)
         NotificationCenter.default.post(name: NSNotification.Name("saveTime"), object: convertedTime)
+    }
+
+    private func alertIfTimeeNotSelected() {
+        let alert = UIAlertController(title: "시간을 선택해주세요!", message: nil, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(alertAction)
+        present(alert, animated: true)
     }
 
     @objc func dismissPresentedView(_ sender: UITapGestureRecognizer) {
