@@ -48,13 +48,13 @@ class CategoryViewController: UIViewController {
         initCollectionView()
         initView()
         setUpCollectionView()
-        setUpLabelTextField()
         loadCategoriesFirstAppLaunch()
         loadCategories()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setUpLabelTextField()
         print("tempLabel: \(tempLabel)")
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: UIResponder.keyboardDidHideNotification, object: nil)
@@ -150,10 +150,11 @@ class CategoryViewController: UIViewController {
         self.labelTextField.isUserInteractionEnabled = true
         self.labelTextField.addGestureRecognizer(dragGesture)
         self.labelTextField.layer.cornerRadius = 20
+        self.labelTextField.backgroundColor = Color.cellBackgroundColor
         self.labelTextField.addShadow()
+        self.labelTextField.text?.removeAll()
         self.labelTextField.layer.masksToBounds = false
-//        guard let placeHolderWidth = labelTextField.attributedPlaceholder?.size().width else { return }
-//        self.labelTextField.addBottomLineView(width: placeHolderWidth, height: 1)
+        //        self.labelTextField.addBottomLineView(width: placeHolderWidth, height: 1)
     }
 
     //MARK: - Gesture functions
@@ -432,7 +433,7 @@ class CategoryViewController: UIViewController {
 
     private func disableAllCellColor() {
         for cellRow in (0...(categories.count - 1)) {
-//            collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0))?.disableGradient()
+            //            collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0))?.disableGradient()
             guard let cell = collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0)) as? CategoryViewCell else { return }
             cell.backgroundColor = Color.cellBackgroundColor
             cell.calendarButton.tintColor = Color.textColor
@@ -446,12 +447,12 @@ class CategoryViewController: UIViewController {
         cellOnGesture.backgroundColor = Color.accentColor
         cellOnGesture.calendarButton.tintColor = Color.textColor
         cellOnGesture.timerButton.tintColor = Color.textColor
-//        cellOnGesture.generateGradient()
+        //        cellOnGesture.generateGradient()
         var array: [Int] = []
         array.append(contentsOf: 0...(categories.count - 1))
         array.remove(at: row)
         for (_, cellRow) in array.enumerated() {
-//            collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0))?.disableGradient()
+            //            collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0))?.disableGradient()
             guard let cell = collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0)) as? CategoryViewCell else { return }
             cell.backgroundColor = Color.cellBackgroundColor
             cell.calendarButton.tintColor = Color.textColor
@@ -461,22 +462,12 @@ class CategoryViewController: UIViewController {
     
     private func animateOut() {
         if isLabelOnCell {
-            UIView.animate(withDuration: 0.3) {
-                self.labelTextField.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
-            }
+            self.labelTextField.animateDisappear()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.labelTextField.animateDisappearAndAppearAt(
-                    initialOrigin: self.textFieldOrigin,
-                    duration: 0.3,
-                    bottomLineAction: self.showTextFieldBottomLine()
-                )
+                self.labelTextField.animateAppearAt(initialOrigin: self.textFieldOrigin)
             }
         } else {
-            self.labelTextField.animateDisappearAndAppearAt(
-                initialOrigin: self.textFieldOrigin,
-                duration: 0.3,
-                bottomLineAction: self.showTextFieldBottomLine()
-            )
+            self.labelTextField.animateAppearAt(initialOrigin: self.textFieldOrigin)
         }
     }
 
@@ -574,12 +565,12 @@ class CategoryViewController: UIViewController {
 
     //MARK: - Handling TextField BottomLine
     private func animateHideTextFieldBottomLine() {
-//        UIView.animate(withDuration: 0.3) {
-//            self.hideTextFieldBottomLine()
-//            self.labelTextField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-//        }
+        //        UIView.animate(withDuration: 0.3) {
+        //            self.hideTextFieldBottomLine()
+        //            self.labelTextField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        //        }
         UIView.animate(withDuration: 0.3) {
-            self.labelTextField.backgroundColor = Color.backgroundColor
+            //            self.labelTextField.backgroundColor =
             self.labelTextField.hideShadow()
         }
     }
@@ -623,10 +614,19 @@ class CategoryViewController: UIViewController {
 }
 
 extension CategoryViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.backgroundColor = nil
+        textField.placeholder = ""
+    }
+
     func textFieldDidChangeSelection(_ textField: UITextField) {
-//        guard let length = textField.attributedText?.size().width else { return }
-//        removeTextFieldBottomLine()
-//        textField.addBottomLineView(width: length, height: 1)
+        textField.backgroundColor = nil
+
+        guard let text = textField.text else { return }
+        if text == "" {
+            textField.backgroundColor = Color.cellBackgroundColor
+            textField.placeholder = "떠오른 생각을 적어주세요"
+        }
     }
 }
 

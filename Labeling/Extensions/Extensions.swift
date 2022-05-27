@@ -32,6 +32,30 @@ extension UITextField {
         self.addSubview(bottomView)
     }
 
+    func addBackgroundView(width: CGFloat, height: CGFloat) {
+        let textFieldBackgroundView = UIView()
+        let screenWidth = UIScreen.main.bounds.width
+        textFieldBackgroundView.frame = CGRect(x: (screenWidth / 2) - (screenWidth * 0.15) - (width / 2), y: self.bounds.origin.y, width: width, height: height)
+        textFieldBackgroundView.backgroundColor = Color.cellBackgroundColor
+        textFieldBackgroundView.layer.cornerRadius = 20
+        textFieldBackgroundView.isUserInteractionEnabled = false
+        textFieldBackgroundView.layer.shadowColor = UIColor.gray.cgColor
+        textFieldBackgroundView.layer.shadowOpacity = 0.5
+        textFieldBackgroundView.layer.shadowRadius = 10
+        textFieldBackgroundView.layer.shadowOffset = CGSize(width: 5, height: 5)
+        textFieldBackgroundView.tag = 10
+        self.addSubview(textFieldBackgroundView)
+    }
+
+    func removeBackgroundView() {
+        let subViews = self.subviews
+        for subView in subViews {
+            if subView.tag == 10 {
+                subView.removeFromSuperview()
+            }
+        }
+    }
+
     func animateDisappearAndAppearAt(initialOrigin: CGPoint, duration: TimeInterval, bottomLineAction: ()) {
         self.alpha = 0
         self.frame.origin = initialOrigin
@@ -40,6 +64,24 @@ extension UITextField {
         UIView.animate(withDuration: duration) {
             self.alpha = 1
             bottomLineAction
+        }
+    }
+
+    func animateDisappear() {
+        UIView.animate(withDuration: 0.3) {
+            self.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+        }
+    }
+
+    func animateAppearAt(initialOrigin: CGPoint) {
+        self.backgroundColor = Color.cellBackgroundColor
+        self.alpha = 0
+        self.frame.origin = initialOrigin
+        self.transform = CGAffineTransform.identity
+        self.text?.removeAll()
+        UIView.animate(withDuration: 0.3) {
+            self.alpha = 1
+            self.addShadow()
         }
     }
 
