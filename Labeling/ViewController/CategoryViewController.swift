@@ -648,9 +648,11 @@ extension CategoryViewController: UICollectionViewDataSource {
             categoryCell.calendarButton.isHidden = false
             categoryCell.timerButton.isHidden = false
             if let icon = categories[indexPath.row].iconName {
-                print("ICON")
-                print(icon)
-                categoryCell.iconButton.setImage(UIImage(systemName: icon), for: .normal)
+                if icon.isEmpty {
+                    categoryCell.iconButton.setImage(UIImage(), for: .normal)
+                } else {
+                    categoryCell.iconButton.setImage(UIImage(systemName: icon), for: .normal)
+                }
             }
             if (categories[indexPath.row].doCalendar == true) && (categories[indexPath.row].doTimer == true) {
                 categoryCell.calendarButton.tintColor = Color.textColor

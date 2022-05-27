@@ -18,7 +18,7 @@ class AddCategoryViewController: UIViewController {
     }
 
     func setUpIconButton() {
-        self.iconButton.setTitle("Pick Icons!", for: .normal)
+        self.iconButton.setTitle("Pick Icon!", for: .normal)
         self.iconButton.setImage(UIImage(), for: .normal)
     }
 
@@ -39,7 +39,6 @@ class AddCategoryViewController: UIViewController {
         guard let subLabel = categorySubLabelTextField.text else { return }
         let doesActivateCalendar = calendarSwitch.isOn
         let doesActivateTimer = timerSwitch.isOn
-        print("\(self.iconName)")
         self.delegate?.addCategory(mainLabel: mainLabel, subLabel: subLabel, doCalendar: doesActivateCalendar, doTimer: doesActivateTimer, iconName: self.iconName)
         self.dismiss(animated: true)
     }
@@ -47,7 +46,11 @@ class AddCategoryViewController: UIViewController {
 
 extension AddCategoryViewController: PassingIconDelegate {
     func passSelectedIcon(name: String) {
-        if name == "" {
+        print("\(name) In passSelectedIcon")
+        if name == "Pick Icon!" {
+            self.iconButton.setImage(UIImage(), for: .normal)
+            self.iconButton.setTitle("Pick Icon!", for: .normal)
+        } else if name == "" {
             self.iconButton.setImage(UIImage(), for: .normal)
             self.iconButton.setTitle("", for: .normal)
         } else {

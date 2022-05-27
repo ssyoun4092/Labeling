@@ -14,6 +14,7 @@ class IconPickerViewConroller: UIViewController {
     let icons = IconPickers()
     var highlightedCellIndexPath: IndexPath? {
         didSet {
+            self.doneButton.tintColor = Color.accentColor
             self.collectionView.reloadData()
         }
     }
@@ -31,11 +32,13 @@ class IconPickerViewConroller: UIViewController {
         let flowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
 //        let cellWidth = (((UIScreen.main.bounds.width - 40) - 20) / 3)
         print("ScreenBounds: \(UIScreen.main.bounds.width)")
+        print("IconView: \(iconView.bounds.width)")
         print("CollectionViewBounds: \(collectionView.bounds.width)")
-        let cellWidth = ((collectionView.bounds.width - 20) / 3)
+        print("safeArea width: \(self.view.safeAreaLayoutGuide.layoutFrame.width)")
+        let cellWidth = ((collectionView.bounds.width) / 3)
         let cellHeight = cellWidth
-        flowLayout.itemSize = CGSize(width: cellWidth, height: cellHeight)
-        collectionView.collectionViewLayout = flowLayout
+//        flowLayout.itemSize = CGSize(width: cellWidth, height: cellHeight)
+//        collectionView.collectionViewLayout = flowLayout
         self.collectionView.allowsSelection = true
         self.collectionView.isUserInteractionEnabled = true
         self.collectionView.register(UINib(nibName: "IconPickerCell", bundle: nil), forCellWithReuseIdentifier: IconPIckerCell.identifier)
@@ -52,6 +55,8 @@ class IconPickerViewConroller: UIViewController {
     }
 
     @IBAction func tapCancelButton(_ sender: UIButton) {
+        self.passIconDelegate?.passSelectedIcon(name: "Pick Icon!")
+        print("tap Cancel Button")
         self.dismiss(animated: true)
     }
 
@@ -105,6 +110,25 @@ extension IconPickerViewConroller: IconDelegate {
         guard let cell = targetCell as? IconPIckerCell else { return }
         let cellIndexPath = collectionView.indexPath(for: cell)
         self.highlightedCellIndexPath = cellIndexPath
-        self.doneButton.tintColor = Color.accentColor
+    }
+}
+
+extension IconPickerViewConroller: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellWidth = (collectionView.bounds.width - 21) / 3
+
+        let cellHeight = cellWidth
+
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+
+        return CGFloat(10)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+
+        return CGFloat(10)
     }
 }

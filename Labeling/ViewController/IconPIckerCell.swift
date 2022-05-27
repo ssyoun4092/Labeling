@@ -11,12 +11,12 @@ class IconPIckerCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        setUpCell()
         setUpIconButton()
     }
 
     func setUpCell() {
         self.layer.cornerRadius = 5
-        self.isUserInteractionEnabled = true
     }
 
     func setUpIconButton() {

@@ -77,12 +77,4 @@ extension UIView {
             layers[0].removeFromSuperlayer()
         }
     }
-//        print(self.layer.sublayers)
-//        if self.layer.sublayers?[0] != nil {
-//            print("REMOVE")
-//            self.layer.sublayers?[0].removeFromSuperlayer()
-//        } else {
-//            print("DON't CARE")
-//        }
-//    }
 }
