@@ -628,6 +628,15 @@ extension CategoryViewController: UITextFieldDelegate {
             textField.placeholder = "떠오른 생각을 적어주세요"
         }
     }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("DidEndEditing")
+        guard let text = textField.text else { return }
+        if text == "" {
+            textField.backgroundColor = Color.cellBackgroundColor
+            textField.placeholder = "떠오른 생각을 적어주세요"
+        }
+    }
 }
 
 extension CategoryViewController: UICollectionViewDataSource {
