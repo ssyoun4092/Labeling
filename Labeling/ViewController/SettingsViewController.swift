@@ -27,6 +27,7 @@ extension SettingsViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingTable", for: indexPath)
         cell.textLabel?.text = target.title
         cell.accessoryType = target.hasIndicator ? .disclosureIndicator : .none
+        cell.backgroundColor = Color.cellBackgroundColor
 
         return cell
     }

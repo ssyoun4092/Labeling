@@ -28,7 +28,7 @@ class LabelTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 20, left: 15, bottom: 0, right: 15))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15))
     }
 
     func setUpCheckButton() {

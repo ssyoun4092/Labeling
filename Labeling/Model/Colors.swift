@@ -5,9 +5,7 @@ struct Color {
     static let accentColor = UIColor(named: "AccentColor")
     static let backgroundColor = UIColor(named: "BackgroundColor")
     static let cellBackgroundColor = UIColor(named: "CellBackgroundColor")
-    static let textColor = UIColor(named: "TextColor")
-}
-
-struct SFSymbol {
-    
+    static let cellHighlightColor = UIColor(named: "CellHighlightColor")
+    static let mainTextColor = UIColor(named: "MainTextColor")
+    static let subTextColor = UIColor(named: "SubTextColor")
 }

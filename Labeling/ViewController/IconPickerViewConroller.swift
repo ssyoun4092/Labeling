@@ -29,16 +29,6 @@ class IconPickerViewConroller: UIViewController {
     private func initCollectionView() {
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
-        let flowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-//        let cellWidth = (((UIScreen.main.bounds.width - 40) - 20) / 3)
-        print("ScreenBounds: \(UIScreen.main.bounds.width)")
-        print("IconView: \(iconView.bounds.width)")
-        print("CollectionViewBounds: \(collectionView.bounds.width)")
-        print("safeArea width: \(self.view.safeAreaLayoutGuide.layoutFrame.width)")
-        let cellWidth = ((collectionView.bounds.width) / 3)
-        let cellHeight = cellWidth
-//        flowLayout.itemSize = CGSize(width: cellWidth, height: cellHeight)
-//        collectionView.collectionViewLayout = flowLayout
         self.collectionView.allowsSelection = true
         self.collectionView.isUserInteractionEnabled = true
         self.collectionView.register(UINib(nibName: "IconPickerCell", bundle: nil), forCellWithReuseIdentifier: IconPIckerCell.identifier)
@@ -50,7 +40,7 @@ class IconPickerViewConroller: UIViewController {
     }
 
     private func setUpButtons() {
-        self.cancelButton.tintColor = Color.textColor
+        self.cancelButton.tintColor = Color.mainTextColor
         self.doneButton.tintColor = .systemGray3
     }
 

@@ -42,9 +42,9 @@ class SelectDateViewController: UIViewController {
     private func setUpCalendarAppearance() {
         calendarView.appearance.headerDateFormat = "YYYY년 MM월"
         calendarView.appearance.headerMinimumDissolvedAlpha = 0
-        calendarView.appearance.headerTitleColor = Color.textColor
-        calendarView.appearance.weekdayTextColor = Color.textColor
-        calendarView.appearance.titleDefaultColor = Color.textColor
+        calendarView.appearance.headerTitleColor = Color.mainTextColor
+        calendarView.appearance.weekdayTextColor = Color.mainTextColor
+        calendarView.appearance.titleDefaultColor = Color.mainTextColor
         calendarView.backgroundColor = Color.cellBackgroundColor
         calendarView.appearance.titleWeekendColor = .systemRed
         calendarView.appearance.todaySelectionColor = .systemRed

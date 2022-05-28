@@ -435,17 +435,17 @@ class CategoryViewController: UIViewController {
             //            collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0))?.disableGradient()
             guard let cell = collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0)) as? CategoryViewCell else { return }
             cell.backgroundColor = Color.cellBackgroundColor
-            cell.calendarButton.tintColor = Color.textColor
-            cell.timerButton.tintColor = Color.textColor
+            cell.calendarButton.tintColor = Color.mainTextColor
+            cell.timerButton.tintColor = Color.mainTextColor
         }
     }
 
     private func disableCellColorExcept(At indexPath: IndexPath) {
         let row = indexPath.row
         guard let cellOnGesture = collectionView.cellForItem(at: IndexPath(row: row, section: 0)) as? CategoryViewCell else { return }
-        cellOnGesture.backgroundColor = Color.accentColor
-        cellOnGesture.calendarButton.tintColor = Color.textColor
-        cellOnGesture.timerButton.tintColor = Color.textColor
+        cellOnGesture.backgroundColor = Color.cellHighlightColor
+        cellOnGesture.calendarButton.tintColor = Color.mainTextColor
+        cellOnGesture.timerButton.tintColor = Color.mainTextColor
         //        cellOnGesture.generateGradient()
         var array: [Int] = []
         array.append(contentsOf: 0...(categories.count - 1))
@@ -454,8 +454,8 @@ class CategoryViewController: UIViewController {
             //            collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0))?.disableGradient()
             guard let cell = collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0)) as? CategoryViewCell else { return }
             cell.backgroundColor = Color.cellBackgroundColor
-            cell.calendarButton.tintColor = Color.textColor
-            cell.timerButton.tintColor = Color.textColor
+            cell.calendarButton.tintColor = Color.mainTextColor
+            cell.timerButton.tintColor = Color.mainTextColor
         }
     }
     
@@ -590,15 +590,15 @@ extension CategoryViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         print("DidChangeSelection")
         textField.backgroundColor = nil
-        guard let text = textField.text else { return }
-        if text == "" {
-            textField.alpha = 0
-            textField.backgroundColor = Color.cellBackgroundColor
-            UIView.animate(withDuration: 0.3) {
-                textField.alpha = 1
-                textField.placeholder = "떠오른 생각을 적어주세요"
-            }
-        }
+//        guard let text = textField.text else { return }
+//        if text == "" {
+//            textField.alpha = 0
+//            textField.backgroundColor = Color.cellBackgroundColor
+//            UIView.animate(withDuration: 0.3) {
+//                textField.alpha = 1
+//                textField.placeholder = "떠오른 생각을 적어주세요"
+//            }
+//        }
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -647,15 +647,15 @@ extension CategoryViewController: UICollectionViewDataSource {
                 }
             }
             if (categories[indexPath.row].doCalendar == true) && (categories[indexPath.row].doTimer == true) {
-                categoryCell.calendarButton.tintColor = Color.textColor
-                categoryCell.timerButton.tintColor = Color.textColor
+                categoryCell.calendarButton.tintColor = Color.mainTextColor
+                categoryCell.timerButton.tintColor = Color.mainTextColor
             } else if (categories[indexPath.row].doCalendar == true) && (categories[indexPath.row].doTimer == false) {
                 categoryCell.calendarButton.isHidden = true
                 categoryCell.timerButton.setImage(UIImage(systemName: Icons.calendarSymbol), for: .normal)
-                categoryCell.timerButton.tintColor = Color.textColor
+                categoryCell.timerButton.tintColor = Color.mainTextColor
             } else if (categories[indexPath.row].doCalendar == false) && (categories[indexPath.row].doTimer == true) {
                 categoryCell.calendarButton.isHidden = true
-                categoryCell.timerButton.tintColor = Color.textColor
+                categoryCell.timerButton.tintColor = Color.mainTextColor
             } else {
                 categoryCell.calendarButton.isHidden = true
                 categoryCell.timerButton.isHidden = true
