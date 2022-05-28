@@ -165,7 +165,6 @@ class CategoryViewController: UIViewController {
         if !(labelTextField.text!.isEmpty) && !(self.currentMode == .edit) {
             switch gesture.state {
             case .began:
-                animateHideTextFieldBottomLine()
                 self.view.endEditing(true)
             case .changed :
                 self.labelTextField.center = CGPoint(x: changedXPoint, y: changedYPoint)
@@ -462,11 +461,13 @@ class CategoryViewController: UIViewController {
     
     private func animateOut() {
         if isLabelOnCell {
-            self.labelTextField.animateDisappear()
+            self.labelTextField.animateTiny()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.labelTextField.disappear()
                 self.labelTextField.animateAppearAt(initialOrigin: self.textFieldOrigin)
             }
         } else {
+            self.labelTextField.disappear()
             self.labelTextField.animateAppearAt(initialOrigin: self.textFieldOrigin)
         }
     }
@@ -563,45 +564,6 @@ class CategoryViewController: UIViewController {
         collectionView.reloadData()
     }
 
-    //MARK: - Handling TextField BottomLine
-    private func animateHideTextFieldBottomLine() {
-        //        UIView.animate(withDuration: 0.3) {
-        //            self.hideTextFieldBottomLine()
-        //            self.labelTextField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        //        }
-        UIView.animate(withDuration: 0.3) {
-            //            self.labelTextField.backgroundColor =
-            self.labelTextField.hideShadow()
-        }
-    }
-
-    private func showTextFieldBottomLine() {
-        let subViews = self.labelTextField.subviews
-        for subView in subViews {
-            if subView.tag == 100 {
-                subView.alpha = 1
-            }
-        }
-    }
-
-    private func hideTextFieldBottomLine() {
-        let subViews = self.labelTextField.subviews
-        for subView in subViews {
-            if subView.tag == 100 {
-                subView.alpha = 0
-            }
-        }
-    }
-
-    private func removeTextFieldBottomLine() {
-        let subviews = self.labelTextField.subviews
-        for subview in subviews {
-            if subview.tag == 100 {
-                subview.removeFromSuperview()
-            }
-        }
-    }
-
     @IBAction func tapEditButton(_ sender: UIBarButtonItem) {
         self.currentMode = (self.currentMode == .normal) ? .edit : .normal
         currentModeDelegate?.changeEditButtonTitle(currentMode: currentMode)
@@ -615,17 +577,27 @@ class CategoryViewController: UIViewController {
 
 extension CategoryViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.backgroundColor = nil
-        textField.placeholder = ""
+        UIView.animate(withDuration: 0.3) {
+            textField.alpha = 0
+            textField.placeholder = ""
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            textField.backgroundColor = nil
+            textField.alpha = 1
+        }
     }
 
     func textFieldDidChangeSelection(_ textField: UITextField) {
+        print("DidChangeSelection")
         textField.backgroundColor = nil
-
         guard let text = textField.text else { return }
         if text == "" {
+            textField.alpha = 0
             textField.backgroundColor = Color.cellBackgroundColor
-            textField.placeholder = "떠오른 생각을 적어주세요"
+            UIView.animate(withDuration: 0.3) {
+                textField.alpha = 1
+                textField.placeholder = "떠오른 생각을 적어주세요"
+            }
         }
     }
 
@@ -633,8 +605,12 @@ extension CategoryViewController: UITextFieldDelegate {
         print("DidEndEditing")
         guard let text = textField.text else { return }
         if text == "" {
+            textField.alpha = 0
             textField.backgroundColor = Color.cellBackgroundColor
-            textField.placeholder = "떠오른 생각을 적어주세요"
+            UIView.animate(withDuration: 0.3) {
+                textField.alpha = 1
+                textField.placeholder = "떠오른 생각을 적어주세요"
+            }
         }
     }
 }

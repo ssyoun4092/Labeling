@@ -9,7 +9,7 @@ class SelectDateViewController: UIViewController {
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
     var selectedDate: Date?
-    var nextButtonText: String = "Choose Time"
+    var nextButtonText: String = "Select"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +60,7 @@ class SelectDateViewController: UIViewController {
         guard let selectedDate = selectedDate else {
             return  alertIfDateNotSelected()
         }
-        if self.nextButton.titleLabel?.text == "Choose Time" {
+        if self.nextButton.titleLabel?.text == "Select" {
             guard let selectTimeVC = self.storyboard?.instantiateViewController(withIdentifier: SelectTimeViewController.identifier) as? SelectTimeViewController else { return }
             selectTimeVC.doesComeFromSelectDateVC = true
             postSelectedDateToObserver(date: selectedDate)
