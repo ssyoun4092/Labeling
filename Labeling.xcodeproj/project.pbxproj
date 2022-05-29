@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		6601D0819D591A4AE8887645 /* Pods_Labeling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 411B90E37CF6B1F55E5B484A /* Pods_Labeling.framework */; };
 		8E1A5F84282F713100388099 /* FirstLaunchCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1A5F83282F713100388099 /* FirstLaunchCategory.swift */; };
+		8E3FACD7284231FF0024C6AB /* SettingsTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3FACD6284231FF0024C6AB /* SettingsTableCell.xib */; };
+		8E3FACD9284232940024C6AB /* DarkModeSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3FACD8284232940024C6AB /* DarkModeSettingCell.swift */; };
 		8E581FD32834D4C400EF82F9 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E581FD22834D4C400EF82F9 /* SettingsViewController.swift */; };
 		8E581FD52835CCFA00EF82F9 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E581FD42835CCFA00EF82F9 /* Settings.swift */; };
 		8E581FDA2835F74600EF82F9 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E581FD92835F74600EF82F9 /* Protocols.swift */; };
@@ -24,7 +26,9 @@
 		8E6D9CC6283F50FD0059362D /* IconPIckerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6D9CC5283F50FD0059362D /* IconPIckerCell.swift */; };
 		8EC26B4B283E00AC00AA9439 /* LabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC26B4A283E00AC00AA9439 /* LabelTableViewCell.swift */; };
 		8ECBE218283A091C007D1B78 /* LabelTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ECBE217283A091C007D1B78 /* LabelTableCell.xib */; };
-		8ECBE21A283A2373007D1B78 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECBE219283A2373007D1B78 /* Colors.swift */; };
+		8ECBE21A283A2373007D1B78 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECBE219283A2373007D1B78 /* Constants.swift */; };
+		8ED0A433284311A5008B8C69 /* ThemeSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED0A432284311A5008B8C69 /* ThemeSelectViewController.swift */; };
+		8ED0A435284333AF008B8C69 /* NoticeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED0A434284333AF008B8C69 /* NoticeViewController.swift */; };
 		8ED263DA281D623000812BA1 /* CategoryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED263D8281D623000812BA1 /* CategoryViewCell.swift */; };
 		8ED263DB281D623000812BA1 /* CategoryViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ED263D9281D623000812BA1 /* CategoryViewCell.xib */; };
 		8ED263DD281D653E00812BA1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED263DC281D653E00812BA1 /* Extensions.swift */; };
@@ -40,6 +44,8 @@
 /* Begin PBXFileReference section */
 		411B90E37CF6B1F55E5B484A /* Pods_Labeling.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Labeling.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E1A5F83282F713100388099 /* FirstLaunchCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchCategory.swift; sourceTree = "<group>"; };
+		8E3FACD6284231FF0024C6AB /* SettingsTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsTableCell.xib; sourceTree = "<group>"; };
+		8E3FACD8284232940024C6AB /* DarkModeSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeSettingCell.swift; sourceTree = "<group>"; };
 		8E581FD22834D4C400EF82F9 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		8E581FD42835CCFA00EF82F9 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		8E581FD92835F74600EF82F9 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
@@ -55,7 +61,9 @@
 		8E6D9CC5283F50FD0059362D /* IconPIckerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPIckerCell.swift; sourceTree = "<group>"; };
 		8EC26B4A283E00AC00AA9439 /* LabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTableViewCell.swift; sourceTree = "<group>"; };
 		8ECBE217283A091C007D1B78 /* LabelTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LabelTableCell.xib; sourceTree = "<group>"; };
-		8ECBE219283A2373007D1B78 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		8ECBE219283A2373007D1B78 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		8ED0A432284311A5008B8C69 /* ThemeSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ThemeSelectViewController.swift; path = Labeling/ViewController/ThemeSelectViewController.swift; sourceTree = SOURCE_ROOT; };
+		8ED0A434284333AF008B8C69 /* NoticeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NoticeViewController.swift; path = Labeling/ViewController/NoticeViewController.swift; sourceTree = SOURCE_ROOT; };
 		8ED263D8281D623000812BA1 /* CategoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewCell.swift; sourceTree = "<group>"; };
 		8ED263D9281D623000812BA1 /* CategoryViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryViewCell.xib; sourceTree = "<group>"; };
 		8ED263DC281D653E00812BA1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -127,6 +135,7 @@
 				8E5820212837520600EF82F9 /* AddCategoryViewCell.xib */,
 				8ECBE217283A091C007D1B78 /* LabelTableCell.xib */,
 				8E6D9CC3283F50240059362D /* IconPickerCell.xib */,
+				8E3FACD6284231FF0024C6AB /* SettingsTableCell.xib */,
 				8EE4760D281926330004EA88 /* LaunchScreen.storyboard */,
 			);
 			path = View;
@@ -142,10 +151,13 @@
 				8E64AEEA282E2F0F009D9BF7 /* LabelTableViewController.swift */,
 				8E6D9CC1283F4FB30059362D /* IconPickerViewConroller.swift */,
 				8E581FD22834D4C400EF82F9 /* SettingsViewController.swift */,
+				8ED0A432284311A5008B8C69 /* ThemeSelectViewController.swift */,
+				8ED0A434284333AF008B8C69 /* NoticeViewController.swift */,
 				8ED263D8281D623000812BA1 /* CategoryViewCell.swift */,
 				8E5820232837521900EF82F9 /* AddCategoryViewCell.swift */,
 				8EC26B4A283E00AC00AA9439 /* LabelTableViewCell.swift */,
 				8E6D9CC5283F50FD0059362D /* IconPIckerCell.swift */,
+				8E3FACD8284232940024C6AB /* DarkModeSettingCell.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -164,7 +176,7 @@
 				8E64AEF0282E797D009D9BF7 /* Model.xcdatamodeld */,
 				8E581FD42835CCFA00EF82F9 /* Settings.swift */,
 				8E1A5F83282F713100388099 /* FirstLaunchCategory.swift */,
-				8ECBE219283A2373007D1B78 /* Colors.swift */,
+				8ECBE219283A2373007D1B78 /* Constants.swift */,
 				8E6D9CBF283F42280059362D /* Icons.swift */,
 			);
 			path = Model;
@@ -269,6 +281,7 @@
 				8EE4760C281926330004EA88 /* Assets.xcassets in Resources */,
 				8ECBE218283A091C007D1B78 /* LabelTableCell.xib in Resources */,
 				8E6D9CC4283F50240059362D /* IconPickerCell.xib in Resources */,
+				8E3FACD7284231FF0024C6AB /* SettingsTableCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,7 +340,9 @@
 				8E581FDA2835F74600EF82F9 /* Protocols.swift in Sources */,
 				8EE476032819262F0004EA88 /* AppDelegate.swift in Sources */,
 				8EE476052819262F0004EA88 /* SceneDelegate.swift in Sources */,
-				8ECBE21A283A2373007D1B78 /* Colors.swift in Sources */,
+				8E3FACD9284232940024C6AB /* DarkModeSettingCell.swift in Sources */,
+				8ECBE21A283A2373007D1B78 /* Constants.swift in Sources */,
+				8ED0A433284311A5008B8C69 /* ThemeSelectViewController.swift in Sources */,
 				8ED263DD281D653E00812BA1 /* Extensions.swift in Sources */,
 				8E581FD52835CCFA00EF82F9 /* Settings.swift in Sources */,
 				8E5820242837521900EF82F9 /* AddCategoryViewCell.swift in Sources */,
@@ -339,6 +354,7 @@
 				8E64AEEB282E2F0F009D9BF7 /* LabelTableViewController.swift in Sources */,
 				8E6D9CC0283F42280059362D /* Icons.swift in Sources */,
 				8E581FD32834D4C400EF82F9 /* SettingsViewController.swift in Sources */,
+				8ED0A435284333AF008B8C69 /* NoticeViewController.swift in Sources */,
 				8E58202A28375DD800EF82F9 /* AddCategoryViewController.swift in Sources */,
 				8E64AEF2282E797D009D9BF7 /* Model.xcdatamodeld in Sources */,
 			);

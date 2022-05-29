@@ -3,7 +3,7 @@ import UIKit
 class AddCategoryViewCell: UICollectionViewCell {
     @IBOutlet weak var addButton: UIButton!
     static let identifier = "AddCategoryViewCell"
-    var delegate: AddSelectedProperty?
+    var delegate: AddSelectedDateTimeDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

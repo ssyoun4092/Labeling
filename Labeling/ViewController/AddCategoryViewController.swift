@@ -11,7 +11,7 @@ class AddCategoryViewController: UIViewController {
     @IBOutlet weak var categorySubLabelTextField: UITextField!
     @IBOutlet weak var calendarSwitch: UISwitch!
     @IBOutlet weak var timerSwitch: UISwitch!
-    var delegate: AddSelectedProperty?
+    weak var delegate: AddSelectedDateTimeDelegate?
     var iconName = ""
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var categories = [Category]()
@@ -146,6 +146,10 @@ class AddCategoryViewController: UIViewController {
         } catch {
             print("Error loading labels \(error)")
         }
+    }
+
+    deinit {
+        print("AddCategory Deinit")
     }
 }
 

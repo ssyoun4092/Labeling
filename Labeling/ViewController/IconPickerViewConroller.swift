@@ -1,16 +1,12 @@
 import UIKit
 
-protocol PassingIconDelegate {
-    func passSelectedIcon(name: String)
-}
-
 class IconPickerViewConroller: UIViewController {
     static let idenfier = "IconPickerViewConroller"
     @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var iconView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
-    var passIconDelegate: PassingIconDelegate?
+    weak var passIconDelegate: PassingIconDelegate?
     let icons = IconPickers()
     var highlightedCellIndexPath: IndexPath? {
         didSet {
@@ -61,6 +57,10 @@ class IconPickerViewConroller: UIViewController {
             self.passIconDelegate?.passSelectedIcon(name: selectedIconName)
             self.dismiss(animated: true)
         }
+    }
+
+    deinit {
+        print("IconPicker Deinit")
     }
 }
 

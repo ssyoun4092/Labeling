@@ -6,6 +6,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        print("Scene will Connect")
+        let userDefaults = UserDefaults.standard
+        if userDefaults.string(forKey: "Theme") == "light" {
+            print("Light!")
+            self.window?.overrideUserInterfaceStyle = .light
+        } else if userDefaults.string(forKey: "Theme") == "dark" {
+            print("Dark")
+            self.window?.overrideUserInterfaceStyle = .dark
+        } else if userDefaults.string(forKey: "Theme") == "system" || userDefaults.string(forKey: "Theme") == nil {
+            print("System")
+            self.window?.overrideUserInterfaceStyle = .unspecified
+        }
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).

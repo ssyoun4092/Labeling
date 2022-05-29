@@ -25,7 +25,7 @@
                             <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="font" scale="large" weight="thin">
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                             </preferredSymbolConfiguration>
-                            <color key="baseForegroundColor" name="TextColor"/>
+                            <color key="baseForegroundColor" name="MainTextColor"/>
                         </buttonConfiguration>
                         <connections>
                             <action selector="tapIconButton:" destination="XJc-Qs-AVD" eventType="touchUpInside" id="prX-T0-zqD"/>
@@ -52,8 +52,8 @@
         <namedColor name="CellBackgroundColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="TextColor">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        <namedColor name="MainTextColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.87000000476837158" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
     </resources>
 </document>

@@ -9,3 +9,7 @@ struct Color {
     static let mainTextColor = UIColor(named: "MainTextColor")
     static let subTextColor = UIColor(named: "SubTextColor")
 }
+
+struct Identifier {
+    static let NoticeViewController = "NoticeViewController"
+}

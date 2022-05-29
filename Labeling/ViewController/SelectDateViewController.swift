@@ -14,8 +14,6 @@ class SelectDateViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("SelectDateVC Did Load")
-        self.calendarView.dataSource = self
-        self.calendarView.delegate = self
         self.dismissView(byTapping: blurView)
         setUpCalendarBackgroundView()
         setUpCalendar()
@@ -27,6 +25,7 @@ class SelectDateViewController: UIViewController {
     }
 
     private func setUpCalendar() {
+        calendarView.delegate = self
         calendarView.scrollEnabled = true
         calendarView.scrollDirection = .horizontal
         setUpCalendarAppearance()
@@ -103,10 +102,6 @@ class SelectDateViewController: UIViewController {
     deinit {
         print("SelectDateViewController Deinit")
     }
-}
-
-extension SelectDateViewController: FSCalendarDataSource {
-    
 }
 
 extension SelectDateViewController: FSCalendarDelegate {

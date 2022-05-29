@@ -6,10 +6,6 @@ enum CurrentMode {
     case edit
 }
 
-protocol ChangeButtonTitle {
-    func changeChoosetTImeToSave()
-}
-
 class CategoryViewController: UIViewController {
 
     //MARK: - Properties
@@ -22,8 +18,7 @@ class CategoryViewController: UIViewController {
     var textFieldOrigin: CGPoint = CGPoint()
     var isLabelOnCell: Bool = false
     var keyboardIsPresented: Bool = false
-    var currentModeDelegate: CategoryViewControllerDelegate?
-    var changeButtonTitleDelegate: ChangeButtonTitle?
+    weak var currentModeDelegate: CategoryViewControllerDelegate?
     var currentMode: CurrentMode = .normal
     var categories = [Category]()
     lazy var firstLaunchCategories: [FirstLaunchCategory] = [trashLabel, somedayLabel, delegateLabel, calendarLabel, asapLabel]
@@ -590,15 +585,6 @@ extension CategoryViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         print("DidChangeSelection")
         textField.backgroundColor = nil
-//        guard let text = textField.text else { return }
-//        if text == "" {
-//            textField.alpha = 0
-//            textField.backgroundColor = Color.cellBackgroundColor
-//            UIView.animate(withDuration: 0.3) {
-//                textField.alpha = 1
-//                textField.placeholder = "떠오른 생각을 적어주세요"
-//            }
-//        }
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -769,7 +755,7 @@ extension CategoryViewController: CategoryViewControllerDelegate {
     }
 }
 
-extension CategoryViewController: AddSelectedProperty {
+extension CategoryViewController: AddSelectedDateTimeDelegate {
     func presentAddCategoryController() {
         guard let addCategoryVC = self.storyboard?.instantiateViewController(withIdentifier: AddCategoryViewController.identifier) as? AddCategoryViewController else { return }
         addCategoryVC.delegate = self

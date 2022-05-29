@@ -189,6 +189,10 @@ class LabelTableViewController: UITableViewController {
         }
         self.tableView.reloadData()
     }
+
+    deinit {
+        print("LabelTableView Deinit")
+    }
 }
 
 extension LabelTableViewController: LabelDoneDelegate {

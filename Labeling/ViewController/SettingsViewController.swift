@@ -4,16 +4,28 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
     let tableList = SettingsSection.createSection()
+    let firstSectionSettingDetailVC: [UIViewController] = [ThemeSelectViewController()]
+    let settingDetailVC = [ThemeSelectViewController.self, IconPickerViewConroller.self]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+        self.tableView.register(UINib(nibName: "SettingsTableCell", bundle: nil), forCellReuseIdentifier: DarkModeSettingCell.identifier)
+    }
+
+    func navigateTargetSettingDetailVC(indexPath: IndexPath) {
+        let targetVC = firstSectionSettingDetailVC[0]
+    }
+
+    deinit {
+        print("Settings Deinit")
     }
 }
 
 extension SettingsViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
+
         return tableList.count
     }
 
@@ -48,8 +60,13 @@ extension SettingsViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath)
-        cell?.backgroundColor = cell?.backgroundColor == .red ? .blue : .red
-        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.row == 0 {
+            guard let targetVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.NoticeViewController) as? NoticeViewController else { return }
+            self.navigationController?.pushViewController(targetVC, animated: true)
+        } else if indexPath.row == 1 {
+            guard let targetVC = self.storyboard?.instantiateViewController(withIdentifier: ThemeSelectViewController.identifier) as? ThemeSelectViewController else { return }
+            self.navigationController?.pushViewController(targetVC, animated: true)
+        }
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }
