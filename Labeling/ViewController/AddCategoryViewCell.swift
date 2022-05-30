@@ -2,8 +2,7 @@ import UIKit
 
 class AddCategoryViewCell: UICollectionViewCell {
     @IBOutlet weak var addButton: UIButton!
-    static let identifier = "AddCategoryViewCell"
-    var delegate: AddSelectedProperty?
+    var delegate: AddSelectedDateTimeDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -13,6 +12,16 @@ class AddCategoryViewCell: UICollectionViewCell {
 
     @objc func tapAddCell() {
         delegate?.presentAddCategoryController()
+    }
+
+    func setUpCell() {
+        self.layer.cornerRadius = 10
+        self.backgroundColor = Color.cellBackgroundColor
+        self.isUserInteractionEnabled = false
+//        self.generateGradient()
+//        self.backgroundColor = UIColor.gray.withAlphaComponent(0.5)
+//        self.layer.borderWidth = 1
+//        self.layer.borderColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1)
     }
 
     func setUpaddButton() {

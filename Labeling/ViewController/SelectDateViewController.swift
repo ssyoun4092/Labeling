@@ -2,20 +2,16 @@ import UIKit
 import FSCalendar
 
 class SelectDateViewController: UIViewController {
-    static let identifier = "SelectDateViewController"
     @IBOutlet weak var blurView: UIView!
     @IBOutlet weak var calendarBackgroundView: UIView!
     @IBOutlet weak var calendarView: FSCalendar!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
     var selectedDate: Date?
-    var nextButtonText: String = "Choose Time"
+    var nextButtonText: String = "Select"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("SelectDateVC Did Load")
-        self.calendarView.dataSource = self
-        self.calendarView.delegate = self
         self.dismissView(byTapping: blurView)
         setUpCalendarBackgroundView()
         setUpCalendar()
@@ -27,6 +23,7 @@ class SelectDateViewController: UIViewController {
     }
 
     private func setUpCalendar() {
+        calendarView.delegate = self
         calendarView.scrollEnabled = true
         calendarView.scrollDirection = .horizontal
         setUpCalendarAppearance()
@@ -42,11 +39,13 @@ class SelectDateViewController: UIViewController {
     private func setUpCalendarAppearance() {
         calendarView.appearance.headerDateFormat = "YYYY년 MM월"
         calendarView.appearance.headerMinimumDissolvedAlpha = 0
-        calendarView.appearance.headerTitleColor = UIColor.black
-        calendarView.appearance.weekdayTextColor = .black
-        calendarView.appearance.titleWeekendColor = .red
+        calendarView.appearance.headerTitleColor = Color.mainTextColor
+        calendarView.appearance.weekdayTextColor = Color.mainTextColor
+        calendarView.appearance.titleDefaultColor = Color.mainTextColor
+        calendarView.backgroundColor = Color.cellBackgroundColor
+        calendarView.appearance.titleWeekendColor = .systemRed
         calendarView.appearance.todaySelectionColor = .systemRed
-        calendarView.appearance.selectionColor = .systemPurple
+        calendarView.appearance.selectionColor = Color.accentColor
     }
 
     @IBAction func tapCancelButton(_ sender: UIButton) {
@@ -55,9 +54,11 @@ class SelectDateViewController: UIViewController {
     }
 
     @IBAction func tapNextButton(_ sender: UIButton) {
-        guard let selectedDate = selectedDate else { return }
-        if self.nextButton.titleLabel?.text == "Choose Time" {
-            guard let selectTimeVC = self.storyboard?.instantiateViewController(withIdentifier: SelectTimeViewController.identifier) as? SelectTimeViewController else { return }
+        guard let selectedDate = selectedDate else {
+            return  alertIfDateNotSelected()
+        }
+        if self.nextButton.titleLabel?.text == "Select" {
+            guard let selectTimeVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.selectTimeViewController) as? SelectTimeViewController else { return }
             selectTimeVC.doesComeFromSelectDateVC = true
             postSelectedDateToObserver(date: selectedDate)
             selectTimeVC.modalPresentationStyle = .overCurrentContext
@@ -72,6 +73,13 @@ class SelectDateViewController: UIViewController {
         }
     }
 
+    private func alertIfDateNotSelected() {
+        let alert = UIAlertController(title: "날짜를 선택해주세요!", message: nil, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(alertAction)
+        present(alert, animated: true)
+    }
+
     private func postSelectedDateToObserver(date: Date) {
         let convertedDate = convertDateToString(date: date)
         NotificationCenter.default.post(name: NSNotification.Name("addDate"), object: convertedDate)
@@ -81,7 +89,6 @@ class SelectDateViewController: UIViewController {
         let convertedDate = convertDateToString(date: date)
         NotificationCenter.default.post(name: NSNotification.Name("saveDate"), object: convertedDate)
     }
-
 
     private func convertDateToString(date: Date) -> String {
         let dateFormatter = DateFormatter()
@@ -93,10 +100,6 @@ class SelectDateViewController: UIViewController {
     deinit {
         print("SelectDateViewController Deinit")
     }
-}
-
-extension SelectDateViewController: FSCalendarDataSource {
-    
 }
 
 extension SelectDateViewController: FSCalendarDelegate {

@@ -2,10 +2,9 @@ import UIKit
 
 class CategoryViewCell: UICollectionViewCell {
     //MARK: - PROPERTIES
-    static let identifier = "CategoryViewCell"
-
+    @IBOutlet weak var iconButton: UIButton!
     @IBOutlet weak var mainLabel: UILabel!
-    @IBOutlet weak var subLabel: UILabel!
+    @IBOutlet weak var numberOfLabel: UILabel!
     @IBOutlet weak var cellView: UIView!
     @IBOutlet weak var xButton: UIButton!
     @IBOutlet weak var calendarButton: UIButton!
@@ -18,14 +17,19 @@ class CategoryViewCell: UICollectionViewCell {
         setUpButtons()
     }
 
+
     func setUpCell() {
         self.layer.cornerRadius = 10
-//        self.backgroundColor = UIColor.gray.withAlphaComponent(0.5)
-//        self.layer.borderWidth = 1
-//        self.layer.borderColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1)
+        self.layer.shadowOffset = CGSize(width: 7, height: 7)
+        self.layer.shadowOpacity = 1.0
+        self.layer.shadowRadius = 5.0
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: 7, height: 7)).cgPath
+        self.layer.masksToBounds = false
     }
 
     func setUpButtons() {
+        iconButton.setTitle("", for: .normal)
         xButton.setTitle("", for: .normal)
         calendarButton.setTitle("", for: .normal)
         timerButton.setTitle("", for: .normal)

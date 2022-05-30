@@ -4,16 +4,37 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
     let tableList = SettingsSection.createSection()
+    let firstSectionSettingDetailVC: [UIViewController] = [ThemeSelectViewController()]
+    let settingDetailVC = [ThemeSelectViewController.self, IconPickerViewConroller.self]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+        self.tableView.register(UINib(nibName: "SettingsTableCell", bundle: nil), forCellReuseIdentifier: Identifier.darkModeSettingCell)
+    }
+
+    private func goToDM() {
+        let myInstaName = "say_young01"
+        guard let targetURL = URL(string: "instagram://user?username=\(myInstaName)") else { return }
+        let application = UIApplication.shared
+
+        if application.canOpenURL(targetURL) {
+            application.open(targetURL)
+        } else {
+            guard let webURL = URL(string: "https://instagram.com/\(myInstaName)") else { return }
+            application.open(webURL)
+        }
+    }
+
+    deinit {
+        print("Settings Deinit")
     }
 }
 
 extension SettingsViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
+
         return tableList.count
     }
 
@@ -27,6 +48,7 @@ extension SettingsViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingTable", for: indexPath)
         cell.textLabel?.text = target.title
         cell.accessoryType = target.hasIndicator ? .disclosureIndicator : .none
+        cell.backgroundColor = Color.cellBackgroundColor
 
         return cell
     }
@@ -47,8 +69,18 @@ extension SettingsViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath)
-        cell?.backgroundColor = cell?.backgroundColor == .red ? .blue : .red
-        tableView.deselectRow(at: indexPath, animated: true)
+        switch (indexPath.row, indexPath.section) {
+        case (0, 0):
+            guard let targetVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.noticeViewController) as? NoticeViewController else { return }
+            self.navigationController?.pushViewController(targetVC, animated: true)
+        case (1, 0):
+            guard let targetVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.themeSelectViewController) as? ThemeSelectViewController else { return }
+            self.navigationController?.pushViewController(targetVC, animated: true)
+        case (0, 1):
+            goToDM()
+        default:
+            print("No Value")
+        }
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }
