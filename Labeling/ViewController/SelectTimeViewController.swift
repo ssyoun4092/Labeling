@@ -1,7 +1,6 @@
 import UIKit
 
 class SelectTimeViewController: UIViewController {
-    static let identifier = "SelectTimeViewController"
     @IBOutlet weak var blurView: UIView!
     @IBOutlet weak var pickerContainerView: UIView!
     @IBOutlet weak var timePicker: UIDatePicker!
@@ -20,27 +19,27 @@ class SelectTimeViewController: UIViewController {
         setUpButtons()
     }
 
-    func initBlurView() {
+    private func initBlurView() {
         let tapForDismissPresentedView = UITapGestureRecognizer(target: self, action: #selector(dismissPresentedView))
         self.blurView.addGestureRecognizer(tapForDismissPresentedView)
     }
 
-    func setUpPickerContainerview() {
+    private func setUpPickerContainerview() {
         pickerContainerView.layer.cornerRadius = 10
     }
 
-    func setUpTimePicker() {
+    private func setUpTimePicker() {
         self.timePicker.addTarget(self, action: #selector(timePickerValueChanged(_:)), for: .valueChanged)
     }
 
-    func setUpButtons() {
+    private func setUpButtons() {
         cancelButton.layer.cornerRadius = 5
         saveButton.layer.cornerRadius = 5
     }
 
     @IBAction func tapCancelButton(_ sender: UIButton) {
         if doesComeFromSelectDateVC {
-            guard let selectedDateVC = self.storyboard?.instantiateViewController(withIdentifier: SelectDateViewController.identifier) as? SelectDateViewController else { return }
+            guard let selectedDateVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.selectDateViewController) as? SelectDateViewController else { return }
             selectedDateVC.modalTransitionStyle = .crossDissolve
             selectedDateVC.modalPresentationStyle = .overCurrentContext
             guard let categoryVC = self.presentingViewController else { return }

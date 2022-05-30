@@ -9,8 +9,21 @@ struct Icons {
 
 struct IconPickers {
     let iconPickers: [IconInPicker] = [
+        IconInPicker(title: "briefcase"),
+        IconInPicker(title: "pin"),
+        IconInPicker(title: "cup.and.saucer"),
+        IconInPicker(title: "fork.knife"),
+        IconInPicker(title: "lightbulb"),
+        IconInPicker(title: "scroll"),
+        IconInPicker(title: "checklist"),
+        IconInPicker(title: "chart.bar"),
         IconInPicker(title: "phone"),
+        IconInPicker(title: "calendar"),
         IconInPicker(title: "trash"),
+        IconInPicker(title: "list.bullet"),
+        IconInPicker(title: "pencil"),
+        IconInPicker(title: "highlighter"),
+        IconInPicker(title: "paintbrush"),
         IconInPicker(title: "heart"),
         IconInPicker(title: "sum"),
         IconInPicker(title: "video"),
@@ -19,14 +32,11 @@ struct IconPickers {
         IconInPicker(title: "bed.double"),
         IconInPicker(title: "cart"),
         IconInPicker(title: "bag"),
+        IconInPicker(title: "chart.line.uptrend.xyaxis"),
         IconInPicker(title: "globe"),
         IconInPicker(title: "play"),
         IconInPicker(title: "pause"),
         IconInPicker(title: "stop"),
-        IconInPicker(title: "list.bullet"),
-        IconInPicker(title: "pencil"),
-        IconInPicker(title: "highlighter"),
-        IconInPicker(title: "paintbrush"),
         IconInPicker(title: "flame"),
         IconInPicker(title: "leaf"),
         IconInPicker(title: "hands.clap"),
@@ -35,7 +45,8 @@ struct IconPickers {
         IconInPicker(title: "gamecontroller"),
         IconInPicker(title: "tray.full"),
         IconInPicker(title: "wrench.and.screwdriver"),
-        IconInPicker(title: "sun.min")
+        IconInPicker(title: "sun.min"),
+        IconInPicker(title: "giftcard")
     ]
 }
 

@@ -8,8 +8,8 @@ protocol CategoryViewControllerDelegate: AnyObject {
 
 protocol AddSelectedDateTimeDelegate: AnyObject {
     func presentAddCategoryController()
-    func addCategory(mainLabel: String, subLabel: String, doCalendar: Bool, doTimer: Bool, iconName: String)
-    func modifyCategory(mainLabel: String, subLabel: String, iconName: String, index: Int64)
+    func addCategory(mainLabel: String, doCalendar: Bool, doTimer: Bool, iconName: String)
+    func modifyCategory(mainLabel: String, iconName: String, index: Int64)
 }
 
 protocol PassingIconDelegate: AnyObject {

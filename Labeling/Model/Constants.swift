@@ -11,5 +11,16 @@ struct Color {
 }
 
 struct Identifier {
-    static let NoticeViewController = "NoticeViewController"
+    static let categoryViewController = "CategoryViewController"
+    static let addCategoryViewController = "AddCategoryViewController"
+    static let selectDateViewController = "SelectDateViewController"
+    static let selectTimeViewController = "SelectTimeViewController"
+    static let iconPickerViewConroller = "IconPickerViewConroller"
+    static let themeSelectViewController = "ThemeSelectViewController"
+    static let noticeViewController = "NoticeViewController"
+    static let categoryViewCell = "CategoryViewCell"
+    static let addCategoryViewCell = "AddCategoryViewCell"
+    static let labelTableViewCell = "LabelTableViewCell"
+    static let iconPIckerCell = "IconPIckerCell"
+    static let darkModeSettingCell = "DarkModeSettingCell"
 }

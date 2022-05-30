@@ -7,7 +7,6 @@ protocol IconDelegate {
 class IconPIckerCell: UICollectionViewCell {
     @IBOutlet weak var iconButton: UIButton!
     var iconDelegate: IconDelegate?
-    static let identifier = "IconPIckerCell"
 
     override func awakeFromNib() {
         super.awakeFromNib()

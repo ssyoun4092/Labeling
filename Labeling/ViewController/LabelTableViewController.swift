@@ -13,7 +13,7 @@ class LabelTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.register(UINib(nibName: "LabelTableCell", bundle: nil), forCellReuseIdentifier: LabelTableViewCell.identifier)
+        self.tableView.register(UINib(nibName: "LabelTableCell", bundle: nil), forCellReuseIdentifier: Identifier.labelTableViewCell)
         self.tableView.rowHeight = 100
         loadCategories()
     }
@@ -24,7 +24,7 @@ class LabelTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: LabelTableViewCell.identifier, for: indexPath) as! LabelTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Identifier.labelTableViewCell, for: indexPath) as! LabelTableViewCell
         let label = labels[indexPath.row]
         cell.mainLabel.text = label.title
         if label.date!.isEmpty && !(label.time!.isEmpty) {
@@ -62,27 +62,6 @@ class LabelTableViewController: UITableViewController {
             completionHandler(true)
         }
         deleteAction.backgroundColor = .systemRed
-
-//        let moveToAnotherCategory = UIContextualAction(style: .normal, title: "이동") { [self] (action, view, completionHandler) in
-//            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-//            let cancelAlertAction = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
-//            alert.addAction(cancelAlertAction)
-//            if let currentCategoryIndex = self.categories.firstIndex(where: { $0 == selectedCategory }) {
-//                categories.remove(at: currentCategoryIndex)
-//                for (_, element) in categories.enumerated() {
-//                    alert.addAction(UIAlertAction(
-//                        title: element.mainLabel,
-//                        style: .default,
-//                        handler: { action in
-//                            self.moveToAnotherCategory(for: indexPath, from: self.selectedCategory!, to: element)
-//                        })
-//                    )
-//                }
-//            }
-//
-//            present(alert, animated: true, completion: nil)
-//        }
-
 
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
@@ -127,59 +106,6 @@ class LabelTableViewController: UITableViewController {
         }
         saveLabel()
     }
-
-//    private func moveToAnotherCategory(for indexPath: IndexPath, from originCategory: Category, to destinationCategory: Category) {
-//        guard let selectDateVC = self.storyboard?.instantiateViewController(withIdentifier: SelectDateViewController.identifier) as? SelectDateViewController else { return }
-//        guard let selectTimeVC = self.storyboard?.instantiateViewController(withIdentifier: SelectTimeViewController.identifier) as? SelectTimeViewController else { return }
-//        let row = indexPath.row
-//        let label = Label(context: self.context)
-//        label.title = labels[row].title
-//        label.done = labels[row].done
-//        guard let labelIndex = destinationCategory.labels?.count else { return }
-//        label.index = Int64(labelIndex)
-//        label.parentCategory = destinationCategory
-//        switch (destinationCategory.doCalendar, destinationCategory.doTimer) {
-//        case (true, true):
-//            if (originCategory.doCalendar && originCategory.doTimer) {
-//            } else {
-//                self.passTitleToTempLabelArray(labels[row].title!)
-//                self.passIndexPathToTempLabelArray(IndexPath(row: labelIndex, section: 0))
-//                selectDateVC.modalPresentationStyle = .overCurrentContext
-//                selectDateVC.modalTransitionStyle = .crossDissolve
-//                self.present(selectDateVC, animated: true)
-//            }
-//        case (true, false):
-//            print("")
-//        case (false, true):
-//            print("")
-//        case (false, false):
-//            print("")
-//        }
-
-//        if destinationCategory.doCalendar && destinationCategory.doTimer {
-//            label.date = labels[row].date
-//            label.time = labels[row].time
-//        } else if (destinationCategory.doCalendar) && !(destinationCategory.doTimer) {
-//            label.date = labels[row].date
-//            label.time = ""
-//        } else if !(destinationCategory.doCalendar) && (destinationCategory.doTimer) {
-//            label.date = ""
-//            label.time = labels[row].time
-//        } else {
-//            label.date = ""
-//            label.time = ""
-//        }
-//        removeLabel(indexPath: indexPath)
-//        saveLabel()
-//    }
-//
-//    private func passTitleToTempLabelArray(_ title: String) {
-//        NotificationCenter.default.post(name: NSNotification.Name("saveTitle"), object: title)
-//    }
-//
-//    private func passIndexPathToTempLabelArray(_ indexPath: IndexPath) {
-//        NotificationCenter.default.post(name: NSNotification.Name("saveIndexPath"), object: indexPath)
-//    }
 
     private func saveLabel() {
         do {

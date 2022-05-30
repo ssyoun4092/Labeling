@@ -11,11 +11,20 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
-        self.tableView.register(UINib(nibName: "SettingsTableCell", bundle: nil), forCellReuseIdentifier: DarkModeSettingCell.identifier)
+        self.tableView.register(UINib(nibName: "SettingsTableCell", bundle: nil), forCellReuseIdentifier: Identifier.darkModeSettingCell)
     }
 
-    func navigateTargetSettingDetailVC(indexPath: IndexPath) {
-        let targetVC = firstSectionSettingDetailVC[0]
+    private func goToDM() {
+        let myInstaName = "say_young01"
+        guard let targetURL = URL(string: "instagram://user?username=\(myInstaName)") else { return }
+        let application = UIApplication.shared
+
+        if application.canOpenURL(targetURL) {
+            application.open(targetURL)
+        } else {
+            guard let webURL = URL(string: "https://instagram.com/\(myInstaName)") else { return }
+            application.open(webURL)
+        }
     }
 
     deinit {
@@ -60,12 +69,17 @@ extension SettingsViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            guard let targetVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.NoticeViewController) as? NoticeViewController else { return }
+        switch (indexPath.row, indexPath.section) {
+        case (0, 0):
+            guard let targetVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.noticeViewController) as? NoticeViewController else { return }
             self.navigationController?.pushViewController(targetVC, animated: true)
-        } else if indexPath.row == 1 {
-            guard let targetVC = self.storyboard?.instantiateViewController(withIdentifier: ThemeSelectViewController.identifier) as? ThemeSelectViewController else { return }
+        case (1, 0):
+            guard let targetVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.themeSelectViewController) as? ThemeSelectViewController else { return }
             self.navigationController?.pushViewController(targetVC, animated: true)
+        case (0, 1):
+            goToDM()
+        default:
+            print("No Value")
         }
         tableView.deselectRow(at: indexPath, animated: false)
     }

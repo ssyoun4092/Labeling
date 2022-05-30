@@ -5,7 +5,6 @@ protocol LabelDoneDelegate {
 }
 
 class LabelTableViewCell: UITableViewCell {
-    static let identifier = "LabelTableViewCell"
     @IBOutlet weak var mainLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!

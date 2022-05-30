@@ -1,7 +1,6 @@
 import UIKit
 
 class ThemeSelectViewController: UIViewController {
-    static let identifier = "ThemeSelectViewController"
     let themeList: [String] = ["라이트 모드", "다크 모드", "시스템 모드"]
     let appDelegate = UIApplication.shared.windows.first
     let userDefaults = UserDefaults.standard

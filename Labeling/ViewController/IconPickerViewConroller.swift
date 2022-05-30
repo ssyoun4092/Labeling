@@ -1,7 +1,6 @@
 import UIKit
 
 class IconPickerViewConroller: UIViewController {
-    static let idenfier = "IconPickerViewConroller"
     @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var iconView: UIView!
@@ -27,7 +26,7 @@ class IconPickerViewConroller: UIViewController {
         self.collectionView.dataSource = self
         self.collectionView.allowsSelection = true
         self.collectionView.isUserInteractionEnabled = true
-        self.collectionView.register(UINib(nibName: "IconPickerCell", bundle: nil), forCellWithReuseIdentifier: IconPIckerCell.identifier)
+        self.collectionView.register(UINib(nibName: "IconPickerCell", bundle: nil), forCellWithReuseIdentifier: Identifier.iconPIckerCell)
     }
 
     private func setUpCollectionView() {
@@ -71,7 +70,7 @@ extension IconPickerViewConroller: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let iconCell = collectionView.dequeueReusableCell(withReuseIdentifier: IconPIckerCell.identifier, for: indexPath) as! IconPIckerCell
+        let iconCell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifier.iconPIckerCell, for: indexPath) as! IconPIckerCell
         if indexPath.row == 0 {
             iconCell.iconButton.setImage(UIImage(), for: .normal)
             iconCell.layer.borderWidth = 0
@@ -89,10 +88,6 @@ extension IconPickerViewConroller: UICollectionViewDataSource {
 
         return iconCell
     }
-}
-
-extension IconPickerViewConroller: UICollectionViewDelegate {
-
 }
 
 extension IconPickerViewConroller: IconDelegate {

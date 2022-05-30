@@ -2,7 +2,6 @@ import UIKit
 import FSCalendar
 
 class SelectDateViewController: UIViewController {
-    static let identifier = "SelectDateViewController"
     @IBOutlet weak var blurView: UIView!
     @IBOutlet weak var calendarBackgroundView: UIView!
     @IBOutlet weak var calendarView: FSCalendar!
@@ -13,7 +12,6 @@ class SelectDateViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("SelectDateVC Did Load")
         self.dismissView(byTapping: blurView)
         setUpCalendarBackgroundView()
         setUpCalendar()
@@ -60,7 +58,7 @@ class SelectDateViewController: UIViewController {
             return  alertIfDateNotSelected()
         }
         if self.nextButton.titleLabel?.text == "Select" {
-            guard let selectTimeVC = self.storyboard?.instantiateViewController(withIdentifier: SelectTimeViewController.identifier) as? SelectTimeViewController else { return }
+            guard let selectTimeVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.selectTimeViewController) as? SelectTimeViewController else { return }
             selectTimeVC.doesComeFromSelectDateVC = true
             postSelectedDateToObserver(date: selectedDate)
             selectTimeVC.modalPresentationStyle = .overCurrentContext

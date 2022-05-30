@@ -1,7 +1,6 @@
 import UIKit
 
 class DarkModeSettingCell: UITableViewCell {
-    static let identifier = "DarkModeSettingCell"
     @IBOutlet weak var darkModeSwitch: UISwitch!
 
     override func awakeFromNib() {
