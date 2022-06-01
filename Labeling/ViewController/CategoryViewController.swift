@@ -536,6 +536,7 @@ class CategoryViewController: UIViewController {
     @IBAction func tapEditButton(_ sender: UIBarButtonItem) {
         self.currentMode = (self.currentMode == .normal) ? .edit : .normal
         currentModeDelegate?.changeEditButtonTitle(currentMode: currentMode)
+        print("ColletionView Reload")
         collectionView.reloadData()
     }
 
@@ -587,6 +588,8 @@ extension CategoryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let categoryCell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifier.categoryViewCell, for: indexPath) as! CategoryViewCell
         let addCell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifier.addCategoryViewCell, for: indexPath) as! AddCategoryViewCell
+        categoryCell.calendarButton.isHidden = false
+        categoryCell.timerButton.isHidden = false
         if indexPath.row == categories.count {
             addCell.delegate = self
 
@@ -598,8 +601,6 @@ extension CategoryViewController: UICollectionViewDataSource {
                 categoryCell.numberOfLabel.text = "\(numberOfLabel) 개"
             }
             categoryCell.iconButton.setImage(UIImage(systemName: categories[indexPath.row].iconName!), for: .normal)
-            categoryCell.calendarButton.isHidden = false
-            categoryCell.timerButton.isHidden = false
             if let icon = categories[indexPath.row].iconName {
                 if icon.isEmpty {
                     categoryCell.iconButton.setImage(UIImage(), for: .normal)
@@ -612,7 +613,7 @@ extension CategoryViewController: UICollectionViewDataSource {
                 categoryCell.timerButton.tintColor = Color.mainTextColor
             } else if (categories[indexPath.row].doCalendar == true) && (categories[indexPath.row].doTimer == false) {
                 categoryCell.calendarButton.isHidden = true
-                categoryCell.timerButton.setImage(UIImage(systemName: Icons.calendarSymbol), for: .normal)
+                categoryCell.timerButton.setImage(UIImage(systemName: Icons.timerSymbol), for: .normal)
                 categoryCell.timerButton.tintColor = Color.mainTextColor
             } else if (categories[indexPath.row].doCalendar == false) && (categories[indexPath.row].doTimer == true) {
                 categoryCell.calendarButton.isHidden = true
@@ -622,10 +623,10 @@ extension CategoryViewController: UICollectionViewDataSource {
                 categoryCell.timerButton.isHidden = true
             }
             categoryCell.xButton.isHidden = (self.currentMode == .normal) ? true : false
-            if self.currentMode == .edit {
-                categoryCell.calendarButton.isHidden = true
-                categoryCell.timerButton.isHidden = true
-            }
+//            if self.currentMode == .edit {
+//                categoryCell.calendarButton.isHidden = true
+//                categoryCell.timerButton.isHidden = true
+//            }
 
             return categoryCell
         }
@@ -671,7 +672,7 @@ extension CategoryViewController: UICollectionViewDelegate {
         for (index, element) in categories.enumerated() {
             element.index = Int64(index)
         }
-        print("save Category")
+
         saveCategory()
     }
 
