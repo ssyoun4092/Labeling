@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NoLabelPlaceholderTableViewCell" rowHeight="225" id="GPC-5W-yQm" customClass="NoLabelPlaceholderTableViewCell" customModule="Labeling" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="520" height="225"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="GPC-5W-yQm" id="tfn-Xa-tNg">
+                <rect key="frame" x="0.0" y="0.0" width="520" height="225"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="저장된 메모가 없습니다." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BSL-aS-hWu">
+                        <rect key="frame" x="50" y="99" width="420" height="27.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                        <color key="textColor" name="SubTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" name="BackgroundColor"/>
+                <constraints>
+                    <constraint firstAttribute="trailingMargin" secondItem="BSL-aS-hWu" secondAttribute="trailing" constant="30" id="RcE-l3-FQv"/>
+                    <constraint firstItem="BSL-aS-hWu" firstAttribute="centerY" secondItem="tfn-Xa-tNg" secondAttribute="centerY" id="kiO-qD-0D4"/>
+                    <constraint firstItem="BSL-aS-hWu" firstAttribute="leading" secondItem="tfn-Xa-tNg" secondAttribute="leadingMargin" constant="30" id="yUH-cH-M1W"/>
+                    <constraint firstItem="BSL-aS-hWu" firstAttribute="centerX" secondItem="tfn-Xa-tNg" secondAttribute="centerX" id="zSD-na-cdB"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="205.79710144927537" y="136.94196428571428"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="BackgroundColor">
+            <color red="0.92100000381469727" green="0.92100000381469727" blue="0.92100000381469727" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="SubTextColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.75" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+    </resources>
+</document>

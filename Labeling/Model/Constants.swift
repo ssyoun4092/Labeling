@@ -21,6 +21,7 @@ struct Identifier {
     static let categoryViewCell = "CategoryViewCell"
     static let addCategoryViewCell = "AddCategoryViewCell"
     static let labelTableViewCell = "LabelTableViewCell"
+    static let noLabelPlaceholderTableViewCell = "NoLabelPlaceholderTableViewCell"
     static let iconPIckerCell = "IconPIckerCell"
     static let darkModeSettingCell = "DarkModeSettingCell"
 }

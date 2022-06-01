@@ -14,34 +14,49 @@ class LabelTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "LabelTableCell", bundle: nil), forCellReuseIdentifier: Identifier.labelTableViewCell)
-        self.tableView.rowHeight = 100
+        self.tableView.register(UINib(nibName: "NoLabelPlaceholderTableCell", bundle: nil), forCellReuseIdentifier: Identifier.noLabelPlaceholderTableViewCell)
+        self.title = selectedCategory?.mainLabel
         loadCategories()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if labels.count == 0 {
 
-        return labels.count
+            return 1
+        } else {
+
+            return labels.count
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Identifier.labelTableViewCell, for: indexPath) as! LabelTableViewCell
-        let label = labels[indexPath.row]
-        cell.mainLabel.text = label.title
-        if label.date!.isEmpty && !(label.time!.isEmpty) {
-            cell.dateLabel.text = label.time
-            cell.timeLabel.text = label.date
-        } else {
-            cell.dateLabel.text = label.date
-            cell.timeLabel.text = label.time
-        }
-        if label.done {
-            cell.checkButton.setImage(UIImage(systemName: Icons.checkMark), for: .normal)
-        } else {
-            cell.checkButton.setImage(UIImage(systemName: Icons.nonCheckMark), for: .normal)
-        }
-        cell.isDoneDelegate = self
+        let labelCell = tableView.dequeueReusableCell(withIdentifier: Identifier.labelTableViewCell, for: indexPath) as! LabelTableViewCell
+        let placeholderCell = tableView.dequeueReusableCell(withIdentifier: Identifier.noLabelPlaceholderTableViewCell) as! NoLabelPlaceholderTableViewCell
 
-        return cell
+        if labels.count == 0 {
+            self.tableView.rowHeight = UIScreen.main.bounds.height - 150
+
+            return placeholderCell
+        } else {
+            self.tableView.rowHeight = 100
+            let label = labels[indexPath.row]
+            labelCell.mainLabel.text = label.title
+            if label.date!.isEmpty && !(label.time!.isEmpty) {
+                labelCell.dateLabel.text = label.time
+                labelCell.timeLabel.text = label.date
+            } else {
+                labelCell.dateLabel.text = label.date
+                labelCell.timeLabel.text = label.time
+            }
+            if label.done {
+                labelCell.checkButton.setImage(UIImage(systemName: Icons.checkMark), for: .normal)
+            } else {
+                labelCell.checkButton.setImage(UIImage(systemName: Icons.nonCheckMark), for: .normal)
+            }
+            labelCell.isDoneDelegate = self
+
+            return labelCell
+        }
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -60,6 +75,8 @@ class LabelTableViewController: UITableViewController {
         let deleteAction = UIContextualAction(style: .normal, title: "삭제") { (action, view, completionHandler) in
             self.removeLabel(indexPath: indexPath)
             completionHandler(true)
+            print("deleteAction")
+            self.tableView.reloadData()
         }
         deleteAction.backgroundColor = .systemRed
 
@@ -133,27 +150,3 @@ extension LabelTableViewController: LabelDoneDelegate {
         saveLabel()
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-@available(iOS 14.0, *)
-struct LabeledTableViewControllerRepresentable: UIViewControllerRepresentable {
-    typealias UIViewControllerType = LabelTableViewController
-
-    func makeUIViewController(context: Context) -> LabelTableViewController {
-        UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LabeledTableViewController") as! LabelTableViewController
-    }
-
-    func updateUIViewController(_ uiViewController: LabelTableViewController, context: Context) {
-
-    }
-}
-
-@available(iOS 14.0, *)
-struct LabeledTableViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        LabeledTableViewControllerRepresentable()
-            .preferredColorScheme(.light)
-    }
-}
-#endif
