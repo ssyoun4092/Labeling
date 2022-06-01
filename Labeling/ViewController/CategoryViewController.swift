@@ -588,8 +588,7 @@ extension CategoryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let categoryCell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifier.categoryViewCell, for: indexPath) as! CategoryViewCell
         let addCell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifier.addCategoryViewCell, for: indexPath) as! AddCategoryViewCell
-        categoryCell.calendarButton.isHidden = false
-        categoryCell.timerButton.isHidden = false
+        categoryCell.setUpButtons()
         if indexPath.row == categories.count {
             addCell.delegate = self
 
@@ -612,21 +611,16 @@ extension CategoryViewController: UICollectionViewDataSource {
                 categoryCell.calendarButton.tintColor = Color.mainTextColor
                 categoryCell.timerButton.tintColor = Color.mainTextColor
             } else if (categories[indexPath.row].doCalendar == true) && (categories[indexPath.row].doTimer == false) {
-                categoryCell.calendarButton.isHidden = true
-                categoryCell.timerButton.setImage(UIImage(systemName: Icons.timerSymbol), for: .normal)
+                categoryCell.timerButton.setImage(UIImage(systemName: Icons.calendarSymbol), for: .normal)
                 categoryCell.timerButton.tintColor = Color.mainTextColor
             } else if (categories[indexPath.row].doCalendar == false) && (categories[indexPath.row].doTimer == true) {
-                categoryCell.calendarButton.isHidden = true
                 categoryCell.timerButton.tintColor = Color.mainTextColor
-            } else {
+            }
+            categoryCell.xButton.isHidden = (self.currentMode == .normal) ? true : false
+            if self.currentMode == .edit {
                 categoryCell.calendarButton.isHidden = true
                 categoryCell.timerButton.isHidden = true
             }
-            categoryCell.xButton.isHidden = (self.currentMode == .normal) ? true : false
-//            if self.currentMode == .edit {
-//                categoryCell.calendarButton.isHidden = true
-//                categoryCell.timerButton.isHidden = true
-//            }
 
             return categoryCell
         }
