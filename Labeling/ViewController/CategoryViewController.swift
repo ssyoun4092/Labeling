@@ -54,6 +54,7 @@ class CategoryViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(saveTitle(_: )), name: NSNotification.Name("saveTitle"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(saveIndexPath(_:)), name: NSNotification.Name("saveIndexPath"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(resetTappedCancel(_:)), name: NSNotification.Name("cancelButtonTapped"), object: nil)
+        self.collectionView.reloadData()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -150,9 +151,6 @@ class CategoryViewController: UIViewController {
                 let gestureLocation = gesture.location(in: collectionView)
                 let modifiedGestureLocation = modifyGestureLocationIfGoesOffFromCollectioViewBounds(gestureLocation)
                 collectionView.updateInteractiveMovementTargetPosition(modifiedGestureLocation)
-                if let indexPath = collectionView.indexPathForItem(at: gestureLocation) {
-                    print(indexPath)
-                }
             case .ended:
                 collectionView.endInteractiveMovement()
             default:
@@ -673,6 +671,7 @@ extension CategoryViewController: UICollectionViewDelegate {
         for (index, element) in categories.enumerated() {
             element.index = Int64(index)
         }
+        print("save Category")
         saveCategory()
     }
 
