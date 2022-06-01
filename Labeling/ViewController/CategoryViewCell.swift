@@ -29,20 +29,11 @@ class CategoryViewCell: UICollectionViewCell {
     }
 
     func setUpButtons() {
-        print("setUpButtons")
         iconButton.setTitle("", for: .normal)
         xButton.setTitle("", for: .normal)
         calendarButton.setTitle("", for: .normal)
-        calendarButton.setImage(UIImage(systemName: Icons.calendarSymbol), for: .normal)
-        calendarButton.tintColor = Color.cellBackgroundColor
-        calendarButton.isHidden = false
         timerButton.setTitle("", for: .normal)
-        timerButton.setImage(UIImage(systemName: Icons.timerSymbol), for: .normal)
-        timerButton.tintColor = Color.cellBackgroundColor
-        timerButton.isHidden = false
     }
-
-
     @IBAction func tapXButton(_ sender: UIButton) {
         self.delegate?.removeCategoryCell(cell: self)
     }

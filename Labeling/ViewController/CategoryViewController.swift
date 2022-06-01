@@ -19,7 +19,7 @@ class CategoryViewController: UIViewController {
     weak var currentModeDelegate: CategoryViewControllerDelegate?
     var currentMode: CurrentMode = .normal
     var categories = [Category]()
-    lazy var firstLaunchCategories: [FirstLaunchCategory] = [trashLabel, somedayLabel, delegateLabel, calendarLabel, asapLabel]
+    lazy var firstLaunchCategories: [FirstLaunchCategory] = [thinkingLabel, assignmentLabel, wantToEatLabel, deadlineLabel, appointmentLabel]
     var isGestureOnCell: Bool? {
         didSet {
             print("isGestureOnCell DidSet")
@@ -536,7 +536,6 @@ class CategoryViewController: UIViewController {
     @IBAction func tapEditButton(_ sender: UIBarButtonItem) {
         self.currentMode = (self.currentMode == .normal) ? .edit : .normal
         currentModeDelegate?.changeEditButtonTitle(currentMode: currentMode)
-        print("ColletionView Reload")
         collectionView.reloadData()
     }
 
@@ -588,7 +587,6 @@ extension CategoryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let categoryCell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifier.categoryViewCell, for: indexPath) as! CategoryViewCell
         let addCell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifier.addCategoryViewCell, for: indexPath) as! AddCategoryViewCell
-        categoryCell.setUpButtons()
         if indexPath.row == categories.count {
             addCell.delegate = self
 
@@ -600,6 +598,8 @@ extension CategoryViewController: UICollectionViewDataSource {
                 categoryCell.numberOfLabel.text = "\(numberOfLabel) 개"
             }
             categoryCell.iconButton.setImage(UIImage(systemName: categories[indexPath.row].iconName!), for: .normal)
+            categoryCell.calendarButton.isHidden = false
+            categoryCell.timerButton.isHidden = false
             if let icon = categories[indexPath.row].iconName {
                 if icon.isEmpty {
                     categoryCell.iconButton.setImage(UIImage(), for: .normal)
@@ -611,10 +611,14 @@ extension CategoryViewController: UICollectionViewDataSource {
                 categoryCell.calendarButton.tintColor = Color.mainTextColor
                 categoryCell.timerButton.tintColor = Color.mainTextColor
             } else if (categories[indexPath.row].doCalendar == true) && (categories[indexPath.row].doTimer == false) {
-                categoryCell.timerButton.setImage(UIImage(systemName: Icons.calendarSymbol), for: .normal)
-                categoryCell.timerButton.tintColor = Color.mainTextColor
+                categoryCell.calendarButton.tintColor = Color.mainTextColor
+                categoryCell.timerButton.isHidden = true
             } else if (categories[indexPath.row].doCalendar == false) && (categories[indexPath.row].doTimer == true) {
+                categoryCell.calendarButton.isHidden = true
                 categoryCell.timerButton.tintColor = Color.mainTextColor
+            } else {
+                categoryCell.calendarButton.isHidden = true
+                categoryCell.timerButton.isHidden = true
             }
             categoryCell.xButton.isHidden = (self.currentMode == .normal) ? true : false
             if self.currentMode == .edit {
@@ -666,7 +670,7 @@ extension CategoryViewController: UICollectionViewDelegate {
         for (index, element) in categories.enumerated() {
             element.index = Int64(index)
         }
-
+        print("save Category")
         saveCategory()
     }
 
