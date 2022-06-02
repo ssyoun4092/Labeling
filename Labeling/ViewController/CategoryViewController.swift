@@ -80,6 +80,9 @@ class CategoryViewController: UIViewController {
         self.collectionView.dataSource = self
         self.collectionView.allowsSelection = true
         self.collectionView.isUserInteractionEnabled = true
+        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            flowLayout.estimatedItemSize = .zero
+        }
         self.collectionView.register(UINib(nibName: "CategoryViewCell", bundle: nil), forCellWithReuseIdentifier: Identifier.categoryViewCell)
         self.collectionView.register(UINib(nibName: "AddCategoryViewCell", bundle: nil), forCellWithReuseIdentifier: Identifier.addCategoryViewCell)
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))

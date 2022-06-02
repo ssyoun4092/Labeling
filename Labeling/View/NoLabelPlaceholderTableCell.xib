@@ -18,7 +18,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="저장된 메모가 없습니다." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BSL-aS-hWu">
-                        <rect key="frame" x="50" y="99" width="420" height="27.5"/>
+                        <rect key="frame" x="50" y="87.5" width="420" height="27.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="23"/>
                         <color key="textColor" name="SubTextColor"/>
                         <nil key="highlightedColor"/>
@@ -27,7 +27,7 @@
                 <color key="backgroundColor" name="BackgroundColor"/>
                 <constraints>
                     <constraint firstAttribute="trailingMargin" secondItem="BSL-aS-hWu" secondAttribute="trailing" constant="30" id="RcE-l3-FQv"/>
-                    <constraint firstItem="BSL-aS-hWu" firstAttribute="centerY" secondItem="tfn-Xa-tNg" secondAttribute="centerY" id="kiO-qD-0D4"/>
+                    <constraint firstItem="BSL-aS-hWu" firstAttribute="centerY" secondItem="tfn-Xa-tNg" secondAttribute="centerY" multiplier="0.9" id="kiO-qD-0D4"/>
                     <constraint firstItem="BSL-aS-hWu" firstAttribute="leading" secondItem="tfn-Xa-tNg" secondAttribute="leadingMargin" constant="30" id="yUH-cH-M1W"/>
                     <constraint firstItem="BSL-aS-hWu" firstAttribute="centerX" secondItem="tfn-Xa-tNg" secondAttribute="centerX" id="zSD-na-cdB"/>
                 </constraints>

@@ -100,8 +100,8 @@ extension IconPickerViewConroller: IconDelegate {
 
 extension IconPickerViewConroller: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = (collectionView.bounds.width - 21) / 3
-
+        let interSpacingCell: CGFloat = 10
+        let cellWidth = (collectionView.bounds.width - ((interSpacingCell * 2) + 1)) / 3
         let cellHeight = cellWidth
 
         return CGSize(width: cellWidth, height: cellHeight)

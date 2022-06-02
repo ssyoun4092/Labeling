@@ -34,7 +34,7 @@ class LabelTableViewController: UITableViewController {
         let placeholderCell = tableView.dequeueReusableCell(withIdentifier: Identifier.noLabelPlaceholderTableViewCell) as! NoLabelPlaceholderTableViewCell
 
         if labels.count == 0 {
-            self.tableView.rowHeight = UIScreen.main.bounds.height - 150
+            self.tableView.rowHeight = self.tableView.bounds.height - 120
 
             return placeholderCell
         } else {

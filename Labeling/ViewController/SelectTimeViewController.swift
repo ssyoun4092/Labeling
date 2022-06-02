@@ -53,7 +53,7 @@ class SelectTimeViewController: UIViewController {
     }
 
     @IBAction func tapSaveButton(_ sender: UIButton) {
-        guard let selectedTime = selectedTime else { return alertIfTimeeNotSelected() }
+        guard let selectedTime = selectedTime else { return alertIfTimeNotSelected() }
         saveSelectedTimeInLabel(time: selectedTime)
         self.dismiss(animated: true)
     }
@@ -71,7 +71,7 @@ class SelectTimeViewController: UIViewController {
         NotificationCenter.default.post(name: NSNotification.Name("saveTime"), object: convertedTime)
     }
 
-    private func alertIfTimeeNotSelected() {
+    private func alertIfTimeNotSelected() {
         let alert = UIAlertController(title: "시간을 선택해주세요!", message: nil, preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "OK", style: .default)
         alert.addAction(alertAction)

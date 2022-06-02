@@ -13,6 +13,7 @@ class CategoryViewCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        mainLabel.adjustsFontSizeToFitWidth = true
         setUpCell()
         setUpButtons()
     }
