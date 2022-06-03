@@ -20,14 +20,6 @@ class CategoryViewController: UIViewController {
     var currentMode: CurrentMode = .normal
     var categories = [Category]()
     lazy var firstLaunchCategories: [FirstLaunchCategory] = [thinkingLabel, assignmentLabel, wantToEatLabel, deadlineLabel, appointmentLabel]
-    var isGestureOnCell: Bool? {
-        didSet {
-            print("isGestureOnCell DidSet")
-            for row in 0...(categories.count - 1) {
-                self.collectionView.cellForItem(at: IndexPath(row: row, section: 0))?.backgroundColor = Color.cellBackgroundColor
-            }
-        }
-    }
     var labels = [Label]()
     var tempLabel: [String: Any] = ["title": "", "date": "", "time": "", "cellIndexPath": IndexPath()]
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -41,6 +33,7 @@ class CategoryViewController: UIViewController {
         setUpCollectionView()
         loadCategoriesFirstAppLaunch()
         loadCategories()
+        print(categories.count)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -110,32 +103,35 @@ class CategoryViewController: UIViewController {
 
     //MARK: - Gesture functions
     @objc func handleDragGesture(_ gesture: UIPanGestureRecognizer) {
+        let cellsFrame = createEachCellFrame(for: categories.count)
+        guard let cellsFrame = cellsFrame else { return }
         let translation = gesture.translation(in: self.labelTextField.superview)
         let changedXPoint = self.labelTextField.center.x + translation.x
         let changedYPoint = self.labelTextField.center.y + translation.y
-        if !(labelTextField.text!.isEmpty) && !(self.currentMode == .edit) {
+        if !(labelTextField.text!.isEmpty) && !(self.currentMode == .edit) && !(categories.count == 0) {
             switch gesture.state {
             case .began:
                 self.view.endEditing(true)
             case .changed :
                 self.labelTextField.center = CGPoint(x: changedXPoint, y: changedYPoint)
-                let indexPath = calculateCellIndexPath(on: self.labelTextField.center)
-                if indexPath.row == 6 {
-                    disableAllCellColor()
+                let rowInTargetCell = calculateCellIndexPath(in: cellsFrame, on: self.labelTextField.center)
+                if let row = rowInTargetCell {
+                    disableCellColorExcept(At: row)
+                    self.isLabelOnCell = true
                 } else {
-                    disableCellColorExcept(At: indexPath)
+                    disableAllCellColor()
+                    self.isLabelOnCell = false
                 }
-                self.isLabelOnCell = isGestureOnCell(At: indexPath)
             case .ended :
-                let indexPath = calculateCellIndexPath(on: self.labelTextField.center)
+                let rowInTargetCell = calculateCellIndexPath(in: cellsFrame, on: self.labelTextField.center)
                 disableAllCellColor()
                 animateOut()
-                if !(indexPath.row == 6) {
-                    self.tempLabel["cellIndexPath"] = indexPath
+                if let row = rowInTargetCell {
+                    let tempIndexPath = IndexPath(row: row, section: 0)
+                    self.tempLabel["cellIndexPath"] = tempIndexPath
                     saveTitleInTempLabel(title: self.labelTextField.text)
-                    presentSelectViewConroller(indexPath: indexPath)
+                    presentSelectViewConroller(row: row)
                 }
-                print("=====")
             default:
                 break
             }
@@ -145,6 +141,8 @@ class CategoryViewController: UIViewController {
 
     @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
         if currentMode == .edit {
+            let edgeCellPoints = generateCornerCellsCenterPoint()
+            print(edgeCellPoints)
             guard let collectionView = collectionView else { return }
             switch gesture.state {
             case .began:
@@ -152,7 +150,7 @@ class CategoryViewController: UIViewController {
                 collectionView.beginInteractiveMovementForItem(at: indexPath)
             case .changed:
                 let gestureLocation = gesture.location(in: collectionView)
-                let modifiedGestureLocation = modifyGestureLocationIfGoesOffFromCollectioViewBounds(gestureLocation)
+                let modifiedGestureLocation = modifyGestureLocationIfGoesOffFromCollectionViewBounds(boundPoints: edgeCellPoints, gestureLocation)
                 collectionView.updateInteractiveMovementTargetPosition(modifiedGestureLocation)
             case .ended:
                 collectionView.endInteractiveMovement()
@@ -171,14 +169,14 @@ class CategoryViewController: UIViewController {
         guard let passedDate = notification.object as? String else { return }
         guard let indexPath = self.tempLabel["cellIndexPath"] as? IndexPath else { return }
         self.tempLabel["date"] = passedDate
-        addLabelToCategory(At: indexPath)
+        addLabelToCategory(At: indexPath.row)
     }
 
     @objc func saveTime(_ notification: Notification) {
         guard let passedTime = notification.object as? String else { return }
         guard let indexPath = self.tempLabel["cellIndexPath"] as? IndexPath else { return }
         self.tempLabel["time"] = passedTime
-        addLabelToCategory(At: indexPath)
+        addLabelToCategory(At: indexPath.row)
     }
 
     @objc func saveTitle(_ notification: Notification) {
@@ -205,208 +203,103 @@ class CategoryViewController: UIViewController {
     }
 
     //MARK: - Handling Cell
-    private func calculateCellIndexPath(on point: CGPoint) -> IndexPath {
-        let currentCellCount = self.categories.count
-        let collectionViewOrigin = collectionView.frame.origin
-        let collectionViewWidth = collectionView.frame.size.width
-        let collectionViewHeight = collectionView.frame.size.height
-        let spacing: CGFloat = 10
-        let cellHeight = (collectionViewHeight - (2 * spacing)) / 3
-        let x1Point = collectionViewOrigin.x
-        let x2Point = collectionViewOrigin.x + (collectionViewWidth / 2)
-        let x3Point = collectionViewOrigin.x + (collectionViewWidth / 2) + spacing
-        let x4Point = collectionViewOrigin.x + collectionViewWidth
-        let y1Point = collectionViewOrigin.y
-        let y2Point = collectionViewOrigin.y + cellHeight
-        let y3Point = collectionViewOrigin.y + cellHeight + spacing
-        let y4Point = collectionViewOrigin.y + (2 * cellHeight) + spacing
-        let y5Point = collectionViewOrigin.y + (2 * cellHeight) + (2 * spacing)
-        let y6Point = collectionViewOrigin.y + collectionViewHeight
-        var indexPath = IndexPath()
+    private func createEachCellFrame(for numberOfCell: Int) -> [CGRect]? {
+        if numberOfCell == 0 {
 
-        switch currentCellCount {
-        case 1:
-            if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
-                indexPath = IndexPath(row: 0, section: 0)
-            } else {
-                indexPath = IndexPath(row: 6, section: 0)
+            return nil
+        } else {
+            var cellFrameArray: [CGRect] = []
+            let collectionViewOrigin = collectionView.frame.origin
+            let collectionViewFrame = collectionView.frame.size
+            let spacing: CGFloat = 10
+            let cellWidth = (collectionViewFrame.width - spacing) / 2
+            let cellHeight = (collectionViewFrame.height - (spacing * 2)) / 3
+            let x1Point = collectionViewOrigin.x
+            let y1Point = collectionViewOrigin.y
+            for number in 0...(numberOfCell - 1) {
+                let currentColumn = number % 2
+                let currentCellX1Point = x1Point + (cellWidth * CGFloat(currentColumn)) + (spacing * CGFloat(currentColumn))
+                let currentRow = number / 2
+                let currentCellY1Point = y1Point + (cellHeight * CGFloat(currentRow)) + (spacing * CGFloat(currentRow))
+                let currentCellPoints: CGRect = CGRect(x: currentCellX1Point, y: currentCellY1Point, width: cellWidth, height: cellHeight)
+                cellFrameArray.append(currentCellPoints)
             }
-        case 2:
-            if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
-                indexPath = IndexPath(row: 0, section: 0)
-            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
-                indexPath = IndexPath(row: 1, section: 0)
-            } else {
-                indexPath = IndexPath(row: 6, section: 0)
-            }
-        case 3:
-            if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
-                indexPath = IndexPath(row: 0, section: 0)
-            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
-                indexPath = IndexPath(row: 1, section: 0)
-            } else if point.x >= x1Point && point.x <= x2Point && point.y >= y3Point && point.y <= y4Point {
-                indexPath = IndexPath(row: 2, section: 0)
-            } else {
-                indexPath = IndexPath(row: 6, section: 0)
-            }
-        case 4:
-            if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
-                indexPath = IndexPath(row: 0, section: 0)
-            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
-                indexPath = IndexPath(row: 1, section: 0)
-            } else if point.x >= x1Point && point.x <= x2Point && point.y >= y3Point && point.y <= y4Point {
-                indexPath = IndexPath(row: 2, section: 0)
-            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y3Point && point.y <= y4Point {
-                indexPath = IndexPath(row: 3, section: 0)
-            } else {
-                indexPath = IndexPath(row: 6, section: 0)
-            }
-        case 5:
-            if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
-                indexPath = IndexPath(row: 0, section: 0)
-            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
-                indexPath = IndexPath(row: 1, section: 0)
-            } else if point.x >= x1Point && point.x <= x2Point && point.y >= y3Point && point.y <= y4Point {
-                indexPath = IndexPath(row: 2, section: 0)
-            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y3Point && point.y <= y4Point {
-                indexPath = IndexPath(row: 3, section: 0)
-            } else if point.x >= x1Point && point.x <= x2Point && point.y >= y5Point && point.y <= y6Point {
-                indexPath = IndexPath(row: 4, section: 0)
-            } else {
-                indexPath = IndexPath(row: 6, section: 0)
-            }
-        case 6:
-            if point.x >= x1Point && point.x <= x2Point && point.y >= y1Point && point.y <= y2Point {
-                indexPath = IndexPath(row: 0, section: 0)
-            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y1Point && point.y <= y2Point {
-                indexPath = IndexPath(row: 1, section: 0)
-            } else if point.x >= x1Point && point.x <= x2Point && point.y >= y3Point && point.y <= y4Point {
-                indexPath = IndexPath(row: 2, section: 0)
-            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y3Point && point.y <= y4Point {
-                indexPath = IndexPath(row: 3, section: 0)
-            } else if point.x >= x1Point && point.x <= x2Point && point.y >= y5Point && point.y <= y6Point {
-                indexPath = IndexPath(row: 4, section: 0)
-            } else if point.x >= x3Point && point.x <= x4Point && point.y >= y5Point && point.y <= y6Point {
-                indexPath = IndexPath(row: 5, section: 0)
-            } else {
-                indexPath = IndexPath(row: 6, section: 0)
-            }
-        default:
-            print("Default")
+
+            return cellFrameArray
         }
-
-        return indexPath
     }
 
-    private func modifyGestureLocationIfGoesOffFromCollectioViewBounds(_ gestureLocation: CGPoint) -> CGPoint {
-        var modifiedGestureLocation = CGPoint()
-        let numberOfCells = (categories.count == 6) ? 6 : (categories.count + 1)
+    private func calculateCellIndexPath(in cellFrames: [CGRect], on point: CGPoint) -> Int? {
+        for (index, rect) in cellFrames.enumerated() {
+            if rect.contains(point) {
+
+                return index
+            }
+        }
+
+        return nil
+    }
+
+    private func generateCornerCellsCenterPoint() -> [CGPoint] {
+        var edgeCellsCenterPointsArray: [CGPoint] = []
+        let numberOfCellRow = (categories.count + 1) / 2
         let cellWidth = (self.collectionView.bounds.size.width - 10) / 2
-        let halfCellWidth = cellWidth / 2
         let cellHeight = (self.collectionView.bounds.size.height - 20) / 3
-        let halfCellHeight = cellHeight / 2
         let spacing: CGFloat = 10
-        let spacingCellVertically = cellWidth + spacing
-        let spacingCellHorizontally = cellHeight + spacing
+        let datumPoint: CGPoint = CGPoint(x: cellWidth / 2, y: cellHeight / 2)
+        let firstPoint = datumPoint
+        let secondPoint = CGPoint(x: datumPoint.x + cellWidth + spacing, y: datumPoint.y)
+        let thirdPoint = CGPoint(x: datumPoint.x, y: datumPoint.y + ((cellHeight + spacing) * CGFloat(numberOfCellRow - 1)))
+        let fourthPoint = CGPoint(x: secondPoint.x, y: thirdPoint.y)
+        edgeCellsCenterPointsArray.append(contentsOf: [firstPoint, secondPoint, thirdPoint, fourthPoint])
 
-        let firstCellCenterPoint = CGPoint(x: halfCellWidth, y: halfCellHeight)
-        let secondCellCenterPoint = CGPoint(x: halfCellWidth +  spacingCellVertically, y: halfCellHeight)
-        let thirdCellCenterPoint = CGPoint(x: halfCellWidth, y: halfCellHeight + spacingCellHorizontally)
-        let fourthCellCenterPoint = CGPoint(x: halfCellWidth + spacingCellVertically, y: halfCellHeight + spacingCellHorizontally)
-        let fifthCellCenterPoint = CGPoint(x: halfCellWidth, y: halfCellHeight + (spacingCellHorizontally * 2))
-        let sixthCellCenterPoint = CGPoint(x: halfCellWidth + spacingCellVertically, y: halfCellHeight + (spacingCellHorizontally * 2))
+        return edgeCellsCenterPointsArray
+    }
 
-        switch numberOfCells {
-        case 1, 2:
-            if gestureLocation.x < firstCellCenterPoint.x {
-                modifiedGestureLocation = CGPoint(x: firstCellCenterPoint.x, y: firstCellCenterPoint.y)
-            } else if gestureLocation.x > secondCellCenterPoint.x {
-                modifiedGestureLocation = CGPoint(x: secondCellCenterPoint.x, y: secondCellCenterPoint.y)
-
-            } else if gestureLocation.y < firstCellCenterPoint.y || gestureLocation.y > firstCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: firstCellCenterPoint.y)
-            } else {
-                modifiedGestureLocation = gestureLocation
-            }
-
-        case 3, 4:
-            if gestureLocation.x < firstCellCenterPoint.x && gestureLocation.y < firstCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: firstCellCenterPoint.x, y: firstCellCenterPoint.y)
-            } else if gestureLocation.x > secondCellCenterPoint.x && gestureLocation.y < secondCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: secondCellCenterPoint.x, y: secondCellCenterPoint.y)
-            } else if gestureLocation.x < thirdCellCenterPoint.x && gestureLocation.y > thirdCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: thirdCellCenterPoint.x, y: thirdCellCenterPoint.y)
-            } else if gestureLocation.x > fourthCellCenterPoint.x && gestureLocation.y > fourthCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: fourthCellCenterPoint.x, y: fourthCellCenterPoint.y)
-            } else if gestureLocation.y < firstCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: firstCellCenterPoint.y)
-            } else if gestureLocation.y > thirdCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: thirdCellCenterPoint.y)
-            } else if gestureLocation.x < firstCellCenterPoint.x {
-                modifiedGestureLocation = CGPoint(x: firstCellCenterPoint.x, y: gestureLocation.y)
-            } else if gestureLocation.x > secondCellCenterPoint.x {
-                modifiedGestureLocation = CGPoint(x: secondCellCenterPoint.x, y: gestureLocation.y)
-            } else {
-                modifiedGestureLocation = gestureLocation
-            }
-
-        case 5, 6:
-            if gestureLocation.x < firstCellCenterPoint.x && gestureLocation.y < firstCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: firstCellCenterPoint.x, y: firstCellCenterPoint.y)
-            } else if gestureLocation.x > secondCellCenterPoint.x && gestureLocation.y < secondCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: secondCellCenterPoint.x, y: secondCellCenterPoint.y)
-            } else if gestureLocation.x < fifthCellCenterPoint.x && gestureLocation.y > fifthCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: fifthCellCenterPoint.x, y: fifthCellCenterPoint.y)
-            } else if gestureLocation.x > sixthCellCenterPoint.x && gestureLocation.y > sixthCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: sixthCellCenterPoint.x, y: sixthCellCenterPoint.y)
-            } else if gestureLocation.y < firstCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: firstCellCenterPoint.y)
-            } else if gestureLocation.y > fifthCellCenterPoint.y {
-                modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: fifthCellCenterPoint.y)
-            } else if gestureLocation.x < firstCellCenterPoint.x {
-                modifiedGestureLocation = CGPoint(x: firstCellCenterPoint.x, y: gestureLocation.y)
-            } else if gestureLocation.x > secondCellCenterPoint.x {
-                modifiedGestureLocation = CGPoint(x: secondCellCenterPoint.x, y: gestureLocation.y)
-            } else {
-                modifiedGestureLocation = gestureLocation
-            }
-
-        default:
-            print("")
+    private func modifyGestureLocationIfGoesOffFromCollectionViewBounds(boundPoints points: [CGPoint], _ gestureLocation: CGPoint) -> CGPoint {
+        var modifiedGestureLocation = CGPoint()
+        if gestureLocation.x < points[0].x && gestureLocation.y < points[0].y {
+            modifiedGestureLocation = CGPoint(x: points[0].x, y: points[0].y)
+        } else if gestureLocation.x > points[1].x && gestureLocation.y < points[1].y {
+            modifiedGestureLocation = CGPoint(x: points[1].x, y: points[1].y)
+        } else if gestureLocation.x < points[2].x && gestureLocation.y > points[2].y {
+            modifiedGestureLocation = CGPoint(x: points[2].x, y: points[2].y)
+        } else if gestureLocation.x > points[3].x && gestureLocation.y > points[3].y {
+            modifiedGestureLocation = CGPoint(x: points[3].x, y: points[3].y)
+        } else if gestureLocation.y < points[0].y {
+            modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: points[0].y)
+        } else if gestureLocation.y > points[2].y {
+            modifiedGestureLocation = CGPoint(x: gestureLocation.x, y: points[2].y)
+        } else if gestureLocation.x < points[0].x {
+            modifiedGestureLocation = CGPoint(x: points[0].x, y: gestureLocation.y)
+        } else if gestureLocation.x > points[1].x {
+            modifiedGestureLocation = CGPoint(x: points[1].x, y: gestureLocation.y)
+        } else {
+            modifiedGestureLocation = gestureLocation
         }
 
         return modifiedGestureLocation
     }
 
-    private func isGestureOnCell(At indexPath: IndexPath) -> Bool {
-        if indexPath.row == 6 {
-
-            return false
-        } else {
-
-            return true
-        }
-    }
-
-    private func presentSelectViewConroller(indexPath: IndexPath) {
-        if categories[indexPath.row].doCalendar && categories[indexPath.row].doTimer {
+    private func presentSelectViewConroller(row: Int) {
+        if categories[row].doCalendar && categories[row].doTimer {
             guard let selectDateVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.selectDateViewController) as? SelectDateViewController else { return }
             selectDateVC.modalPresentationStyle = .overCurrentContext
             selectDateVC.modalTransitionStyle = .crossDissolve
             self.present(selectDateVC, animated: true)
-        } else if (categories[indexPath.row].doCalendar == true) && (categories[indexPath.row].doTimer == false) {
+        } else if (categories[row].doCalendar == true) && (categories[row].doTimer == false) {
             guard let selectDateVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.selectDateViewController) as? SelectDateViewController else { return }
             selectDateVC.nextButtonText = "Save"
             selectDateVC.modalPresentationStyle = .overCurrentContext
             selectDateVC.modalTransitionStyle = .crossDissolve
             self.present(selectDateVC, animated: true)
-        } else if (categories[indexPath.row].doCalendar == false) && (categories[indexPath.row].doTimer == true) {
+        } else if (categories[row].doCalendar == false) && (categories[row].doTimer == true) {
             guard let selectTimeVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.selectTimeViewController) as? SelectTimeViewController else { return }
             selectTimeVC.modalPresentationStyle = .overCurrentContext
             selectTimeVC.modalTransitionStyle = .crossDissolve
             self.present(selectTimeVC, animated: true)
         } else {
-            addLabelToCategory(At: indexPath)
+            addLabelToCategory(At: row)
             resetTempLabel()
         }
     }
@@ -420,8 +313,7 @@ class CategoryViewController: UIViewController {
         }
     }
 
-    private func disableCellColorExcept(At indexPath: IndexPath) {
-        let row = indexPath.row
+    private func disableCellColorExcept(At row: Int) {
         guard let cellOnGesture = collectionView.cellForItem(at: IndexPath(row: row, section: 0)) as? CategoryViewCell else { return }
         cellOnGesture.backgroundColor = Color.cellHighlightColor
         cellOnGesture.calendarButton.tintColor = Color.mainTextColor
@@ -442,11 +334,11 @@ class CategoryViewController: UIViewController {
             self.labelTextField.animateTiny()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.labelTextField.disappear()
-                self.labelTextField.animateAppearAt(initialOrigin: self.textFieldOrigin)
+                self.labelTextField.animateAppear(at: self.textFieldOrigin)
             }
         } else {
             self.labelTextField.disappear()
-            self.labelTextField.animateAppearAt(initialOrigin: self.textFieldOrigin)
+            self.labelTextField.animateAppear(at: self.textFieldOrigin)
         }
     }
 
@@ -480,7 +372,7 @@ class CategoryViewController: UIViewController {
         self.tempLabel = ["title": "", "date": "", "time": "", "cellIndexPath": IndexPath()]
     }
 
-    private func addLabelToCategory(At indexPath: IndexPath) {
+    private func addLabelToCategory(At indexPathRow: Int) {
         guard let labelText = self.labelTextField.text else { return }
         print("AddLabelToCategory INIT")
         let label = Label(context: self.context)
@@ -488,9 +380,9 @@ class CategoryViewController: UIViewController {
         label.date = self.tempLabel["date"] as? String
         label.time = self.tempLabel["time"] as? String
         label.done = false
-        guard let labelIndex = categories[indexPath.row].labels?.count else { return }
+        guard let labelIndex = categories[indexPathRow].labels?.count else { return }
         label.index = Int64(labelIndex)
-        label.parentCategory = categories[indexPath.row]
+        label.parentCategory = categories[indexPathRow]
         self.labels.append(label)
         print(labelText)
         saveCategory()

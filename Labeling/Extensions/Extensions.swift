@@ -41,8 +41,8 @@ extension UITextField {
         self.alpha = 0
     }
 
-    func animateAppearAt(initialOrigin: CGPoint) {
-        self.frame.origin = initialOrigin
+    func animateAppear(at point: CGPoint) {
+        self.frame.origin = point
         self.transform = CGAffineTransform.identity
         self.text?.removeAll()
         self.placeholder = "떠오른 생각을 적어주세요"
