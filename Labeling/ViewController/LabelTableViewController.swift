@@ -32,9 +32,10 @@ class LabelTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let labelCell = tableView.dequeueReusableCell(withIdentifier: Identifier.labelTableViewCell, for: indexPath) as! LabelTableViewCell
         let placeholderCell = tableView.dequeueReusableCell(withIdentifier: Identifier.noLabelPlaceholderTableViewCell) as! NoLabelPlaceholderTableViewCell
+        placeholderCell.isUserInteractionEnabled = false
 
         if labels.count == 0 {
-            self.tableView.rowHeight = self.tableView.bounds.height - 120
+            self.tableView.rowHeight = (self.tableView.bounds.height / 2)
 
             return placeholderCell
         } else {
@@ -71,16 +72,19 @@ class LabelTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if !(labels.count == 0) {
+            let deleteAction = UIContextualAction(style: .normal, title: "삭제") { (action, view, completionHandler) in
+                self.removeLabel(indexPath: indexPath)
+                completionHandler(true)
+                print("deleteAction")
+                self.tableView.reloadData()
+            }
+            deleteAction.backgroundColor = .systemRed
 
-        let deleteAction = UIContextualAction(style: .normal, title: "삭제") { (action, view, completionHandler) in
-            self.removeLabel(indexPath: indexPath)
-            completionHandler(true)
-            print("deleteAction")
-            self.tableView.reloadData()
+            return UISwipeActionsConfiguration(actions: [deleteAction])
         }
-        deleteAction.backgroundColor = .systemRed
 
-        return UISwipeActionsConfiguration(actions: [deleteAction])
+        return nil
     }
 
     private func loadCategories() {
