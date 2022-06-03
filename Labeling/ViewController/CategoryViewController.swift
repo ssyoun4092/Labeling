@@ -114,23 +114,23 @@ class CategoryViewController: UIViewController {
                 self.view.endEditing(true)
             case .changed :
                 self.labelTextField.center = CGPoint(x: changedXPoint, y: changedYPoint)
-                let rowInTargetCell = calculateCellIndexPath(in: cellsFrame, on: self.labelTextField.center)
-                if let row = rowInTargetCell {
-                    disableCellColorExcept(At: row)
+                let rowAtTargetCell = calculateCellIndexPath(in: cellsFrame, on: self.labelTextField.center)
+                if let row = rowAtTargetCell {
+                    removeCellColorExcept(at: row)
                     self.isLabelOnCell = true
                 } else {
-                    disableAllCellColor()
+                    removeAllCellColor()
                     self.isLabelOnCell = false
                 }
             case .ended :
+                removeAllCellColor()
+                animateDisappear()
                 let rowInTargetCell = calculateCellIndexPath(in: cellsFrame, on: self.labelTextField.center)
-                disableAllCellColor()
-                animateOut()
                 if let row = rowInTargetCell {
                     let tempIndexPath = IndexPath(row: row, section: 0)
                     self.tempLabel["cellIndexPath"] = tempIndexPath
                     saveTitleInTempLabel(title: self.labelTextField.text)
-                    presentSelectViewConroller(row: row)
+                    presentViewConrollerSelected(at: row)
                 }
             default:
                 break
@@ -169,14 +169,14 @@ class CategoryViewController: UIViewController {
         guard let passedDate = notification.object as? String else { return }
         guard let indexPath = self.tempLabel["cellIndexPath"] as? IndexPath else { return }
         self.tempLabel["date"] = passedDate
-        addLabelToCategory(At: indexPath.row)
+        addLabelToCategory(at: indexPath.row)
     }
 
     @objc func saveTime(_ notification: Notification) {
         guard let passedTime = notification.object as? String else { return }
         guard let indexPath = self.tempLabel["cellIndexPath"] as? IndexPath else { return }
         self.tempLabel["time"] = passedTime
-        addLabelToCategory(At: indexPath.row)
+        addLabelToCategory(at: indexPath.row)
     }
 
     @objc func saveTitle(_ notification: Notification) {
@@ -241,7 +241,7 @@ class CategoryViewController: UIViewController {
     }
 
     private func generateCornerCellsCenterPoint() -> [CGPoint] {
-        var edgeCellsCenterPointsArray: [CGPoint] = []
+        var cornerCellsCenterPointsArray: [CGPoint] = []
         let numberOfCellRow = (categories.count + 1) / 2
         let cellWidth = (self.collectionView.bounds.size.width - 10) / 2
         let cellHeight = (self.collectionView.bounds.size.height - 20) / 3
@@ -251,9 +251,9 @@ class CategoryViewController: UIViewController {
         let secondPoint = CGPoint(x: datumPoint.x + cellWidth + spacing, y: datumPoint.y)
         let thirdPoint = CGPoint(x: datumPoint.x, y: datumPoint.y + ((cellHeight + spacing) * CGFloat(numberOfCellRow - 1)))
         let fourthPoint = CGPoint(x: secondPoint.x, y: thirdPoint.y)
-        edgeCellsCenterPointsArray.append(contentsOf: [firstPoint, secondPoint, thirdPoint, fourthPoint])
+        cornerCellsCenterPointsArray.append(contentsOf: [firstPoint, secondPoint, thirdPoint, fourthPoint])
 
-        return edgeCellsCenterPointsArray
+        return cornerCellsCenterPointsArray
     }
 
     private func modifyGestureLocationIfGoesOffFromCollectionViewBounds(boundPoints points: [CGPoint], _ gestureLocation: CGPoint) -> CGPoint {
@@ -281,7 +281,7 @@ class CategoryViewController: UIViewController {
         return modifiedGestureLocation
     }
 
-    private func presentSelectViewConroller(row: Int) {
+    private func presentViewConrollerSelected(at row: Int) {
         if categories[row].doCalendar && categories[row].doTimer {
             guard let selectDateVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.selectDateViewController) as? SelectDateViewController else { return }
             selectDateVC.modalPresentationStyle = .overCurrentContext
@@ -299,12 +299,12 @@ class CategoryViewController: UIViewController {
             selectTimeVC.modalTransitionStyle = .crossDissolve
             self.present(selectTimeVC, animated: true)
         } else {
-            addLabelToCategory(At: row)
+            addLabelToCategory(at: row)
             resetTempLabel()
         }
     }
 
-    private func disableAllCellColor() {
+    private func removeAllCellColor() {
         for cellRow in (0...(categories.count - 1)) {
             guard let cell = collectionView.cellForItem(at: IndexPath(row: cellRow, section: 0)) as? CategoryViewCell else { return }
             cell.backgroundColor = Color.cellBackgroundColor
@@ -313,7 +313,7 @@ class CategoryViewController: UIViewController {
         }
     }
 
-    private func disableCellColorExcept(At row: Int) {
+    private func removeCellColorExcept(at row: Int) {
         guard let cellOnGesture = collectionView.cellForItem(at: IndexPath(row: row, section: 0)) as? CategoryViewCell else { return }
         cellOnGesture.backgroundColor = Color.cellHighlightColor
         cellOnGesture.calendarButton.tintColor = Color.mainTextColor
@@ -329,7 +329,7 @@ class CategoryViewController: UIViewController {
         }
     }
     
-    private func animateOut() {
+    private func animateDisappear() {
         if isLabelOnCell {
             self.labelTextField.animateTiny()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -355,7 +355,6 @@ class CategoryViewController: UIViewController {
                 categories.append(category)
                 saveCategory()
             }
-            print("FirstLaunch!")
         }
     }
 
@@ -364,7 +363,7 @@ class CategoryViewController: UIViewController {
         if !labelTitle.isEmpty {
             self.tempLabel["title"] = labelTitle
         } else {
-            print("Be Empty!")
+            print("Is Empty!")
         }
     }
 
@@ -372,8 +371,8 @@ class CategoryViewController: UIViewController {
         self.tempLabel = ["title": "", "date": "", "time": "", "cellIndexPath": IndexPath()]
     }
 
-    private func addLabelToCategory(At indexPathRow: Int) {
-        guard let labelText = self.labelTextField.text else { return }
+    private func addLabelToCategory(at indexPathRow: Int) {
+        guard let _ = self.labelTextField.text else { return }
         print("AddLabelToCategory INIT")
         let label = Label(context: self.context)
         label.title = self.tempLabel["title"] as? String
@@ -384,7 +383,6 @@ class CategoryViewController: UIViewController {
         label.index = Int64(labelIndex)
         label.parentCategory = categories[indexPathRow]
         self.labels.append(label)
-        print(labelText)
         saveCategory()
         resetTempLabel()
     }
@@ -471,12 +469,8 @@ extension CategoryViewController: UITextFieldDelegate {
 
 extension CategoryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let maximumCellCount = 6
-        if categories.count == maximumCellCount {
-            return categories.count
-        } else {
-            return (categories.count + 1)
-        }
+
+        return categories.count + 1
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
