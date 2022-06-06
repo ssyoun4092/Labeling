@@ -15,10 +15,11 @@ class CategoryViewController: UIViewController {
 
     var textFieldOrigin: CGPoint = CGPoint()
     var isLabelOnCell: Bool = false
-    var keyboardIsPresented: Bool = false
+    var keyboardIsPresenting: Bool = false
     weak var currentModeDelegate: CategoryViewControllerDelegate?
     var currentMode: CurrentMode = .normal
     var categories = [Category]()
+    var timer: Timer?
     lazy var firstLaunchCategories: [FirstLaunchCategory] = [thinkingLabel, assignmentLabel, wantToEatLabel, deadlineLabel, appointmentLabel]
     var labels = [Label]()
     var tempLabel: [String: Any] = ["title": "", "date": "", "time": "", "cellIndexPath": IndexPath()]
@@ -33,7 +34,6 @@ class CategoryViewController: UIViewController {
         setUpCollectionView()
         loadCategoriesFirstAppLaunch()
         loadCategories()
-        print(categories.count)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -104,6 +104,7 @@ class CategoryViewController: UIViewController {
     //MARK: - Gesture functions
     @objc func handleDragGesture(_ gesture: UIPanGestureRecognizer) {
         let cellsFrame = createEachCellFrame(for: categories.count)
+        timer?.invalidate()
         guard let cellsFrame = cellsFrame else { return }
         let translation = gesture.translation(in: self.labelTextField.superview)
         let changedXPoint = self.labelTextField.center.x + translation.x
@@ -150,7 +151,7 @@ class CategoryViewController: UIViewController {
                 collectionView.beginInteractiveMovementForItem(at: indexPath)
             case .changed:
                 let gestureLocation = gesture.location(in: collectionView)
-                let modifiedGestureLocation = modifyGestureLocationIfGoesOffFromCollectionViewBounds(boundPoints: edgeCellPoints, gestureLocation)
+                let modifiedGestureLocation = modifyGestureLocationIfGoesOffFromCollectionViewBounds(cornerPoints: edgeCellPoints, gestureLocation)
                 collectionView.updateInteractiveMovementTargetPosition(modifiedGestureLocation)
             case .ended:
                 collectionView.endInteractiveMovement()
@@ -195,11 +196,11 @@ class CategoryViewController: UIViewController {
 
     //MARK: - Handling Keyboard
     @objc func keyboardDidShow() {
-        self.keyboardIsPresented = true
+        self.keyboardIsPresenting = true
     }
 
     @objc func keyboardDidHide() {
-        self.keyboardIsPresented = false
+        self.keyboardIsPresenting = false
     }
 
     //MARK: - Handling Cell
@@ -247,16 +248,16 @@ class CategoryViewController: UIViewController {
         let cellHeight = (self.collectionView.bounds.size.height - 20) / 3
         let spacing: CGFloat = 10
         let datumPoint: CGPoint = CGPoint(x: cellWidth / 2, y: cellHeight / 2)
-        let firstPoint = datumPoint
-        let secondPoint = CGPoint(x: datumPoint.x + cellWidth + spacing, y: datumPoint.y)
-        let thirdPoint = CGPoint(x: datumPoint.x, y: datumPoint.y + ((cellHeight + spacing) * CGFloat(numberOfCellRow - 1)))
-        let fourthPoint = CGPoint(x: secondPoint.x, y: thirdPoint.y)
-        cornerCellsCenterPointsArray.append(contentsOf: [firstPoint, secondPoint, thirdPoint, fourthPoint])
+        let topLeadingCellPoint = datumPoint
+        let topTrailingCellPoint = CGPoint(x: datumPoint.x + cellWidth + spacing, y: datumPoint.y)
+        let bottomLeadingCellPoint = CGPoint(x: datumPoint.x, y: datumPoint.y + ((cellHeight + spacing) * CGFloat(numberOfCellRow - 1)))
+        let bottomTrailingCellPoint = CGPoint(x: topTrailingCellPoint.x, y: bottomLeadingCellPoint.y)
+        cornerCellsCenterPointsArray.append(contentsOf: [topLeadingCellPoint, topTrailingCellPoint, bottomLeadingCellPoint, bottomTrailingCellPoint])
 
         return cornerCellsCenterPointsArray
     }
 
-    private func modifyGestureLocationIfGoesOffFromCollectionViewBounds(boundPoints points: [CGPoint], _ gestureLocation: CGPoint) -> CGPoint {
+    private func modifyGestureLocationIfGoesOffFromCollectionViewBounds(cornerPoints points: [CGPoint], _ gestureLocation: CGPoint) -> CGPoint {
         var modifiedGestureLocation = CGPoint()
         if gestureLocation.x < points[0].x && gestureLocation.y < points[0].y {
             modifiedGestureLocation = CGPoint(x: points[0].x, y: points[0].y)
@@ -447,9 +448,11 @@ extension CategoryViewController: UITextFieldDelegate {
             textField.backgroundColor = nil
             textField.alpha = 1
         }
+        timer?.invalidate()
     }
 
     func textFieldDidChangeSelection(_ textField: UITextField) {
+        timer?.invalidate()
         textField.backgroundColor = nil
     }
 
@@ -463,6 +466,10 @@ extension CategoryViewController: UITextFieldDelegate {
                 textField.alpha = 1
                 textField.placeholder = "떠오른 생각을 적어주세요"
             }
+        } else {
+            timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { [weak self] _ in
+                self?.labelTextField.shake()
+            })
         }
     }
 }
@@ -522,7 +529,7 @@ extension CategoryViewController: UICollectionViewDataSource {
 
 extension CategoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if !keyboardIsPresented {
+        if !keyboardIsPresenting {
             switch currentMode {
             case .normal:
                 performSegue(withIdentifier: "goToLabeled", sender: self)
@@ -555,11 +562,9 @@ extension CategoryViewController: UICollectionViewDelegate {
         let itemMove = categories[sourceIndexPath.row]
         categories.remove(at: sourceIndexPath.row)
         categories.insert(itemMove, at: destinationIndexPath.row)
-
         for (index, element) in categories.enumerated() {
             element.index = Int64(index)
         }
-        print("save Category")
         saveCategory()
     }
 

@@ -51,6 +51,24 @@ extension UITextField {
             self.addShadow()
         }
     }
+
+    func shake() {
+        let shakeAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        shakeAnimation.duration = 0.25
+        shakeAnimation.repeatCount = 3
+        let startAngle: Float = (-2) * 3.14159/180
+        let stopAngle = -startAngle
+        shakeAnimation.fromValue = NSNumber(value: startAngle as Float)
+        shakeAnimation.toValue = NSNumber(value: 3 * stopAngle as Float)
+        shakeAnimation.autoreverses = true
+        let layer: CALayer = self.layer
+        layer.add(shakeAnimation, forKey:"animate")
+    }
+
+    func stopShake() {
+        let layer: CALayer = self.layer
+        layer.removeAnimation(forKey: "animate")
+    }
 }
 
 extension UIApplication {
