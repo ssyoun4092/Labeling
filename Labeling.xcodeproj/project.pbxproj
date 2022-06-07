@@ -26,6 +26,7 @@
 		8E6D9CC2283F4FB30059362D /* IconPickerViewConroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6D9CC1283F4FB30059362D /* IconPickerViewConroller.swift */; };
 		8E6D9CC4283F50240059362D /* IconPickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E6D9CC3283F50240059362D /* IconPickerCell.xib */; };
 		8E6D9CC6283F50FD0059362D /* IconPIckerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6D9CC5283F50FD0059362D /* IconPIckerCell.swift */; };
+		8E8B1174284DBBE400493C5F /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8B1173284DBBE400493C5F /* OnboardingViewController.swift */; };
 		8EC26B4B283E00AC00AA9439 /* LabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC26B4A283E00AC00AA9439 /* LabelTableViewCell.swift */; };
 		8ECBE218283A091C007D1B78 /* LabelTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ECBE217283A091C007D1B78 /* LabelTableCell.xib */; };
 		8ECBE21A283A2373007D1B78 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECBE219283A2373007D1B78 /* Constants.swift */; };
@@ -41,6 +42,8 @@
 		8EE476072819262F0004EA88 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE476062819262F0004EA88 /* CategoryViewController.swift */; };
 		8EE4760C281926330004EA88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8EE4760B281926330004EA88 /* Assets.xcassets */; };
 		8EE4760F281926330004EA88 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8EE4760D281926330004EA88 /* LaunchScreen.storyboard */; };
+		8EF98012284EEAF600C6B716 /* OnboardingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF98011284EEAF600C6B716 /* OnboardingMessage.swift */; };
+		8EF98014284EEB2500C6B716 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF98013284EEB2500C6B716 /* OnboardingCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +66,7 @@
 		8E6D9CC1283F4FB30059362D /* IconPickerViewConroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerViewConroller.swift; sourceTree = "<group>"; };
 		8E6D9CC3283F50240059362D /* IconPickerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IconPickerCell.xib; sourceTree = "<group>"; };
 		8E6D9CC5283F50FD0059362D /* IconPIckerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPIckerCell.swift; sourceTree = "<group>"; };
+		8E8B1173284DBBE400493C5F /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		8EC26B4A283E00AC00AA9439 /* LabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTableViewCell.swift; sourceTree = "<group>"; };
 		8ECBE217283A091C007D1B78 /* LabelTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LabelTableCell.xib; sourceTree = "<group>"; };
 		8ECBE219283A2373007D1B78 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -80,6 +84,8 @@
 		8EE4760B281926330004EA88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8EE4760E281926330004EA88 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8EE47610281926330004EA88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8EF98011284EEAF600C6B716 /* OnboardingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMessage.swift; sourceTree = "<group>"; };
+		8EF98013284EEB2500C6B716 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OnboardingCell.swift; path = Labeling/ViewController/OnboardingCell.swift; sourceTree = SOURCE_ROOT; };
 		9B73038C3BEE1C9A3573514C /* Pods-Labeling.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Labeling.debug.xcconfig"; path = "Target Support Files/Pods-Labeling/Pods-Labeling.debug.xcconfig"; sourceTree = "<group>"; };
 		CE2E2251AFD37A134F9AECE4 /* Pods-Labeling.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Labeling.release.xcconfig"; path = "Target Support Files/Pods-Labeling/Pods-Labeling.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -158,12 +164,14 @@
 				8E581FD22834D4C400EF82F9 /* SettingsViewController.swift */,
 				8ED0A432284311A5008B8C69 /* ThemeSelectViewController.swift */,
 				8ED0A434284333AF008B8C69 /* NoticeViewController.swift */,
+				8E8B1173284DBBE400493C5F /* OnboardingViewController.swift */,
 				8ED263D8281D623000812BA1 /* CategoryViewCell.swift */,
 				8E5820232837521900EF82F9 /* AddCategoryViewCell.swift */,
 				8EC26B4A283E00AC00AA9439 /* LabelTableViewCell.swift */,
 				8E169E8028478C5400587094 /* NoLabelPlaceholderTableViewCell.swift */,
 				8E6D9CC5283F50FD0059362D /* IconPIckerCell.swift */,
 				8E3FACD8284232940024C6AB /* DarkModeSettingCell.swift */,
+				8EF98013284EEB2500C6B716 /* OnboardingCell.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -181,6 +189,7 @@
 			children = (
 				8E64AEF0282E797D009D9BF7 /* Model.xcdatamodeld */,
 				8E581FD42835CCFA00EF82F9 /* Settings.swift */,
+				8EF98011284EEAF600C6B716 /* OnboardingMessage.swift */,
 				8E1A5F83282F713100388099 /* FirstLaunchCategory.swift */,
 				8ECBE219283A2373007D1B78 /* Constants.swift */,
 				8E6D9CBF283F42280059362D /* Icons.swift */,
@@ -349,10 +358,12 @@
 				8EE476052819262F0004EA88 /* SceneDelegate.swift in Sources */,
 				8E3FACD9284232940024C6AB /* DarkModeSettingCell.swift in Sources */,
 				8ECBE21A283A2373007D1B78 /* Constants.swift in Sources */,
+				8EF98012284EEAF600C6B716 /* OnboardingMessage.swift in Sources */,
 				8ED0A433284311A5008B8C69 /* ThemeSelectViewController.swift in Sources */,
 				8ED263DD281D653E00812BA1 /* Extensions.swift in Sources */,
 				8E581FD52835CCFA00EF82F9 /* Settings.swift in Sources */,
 				8E5820242837521900EF82F9 /* AddCategoryViewCell.swift in Sources */,
+				8E8B1174284DBBE400493C5F /* OnboardingViewController.swift in Sources */,
 				8E6D9CC6283F50FD0059362D /* IconPIckerCell.swift in Sources */,
 				8ED263DA281D623000812BA1 /* CategoryViewCell.swift in Sources */,
 				8EC26B4B283E00AC00AA9439 /* LabelTableViewCell.swift in Sources */,
@@ -362,6 +373,7 @@
 				8E6D9CC0283F42280059362D /* Icons.swift in Sources */,
 				8E169E8128478C5400587094 /* NoLabelPlaceholderTableViewCell.swift in Sources */,
 				8E581FD32834D4C400EF82F9 /* SettingsViewController.swift in Sources */,
+				8EF98014284EEB2500C6B716 /* OnboardingCell.swift in Sources */,
 				8ED0A435284333AF008B8C69 /* NoticeViewController.swift in Sources */,
 				8E58202A28375DD800EF82F9 /* AddCategoryViewController.swift in Sources */,
 				8E64AEF2282E797D009D9BF7 /* Model.xcdatamodeld in Sources */,

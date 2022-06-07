@@ -345,7 +345,7 @@ class CategoryViewController: UIViewController {
 
     //MARK: - Handling Coredata
     private func loadCategoriesFirstAppLaunch() {
-        if UIApplication.isFirstLaunch() {
+        if !UserDefaults.standard.bool(forKey: "isFirstLaunch") {
             for count in 0...(firstLaunchCategories.count - 1) {
                 let category = Category(context: self.context)
                 category.mainLabel = firstLaunchCategories[count].mainLabel
@@ -356,6 +356,7 @@ class CategoryViewController: UIViewController {
                 categories.append(category)
                 saveCategory()
             }
+            UserDefaults.standard.set(true, forKey: "isFirstLaunch")
         }
     }
 

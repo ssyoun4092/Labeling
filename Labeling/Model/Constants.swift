@@ -18,10 +18,12 @@ struct Identifier {
     static let iconPickerViewConroller = "IconPickerViewConroller"
     static let themeSelectViewController = "ThemeSelectViewController"
     static let noticeViewController = "NoticeViewController"
+    static let onboardingViewController = "OnboardingViewController"
     static let categoryViewCell = "CategoryViewCell"
     static let addCategoryViewCell = "AddCategoryViewCell"
     static let labelTableViewCell = "LabelTableViewCell"
     static let noLabelPlaceholderTableViewCell = "NoLabelPlaceholderTableViewCell"
     static let iconPIckerCell = "IconPIckerCell"
     static let darkModeSettingCell = "DarkModeSettingCell"
+    static let onboardingCell = "OnboardingCell"
 }

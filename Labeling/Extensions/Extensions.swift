@@ -76,8 +76,11 @@ extension UIApplication {
         if !UserDefaults.standard.bool(forKey: "hasBeenLaunchedBeforeFlag") {
             UserDefaults.standard.set(true, forKey: "hasBeenLaunchedBeforeFlag")
             UserDefaults.standard.synchronize()
+            UserDefaults.standard.set(false, forKey: "isFirstLaunch")
+
             return true
         }
+
         return false
     }
 }

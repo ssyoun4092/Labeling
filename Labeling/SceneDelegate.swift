@@ -6,7 +6,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        print("Scene will Connect")
+        if UIApplication.isFirstLaunch() {
+            let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+            let onboardingVC = mainStoryboard.instantiateViewController(withIdentifier: Identifier.onboardingViewController) as! OnboardingViewController
+            self.window?.makeKeyAndVisible()
+            self.window?.rootViewController = onboardingVC
+        }
+
         let userDefaults = UserDefaults.standard
         if userDefaults.string(forKey: "Theme") == "light" {
             print("Light!")
