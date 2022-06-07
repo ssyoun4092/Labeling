@@ -468,7 +468,7 @@ extension CategoryViewController: UITextFieldDelegate {
                 textField.placeholder = "떠오른 생각을 적어주세요"
             }
         } else {
-            timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { [weak self] _ in
+            timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true, block: { [weak self] _ in
                 self?.labelTextField.shake()
             })
         }

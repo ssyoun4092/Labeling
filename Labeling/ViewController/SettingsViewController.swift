@@ -27,6 +27,14 @@ class SettingsViewController: UIViewController {
         }
     }
 
+    private func goToAppRating() {
+        let myAppID = "1626607752"
+        let myAppstoreURL = "itms-apps://itunes.apple.com/app/id\(myAppID)?mt=8&action=write-review"
+        guard let url = URL(string: myAppstoreURL) else {
+            return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+
     deinit {
         print("Settings Deinit")
     }
@@ -69,18 +77,31 @@ extension SettingsViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedCell = tableView.cellForRow(at: indexPath)
+        selectedCell?.contentView.backgroundColor = .clear
         switch (indexPath.row, indexPath.section) {
         case (0, 0):
             guard let targetVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.noticeViewController) as? NoticeViewController else { return }
             self.navigationController?.pushViewController(targetVC, animated: true)
+
         case (1, 0):
             guard let targetVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.themeSelectViewController) as? ThemeSelectViewController else { return }
             self.navigationController?.pushViewController(targetVC, animated: true)
+
         case (0, 1):
             goToDM()
+
+        case (1, 1):
+            goToAppRating()
+
+        case (2, 1):
+            guard let onboardingVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.onboardingViewController) as? OnboardingViewController else { return }
+            onboardingVC.modalPresentationStyle = .fullScreen
+            present(onboardingVC, animated: false)
+
         default:
             print("No Value")
         }
-        tableView.deselectRow(at: indexPath, animated: false)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

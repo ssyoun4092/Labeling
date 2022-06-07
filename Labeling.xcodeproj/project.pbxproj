@@ -28,6 +28,8 @@
 		8E6D9CC6283F50FD0059362D /* IconPIckerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6D9CC5283F50FD0059362D /* IconPIckerCell.swift */; };
 		8E8B1174284DBBE400493C5F /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8B1173284DBBE400493C5F /* OnboardingViewController.swift */; };
 		8EC26B4B283E00AC00AA9439 /* LabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC26B4A283E00AC00AA9439 /* LabelTableViewCell.swift */; };
+		8EC9EC05284F6E6A0012EABC /* NoticeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC9EC04284F6E6A0012EABC /* NoticeMessage.swift */; };
+		8EC9EC07284F71640012EABC /* NoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC9EC06284F71640012EABC /* NoticeCell.swift */; };
 		8ECBE218283A091C007D1B78 /* LabelTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ECBE217283A091C007D1B78 /* LabelTableCell.xib */; };
 		8ECBE21A283A2373007D1B78 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECBE219283A2373007D1B78 /* Constants.swift */; };
 		8ED0A433284311A5008B8C69 /* ThemeSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED0A432284311A5008B8C69 /* ThemeSelectViewController.swift */; };
@@ -68,6 +70,8 @@
 		8E6D9CC5283F50FD0059362D /* IconPIckerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPIckerCell.swift; sourceTree = "<group>"; };
 		8E8B1173284DBBE400493C5F /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		8EC26B4A283E00AC00AA9439 /* LabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTableViewCell.swift; sourceTree = "<group>"; };
+		8EC9EC04284F6E6A0012EABC /* NoticeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeMessage.swift; sourceTree = "<group>"; };
+		8EC9EC06284F71640012EABC /* NoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCell.swift; sourceTree = "<group>"; };
 		8ECBE217283A091C007D1B78 /* LabelTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LabelTableCell.xib; sourceTree = "<group>"; };
 		8ECBE219283A2373007D1B78 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8ED0A432284311A5008B8C69 /* ThemeSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ThemeSelectViewController.swift; path = Labeling/ViewController/ThemeSelectViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -168,8 +172,9 @@
 				8ED263D8281D623000812BA1 /* CategoryViewCell.swift */,
 				8E5820232837521900EF82F9 /* AddCategoryViewCell.swift */,
 				8EC26B4A283E00AC00AA9439 /* LabelTableViewCell.swift */,
-				8E169E8028478C5400587094 /* NoLabelPlaceholderTableViewCell.swift */,
 				8E6D9CC5283F50FD0059362D /* IconPIckerCell.swift */,
+				8E169E8028478C5400587094 /* NoLabelPlaceholderTableViewCell.swift */,
+				8EC9EC06284F71640012EABC /* NoticeCell.swift */,
 				8E3FACD8284232940024C6AB /* DarkModeSettingCell.swift */,
 				8EF98013284EEB2500C6B716 /* OnboardingCell.swift */,
 			);
@@ -190,6 +195,7 @@
 				8E64AEF0282E797D009D9BF7 /* Model.xcdatamodeld */,
 				8E581FD42835CCFA00EF82F9 /* Settings.swift */,
 				8EF98011284EEAF600C6B716 /* OnboardingMessage.swift */,
+				8EC9EC04284F6E6A0012EABC /* NoticeMessage.swift */,
 				8E1A5F83282F713100388099 /* FirstLaunchCategory.swift */,
 				8ECBE219283A2373007D1B78 /* Constants.swift */,
 				8E6D9CBF283F42280059362D /* Icons.swift */,
@@ -351,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E6D9CC2283F4FB30059362D /* IconPickerViewConroller.swift in Sources */,
+				8EC9EC05284F6E6A0012EABC /* NoticeMessage.swift in Sources */,
 				8EE476072819262F0004EA88 /* CategoryViewController.swift in Sources */,
 				8ED47F7E2837DBBF00AAA781 /* SelectTimeViewController.swift in Sources */,
 				8E581FDA2835F74600EF82F9 /* Protocols.swift in Sources */,
@@ -367,6 +374,7 @@
 				8E6D9CC6283F50FD0059362D /* IconPIckerCell.swift in Sources */,
 				8ED263DA281D623000812BA1 /* CategoryViewCell.swift in Sources */,
 				8EC26B4B283E00AC00AA9439 /* LabelTableViewCell.swift in Sources */,
+				8EC9EC07284F71640012EABC /* NoticeCell.swift in Sources */,
 				8ED47F7C2837DB0E00AAA781 /* SelectDateViewController.swift in Sources */,
 				8E1A5F84282F713100388099 /* FirstLaunchCategory.swift in Sources */,
 				8E64AEEB282E2F0F009D9BF7 /* LabelTableViewController.swift in Sources */,
@@ -516,7 +524,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VP52T77886;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Labeling/Info.plist;
@@ -531,7 +539,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.SeYeong.Labeling;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -548,7 +556,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VP52T77886;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Labeling/Info.plist;
@@ -563,7 +571,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.SeYeong.Labeling;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

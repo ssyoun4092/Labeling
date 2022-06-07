@@ -3,23 +3,42 @@ import UIKit
 class OnboardingViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
-    @IBOutlet weak var skipButton: UIButton!
+    @IBOutlet weak var xButton: UIButton!
     let messages: [OnboardingMessage] = OnboardingMessage.messages
 
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.bounces = false
+        setUpButton()
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             flowLayout.estimatedItemSize = .zero
         }
         pageControl.numberOfPages = messages.count
     }
-    @IBAction func tapSkipButton(_ sender: UIButton) {
-        guard let homeVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.categoryViewController) as? CategoryViewController else { return }
-        let navVC = UINavigationController(rootViewController: homeVC)
-        navVC.modalPresentationStyle = .fullScreen
-        self.present(navVC, animated: false)
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNeedsStatusBarAppearanceUpdate()
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .darkContent
+    }
+
+    func setUpButton() {
+        xButton.setTitle("", for: .normal)
+    }
+
+    @IBAction func tapXButton(_ sender: UIButton) {
+        if !UserDefaults.standard.bool(forKey: "isFirstLaunch") {
+            guard let homeVC = self.storyboard?.instantiateViewController(withIdentifier: Identifier.categoryViewController) as? CategoryViewController else { return }
+            let navVC = UINavigationController(rootViewController: homeVC)
+            navVC.modalPresentationStyle = .fullScreen
+            self.present(navVC, animated: false)
+        } else {
+            dismiss(animated: false)
+        }
     }
 
     deinit {
@@ -63,10 +82,5 @@ extension OnboardingViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let index = Int(scrollView.contentOffset.x / collectionView.bounds.width)
         pageControl.currentPage = index
-        if index == (messages.count - 1) {
-            self.skipButton.setTitle("Done", for: .normal)
-        } else {
-            self.skipButton.setTitle("Skip", for: .normal)
-        }
     }
 }
