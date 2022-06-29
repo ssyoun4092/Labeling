@@ -30,8 +30,7 @@ class SettingsViewController: UIViewController {
     private func goToAppRating() {
         let myAppID = "1626607752"
         let myAppstoreURL = "itms-apps://itunes.apple.com/app/id\(myAppID)?mt=8&action=write-review"
-        guard let url = URL(string: myAppstoreURL) else {
-            return }
+        guard let url = URL(string: myAppstoreURL) else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 

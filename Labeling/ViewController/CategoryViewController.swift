@@ -559,7 +559,6 @@ extension CategoryViewController: UICollectionViewDelegate {
         for (index, element) in categories.enumerated() {
             element.index = Int64(index)
         }
-        print("save Category")
         saveCategory()
     }
 
@@ -603,7 +602,6 @@ extension CategoryViewController: CategoryViewControllerDelegate {
     func removeCategoryCell(cell: UICollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         guard let numberOfLabelInCategory = categories[indexPath.row].labels?.count else { return }
-
         let alert = UIAlertController(title: "❗️해당 카테고리에 라벨이 들어있습니다. 그래도 삭제하시겠습니까?", message: nil, preferredStyle: .alert)
         let removeAction = UIAlertAction(title: "네", style: .default) { [weak self] _ in
             guard let targetCategory = self?.categories[indexPath.row] else { return }
