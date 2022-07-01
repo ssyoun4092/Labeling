@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		6601D0819D591A4AE8887645 /* Pods_Labeling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 411B90E37CF6B1F55E5B484A /* Pods_Labeling.framework */; };
+		8E0B9C62286EA6FA00E17EAF /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0B9C61286EA6FA00E17EAF /* CategoryViewModel.swift */; };
+		8E0B9C66286EBC2B00E17EAF /* FetchCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0B9C65286EBC2B00E17EAF /* FetchCategory.swift */; };
+		8E0B9C68286ECDFC00E17EAF /* CategoryMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0B9C67286ECDFC00E17EAF /* CategoryMenu.swift */; };
 		8E169E8128478C5400587094 /* NoLabelPlaceholderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E169E8028478C5400587094 /* NoLabelPlaceholderTableViewCell.swift */; };
 		8E169E8328478F8A00587094 /* NoLabelPlaceholderTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E169E8228478F8A00587094 /* NoLabelPlaceholderTableCell.xib */; };
 		8E1A5F84282F713100388099 /* FirstLaunchCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1A5F83282F713100388099 /* FirstLaunchCategory.swift */; };
@@ -50,6 +53,9 @@
 
 /* Begin PBXFileReference section */
 		411B90E37CF6B1F55E5B484A /* Pods_Labeling.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Labeling.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E0B9C61286EA6FA00E17EAF /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
+		8E0B9C65286EBC2B00E17EAF /* FetchCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCategory.swift; sourceTree = "<group>"; };
+		8E0B9C67286ECDFC00E17EAF /* CategoryMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryMenu.swift; sourceTree = "<group>"; };
 		8E169E8028478C5400587094 /* NoLabelPlaceholderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoLabelPlaceholderTableViewCell.swift; sourceTree = "<group>"; };
 		8E169E8228478F8A00587094 /* NoLabelPlaceholderTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoLabelPlaceholderTableCell.xib; sourceTree = "<group>"; };
 		8E1A5F83282F713100388099 /* FirstLaunchCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchCategory.swift; sourceTree = "<group>"; };
@@ -123,6 +129,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		8E0B9C63286EA6FF00E17EAF /* CategoryViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8EE476062819262F0004EA88 /* CategoryViewController.swift */,
+				8E0B9C61286EA6FA00E17EAF /* CategoryViewModel.swift */,
+				8E0B9C67286ECDFC00E17EAF /* CategoryMenu.swift */,
+			);
+			path = CategoryViewController;
+			sourceTree = "<group>";
+		};
+		8E0B9C64286EBBED00E17EAF /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				8E0B9C65286EBC2B00E17EAF /* FetchCategory.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		8E581FD82835F72F00EF82F9 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -159,7 +183,7 @@
 		8E64AEE7282DF2D3009D9BF7 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				8EE476062819262F0004EA88 /* CategoryViewController.swift */,
+				8E0B9C63286EA6FF00E17EAF /* CategoryViewController */,
 				8E58202928375DD800EF82F9 /* AddCategoryViewController.swift */,
 				8ED47F7B2837DB0E00AAA781 /* SelectDateViewController.swift */,
 				8ED47F7D2837DBBF00AAA781 /* SelectTimeViewController.swift */,
@@ -227,6 +251,7 @@
 				8E64AEE3282CED29009D9BF7 /* Resources */,
 				8E581FD82835F72F00EF82F9 /* Protocols */,
 				8E64AEE8282DF2DC009D9BF7 /* Extensions */,
+				8E0B9C64286EBBED00E17EAF /* CoreData */,
 				8E64AEE9282DF2F8009D9BF7 /* Model */,
 				8E64AEE6282DF2C6009D9BF7 /* View */,
 				8E64AEE7282DF2D3009D9BF7 /* ViewController */,
@@ -356,6 +381,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E0B9C68286ECDFC00E17EAF /* CategoryMenu.swift in Sources */,
 				8E6D9CC2283F4FB30059362D /* IconPickerViewConroller.swift in Sources */,
 				8EC9EC05284F6E6A0012EABC /* NoticeMessage.swift in Sources */,
 				8EE476072819262F0004EA88 /* CategoryViewController.swift in Sources */,
@@ -378,6 +404,8 @@
 				8ED47F7C2837DB0E00AAA781 /* SelectDateViewController.swift in Sources */,
 				8E1A5F84282F713100388099 /* FirstLaunchCategory.swift in Sources */,
 				8E64AEEB282E2F0F009D9BF7 /* LabelTableViewController.swift in Sources */,
+				8E0B9C62286EA6FA00E17EAF /* CategoryViewModel.swift in Sources */,
+				8E0B9C66286EBC2B00E17EAF /* FetchCategory.swift in Sources */,
 				8E6D9CC0283F42280059362D /* Icons.swift in Sources */,
 				8E169E8128478C5400587094 /* NoLabelPlaceholderTableViewCell.swift in Sources */,
 				8E581FD32834D4C400EF82F9 /* SettingsViewController.swift in Sources */,

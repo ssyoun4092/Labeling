@@ -1,5 +1,8 @@
 import UIKit
 import CoreData
+import RxSwift
+import RxCocoa
+import RxViewController
 
 enum CurrentMode {
     case normal
@@ -13,6 +16,9 @@ class CategoryViewController: UIViewController {
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var settingButton: UIBarButtonItem!
 
+    let viewModel: CategoryViewModelType
+    var disposeBag = DisposeBag()
+
     var textFieldOrigin: CGPoint = CGPoint()
     var isLabelOnCell: Bool = false
     var keyboardIsPresented: Bool = false
@@ -25,6 +31,16 @@ class CategoryViewController: UIViewController {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     //MARK: - View Cycle
+    init(viewModel: CategoryViewModelType = CategoryViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        viewModel = CategoryViewModel()
+        super.init(coder: coder)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
@@ -33,7 +49,6 @@ class CategoryViewController: UIViewController {
         setUpCollectionView()
         loadCategoriesFirstAppLaunch()
         loadCategories()
-        print(categories.count)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -60,6 +75,18 @@ class CategoryViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("saveTitle"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("saveIndexPath"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("cancelButtonTapped"), object: nil)
+    }
+
+    //MARK: - setupBindings()
+    func setupBindings() {
+        let firstLoad = rx.viewWillAppear.take(1).map { _ in () }
+        Observable.merge(firstLoad)
+            .bind(to: viewModel.loadCategories)
+            .disposed(by: disposeBag)
+
+        viewModel.allCategories
+            .bind(to: collectionView.rx.items(cellIdentifier: Identifier.categoryViewCell, cellType: CategoryViewCell.self)) { index, item, cell in
+            }
     }
 
     //MARK: - Setup View

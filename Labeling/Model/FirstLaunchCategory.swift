@@ -5,6 +5,10 @@ struct FirstLaunchCategory {
     let doCalendar: Bool
     let doTimer: Bool
     let iconName: String
+
+    static let categories: [FirstLaunchCategory] = [
+        thinkingLabel, assignmentLabel, wantToEatLabel, deadlineLabel, appointmentLabel
+    ]
 }
 
 let thinkingLabel = FirstLaunchCategory(mainLabel: "아이디어", doCalendar: false, doTimer: false, iconName: "lightbulb")

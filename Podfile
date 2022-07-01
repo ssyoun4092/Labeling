@@ -8,5 +8,8 @@ target 'Labeling' do
   # Pods for Labeling
 
   pod 'FSCalendar'
+  pod 'RxSwift'
+  pod 'RxCocoa'
+  pod 'RxViewController'
 
 end
