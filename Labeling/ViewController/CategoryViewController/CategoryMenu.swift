@@ -6,10 +6,18 @@ struct CategoryMenu {
     let doCalendar: Bool
     let doTimer: Bool
 
-    init(_ item: Category) {
+    let currentMode: EditMode
+
+    init(_ item: Category, mode: EditMode) {
         mainLabel = item.mainLabel ?? ""
         iconName = item.iconName ?? ""
         doCalendar = item.doCalendar
         doTimer = item.doTimer
+        currentMode = mode
     }
+}
+
+enum EditMode {
+    case normal
+    case edit
 }

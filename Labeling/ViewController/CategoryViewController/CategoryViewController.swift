@@ -4,10 +4,10 @@ import RxSwift
 import RxCocoa
 import RxViewController
 
-enum CurrentMode {
-    case normal
-    case edit
-}
+//enum EditMode {
+//    case normal
+//    case edit
+//}
 
 class CategoryViewController: UIViewController {
     //MARK: - Properties
@@ -22,8 +22,8 @@ class CategoryViewController: UIViewController {
     var textFieldOrigin: CGPoint = CGPoint()
     var isLabelOnCell: Bool = false
     var keyboardIsPresented: Bool = false
-    weak var currentModeDelegate: CategoryViewControllerDelegate?
-    var currentMode: CurrentMode = .normal
+//    weak var currentModeDelegate: CategoryViewControllerDelegate?
+//    var currentMode: EditMode = .normal
     var categories = [Category]()
     lazy var firstLaunchCategories: [FirstLaunchCategory] = [thinkingLabel, assignmentLabel, wantToEatLabel, deadlineLabel, appointmentLabel]
     var labels = [Label]()
@@ -44,13 +44,15 @@ class CategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        initCollectionView()
-        initView()
-        setUpCollectionView()
-        loadCategoriesFirstAppLaunch()
-        loadCategories()
+        registerCells()
+        setupBindings()
+//        initCollectionView()
+//        initView()
+//        setUpCollectionView()
+//        loadCategoriesFirstAppLaunch()
+//        loadCategories()
     }
-
+/*
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setUpLabelTextField()
@@ -76,7 +78,7 @@ class CategoryViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("saveIndexPath"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("cancelButtonTapped"), object: nil)
     }
-
+ */
     //MARK: - setupBindings()
     func setupBindings() {
         let firstLoad = rx.viewWillAppear.take(1).map { _ in () }
@@ -86,27 +88,44 @@ class CategoryViewController: UIViewController {
 
         viewModel.allCategories
             .bind(to: collectionView.rx.items(cellIdentifier: Identifier.categoryViewCell, cellType: CategoryViewCell.self)) { index, item, cell in
+                cell.onData.onNext(item)
             }
+            .disposed(by: disposeBag)
+
+        collectionView.rx.setDelegate(self)
+            .disposed(by: disposeBag)
+
+        editButton.rx.tap
+            .do(onNext: {
+                print("Tapped")
+            })
+            .bind(to: viewModel.tapEditButton)
+            .disposed(by: disposeBag)
     }
 
     //MARK: - Setup View
+    private func registerCells() {
+        self.collectionView.register(UINib(nibName: "CategoryViewCell", bundle: nil), forCellWithReuseIdentifier: Identifier.categoryViewCell)
+        self.collectionView.register(UINib(nibName: "AddCategoryViewCell", bundle: nil), forCellWithReuseIdentifier: Identifier.addCategoryViewCell)
+    }
+
     private func initView() {
         self.hideKeyboard()
-        self.currentModeDelegate = self
+//        self.currentModeDelegate = self
     }
 
     private func initCollectionView() {
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
+//        self.collectionView.delegate = self
+//        self.collectionView.dataSource = self
         self.collectionView.allowsSelection = true
         self.collectionView.isUserInteractionEnabled = true
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             flowLayout.estimatedItemSize = .zero
         }
-        self.collectionView.register(UINib(nibName: "CategoryViewCell", bundle: nil), forCellWithReuseIdentifier: Identifier.categoryViewCell)
-        self.collectionView.register(UINib(nibName: "AddCategoryViewCell", bundle: nil), forCellWithReuseIdentifier: Identifier.addCategoryViewCell)
-        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
-        self.collectionView.addGestureRecognizer(longPressGesture)
+//        self.collectionView.register(UINib(nibName: "CategoryViewCell", bundle: nil), forCellWithReuseIdentifier: Identifier.categoryViewCell)
+//        self.collectionView.register(UINib(nibName: "AddCategoryViewCell", bundle: nil), forCellWithReuseIdentifier: Identifier.addCategoryViewCell)
+//        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+//        self.collectionView.addGestureRecognizer(longPressGesture)
     }
 
     private func setUpCollectionView() {
@@ -117,18 +136,19 @@ class CategoryViewController: UIViewController {
 
     private func setUpLabelTextField() {
         textFieldOrigin = self.labelTextField.frame.origin
-        let dragGesture = UIPanGestureRecognizer(target: self, action: #selector(handleDragGesture))
-        self.labelTextField.delegate = self
+//        let dragGesture = UIPanGestureRecognizer(target: self, action: #selector(handleDragGesture))
+//        self.labelTextField.delegate = self
         self.labelTextField.isUserInteractionEnabled = true
-        self.labelTextField.addGestureRecognizer(dragGesture)
+//        self.labelTextField.addGestureRecognizer(dragGesture)
         self.labelTextField.layer.cornerRadius = 20
-        self.labelTextField.backgroundColor = Color.cellBackgroundColor
-        self.labelTextField.addShadow()
-        self.labelTextField.text?.removeAll()
+//        self.labelTextField.backgroundColor = Color.cellBackgroundColor
+//        self.labelTextField.addShadow()
+//        self.labelTextField.text?.removeAll()
         self.labelTextField.layer.masksToBounds = false
     }
 
     //MARK: - Gesture functions
+    /*
     @objc func handleDragGesture(_ gesture: UIPanGestureRecognizer) {
         let cellsFrame = createEachCellFrame(for: categories.count)
         guard let cellsFrame = cellsFrame else { return }
@@ -368,7 +388,7 @@ class CategoryViewController: UIViewController {
             self.labelTextField.animateAppear(at: self.textFieldOrigin)
         }
     }
-
+     */
     //MARK: - Handling Coredata
     private func loadCategoriesFirstAppLaunch() {
         if UIApplication.isFirstLaunch() {
@@ -454,8 +474,8 @@ class CategoryViewController: UIViewController {
     }
 
     @IBAction func tapEditButton(_ sender: UIBarButtonItem) {
-        self.currentMode = (self.currentMode == .normal) ? .edit : .normal
-        currentModeDelegate?.changeEditButtonTitle(currentMode: currentMode)
+//        self.currentMode = (self.currentMode == .normal) ? .edit : .normal
+//        currentModeDelegate?.changeEditButtonTitle(currentMode: currentMode)
         collectionView.reloadData()
     }
 
@@ -464,6 +484,7 @@ class CategoryViewController: UIViewController {
     }
 }
 
+/*
 extension CategoryViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         UIView.animate(withDuration: 0.3) {
@@ -493,7 +514,9 @@ extension CategoryViewController: UITextFieldDelegate {
         }
     }
 }
+*/
 
+/*
 extension CategoryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 
@@ -546,7 +569,9 @@ extension CategoryViewController: UICollectionViewDataSource {
         }
     }
 }
+ */
 
+/*
 extension CategoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if !keyboardIsPresented && ((collectionView.cellForItem(at: indexPath) as? AddCategoryViewCell) == nil ) {
@@ -600,6 +625,7 @@ extension CategoryViewController: UICollectionViewDelegate {
         }
     }
 }
+ */
 
 extension CategoryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -620,7 +646,7 @@ extension CategoryViewController: UICollectionViewDelegateFlowLayout {
         return CGFloat(10)
     }
 }
-
+/*
 extension CategoryViewController: CategoryViewControllerDelegate {
     func changeEditButtonTitle(currentMode: CurrentMode) {
         self.editButton.title = (currentMode == .edit) ? "완료" : "편집"
@@ -693,3 +719,4 @@ extension CategoryViewController: AddSelectedDateTimeDelegate {
         saveCategory()
     }
 }
+ */

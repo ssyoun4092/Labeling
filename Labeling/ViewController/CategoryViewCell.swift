@@ -1,15 +1,31 @@
 import UIKit
+import RxSwift
+import RxCocoa
 
 class CategoryViewCell: UICollectionViewCell {
-    //MARK: - PROPERTIES
-    @IBOutlet weak var iconButton: UIButton!
-    @IBOutlet weak var mainLabel: UILabel!
-    @IBOutlet weak var numberOfLabel: UILabel!
-    @IBOutlet weak var cellView: UIView!
-    @IBOutlet weak var xButton: UIButton!
-    @IBOutlet weak var calendarButton: UIButton!
-    @IBOutlet weak var timerButton: UIButton!
-    var delegate: CategoryViewControllerDelegate?
+    var disposeBag = DisposeBag()
+    var onData: AnyObserver<CategoryMenu>
+
+    required init?(coder aDecoder: NSCoder) {
+        let data = PublishSubject<CategoryMenu>()
+        onData = data.asObserver()
+
+        super.init(coder: aDecoder)
+
+        data.observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] menu in
+                self?.mainLabel.text = menu.mainLabel
+                self?.iconButton.setImage(UIImage(systemName: menu.iconName), for: .normal)
+
+                switch menu.currentMode {
+                case .normal:
+                    self?.xButton.isHidden = true
+                case .edit:
+                    self?.xButton.isHidden = false
+                }
+            })
+            .disposed(by: disposeBag)
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -17,7 +33,6 @@ class CategoryViewCell: UICollectionViewCell {
         setUpCell()
         setUpButtons()
     }
-
 
     func setUpCell() {
         self.layer.cornerRadius = 10
@@ -35,7 +50,17 @@ class CategoryViewCell: UICollectionViewCell {
         calendarButton.setTitle("", for: .normal)
         timerButton.setTitle("", for: .normal)
     }
+
+    //MARK: - IBOutlets
+    @IBOutlet weak var iconButton: UIButton!
+    @IBOutlet weak var mainLabel: UILabel!
+    @IBOutlet weak var numberOfLabel: UILabel!
+    @IBOutlet weak var cellView: UIView!
+    @IBOutlet weak var xButton: UIButton!
+    @IBOutlet weak var calendarButton: UIButton!
+    @IBOutlet weak var timerButton: UIButton!
+
     @IBAction func tapXButton(_ sender: UIButton) {
-        self.delegate?.removeCategoryCell(cell: self)
+//        self.delegate?.removeCategoryCell(cell: self)
     }
 }

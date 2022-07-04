@@ -21,7 +21,7 @@ extension UIViewController {
         self.view.endEditing(true)
     }
 }
-
+/*
 extension UITextField {
     func addShadow() {
         self.layer.shadowColor = UIColor.black.cgColor
@@ -70,7 +70,7 @@ extension UITextField {
         layer.removeAnimation(forKey: "animate")
     }
 }
-
+ */
 extension UIApplication {
     class func isFirstLaunch() -> Bool {
         if !UserDefaults.standard.bool(forKey: "hasBeenLaunchedBeforeFlag") {

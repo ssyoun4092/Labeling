@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 protocol CategoryViewControllerDelegate: AnyObject {
-    func changeEditButtonTitle(currentMode: CurrentMode)
+    func changeEditButtonTitle(currentMode: EditMode)
     func removeCategoryCell(cell: UICollectionViewCell)
 }
 
